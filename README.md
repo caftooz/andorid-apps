@@ -104,6 +104,17 @@ Debug-сборки обоих приложений подписаны общим
 
 Первый переход с debug-сборки на release требует переустановки (разные ключи подписи): сначала сделайте экспорт JSON в настройках.
 
+## CI/CD (GitHub Actions)
+
+* `.github/workflows/ci.yml`: при каждом пуше в `main` и в запросах на слияние запускает `lint` и сборку debug обоих приложений.
+* `.github/workflows/release.yml`: при пуше тега `v*` собирает **подписанные** release-APK и публикует релиз с файлами
+  `app-training-release.apk` и `app-nutrition-release.apk` (имена ищет автообновление). Тег должен совпадать с `diary.version`
+  в `gradle.properties`, иначе сборка остановится.
+
+Нужные секреты репозитория (Settings → Secrets and variables → Actions): `DIARY_KEYSTORE_BASE64` (файл `.jks` в base64),
+`DIARY_KEYSTORE_PASSWORD`, `DIARY_KEY_ALIAS`, `DIARY_KEY_PASSWORD`.
+Выпуск версии: поднять `diary.version`, закоммитить и запушить, затем `git tag v0.2.3 && git push origin v0.2.3`.
+
 ## Совместимость с веб-версией
 
 JSON-экспорт и импорт совместимы с прототипами (`dnevnik-trenirovok` `version: 3`, `dnevnik-raciona` `version: 1`).
