@@ -1,0 +1,9005 @@
+{
+ "frozenToday": "2026-03-18",
+ "sessions": [
+  {
+   "id": "s1",
+   "date": "2026-02-23",
+   "type": "gym",
+   "prog": "A",
+   "title": "",
+   "start": 1000,
+   "min": 50,
+   "rpe": 3,
+   "pain": [],
+   "note": "",
+   "ex": [
+    {
+     "id": "bbsquat",
+     "name": "Присед со штангой",
+     "kind": "w",
+     "sets": [
+      {
+       "w": 40,
+       "r": 5,
+       "fb": "ok"
+      },
+      {
+       "w": 40,
+       "r": 5,
+       "fb": "ok"
+      },
+      {
+       "w": 40,
+       "r": 5,
+       "fb": "ok"
+      },
+      {
+       "w": 40,
+       "r": 5,
+       "fb": "ok"
+      }
+     ]
+    },
+    {
+     "id": "dips",
+     "kind": "w",
+     "sets": [
+      {
+       "w": 0,
+       "r": 10,
+       "fb": "ok"
+      },
+      {
+       "w": 0,
+       "r": 10,
+       "fb": "ok"
+      },
+      {
+       "w": 0,
+       "r": 10,
+       "fb": "ok"
+      },
+      {
+       "w": 0,
+       "r": 10,
+       "fb": "ok"
+      }
+     ]
+    },
+    {
+     "id": "plank",
+     "kind": "time",
+     "sets": [
+      {
+       "w": 0,
+       "r": 40,
+       "fb": null
+      },
+      {
+       "w": 0,
+       "r": 40,
+       "fb": null
+      },
+      {
+       "w": 0,
+       "r": 40,
+       "fb": null
+      }
+     ]
+    },
+    {
+     "id": "pushup",
+     "kind": "bw",
+     "sets": [
+      {
+       "w": 0,
+       "r": 9,
+       "fb": null
+      },
+      {
+       "w": 0,
+       "r": 8,
+       "fb": null
+      },
+      {
+       "w": 0,
+       "r": 8,
+       "fb": null
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s2",
+   "date": "2026-03-02",
+   "type": "gym",
+   "prog": "B",
+   "title": "",
+   "start": 2000,
+   "min": 50,
+   "rpe": 3,
+   "pain": [],
+   "note": "",
+   "ex": [
+    {
+     "id": "pullup",
+     "kind": "w",
+     "sets": [
+      {
+       "w": 0,
+       "r": 8,
+       "fb": "ok"
+      },
+      {
+       "w": 0,
+       "r": 8,
+       "fb": "easy"
+      },
+      {
+       "w": 0,
+       "r": 8,
+       "fb": "ok"
+      },
+      {
+       "w": 0,
+       "r": 8,
+       "fb": "ok"
+      },
+      {
+       "w": 0,
+       "r": 8,
+       "fb": "ok"
+      }
+     ]
+    },
+    {
+     "id": "dbrow",
+     "kind": "w",
+     "sets": [
+      {
+       "w": 20,
+       "r": 10,
+       "fb": "ok"
+      },
+      {
+       "w": 20,
+       "r": 10,
+       "fb": "hard"
+      },
+      {
+       "w": 20,
+       "r": 9,
+       "fb": "ok"
+      }
+     ]
+    },
+    {
+     "id": "squat",
+     "kind": "w",
+     "sets": [
+      {
+       "w": 16,
+       "r": 10,
+       "fb": "ok"
+      },
+      {
+       "w": 16,
+       "r": 10,
+       "fb": "ok"
+      },
+      {
+       "w": 16,
+       "r": 10,
+       "fb": "ok"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "s3",
+   "date": "2026-03-09",
+   "type": "gym",
+   "prog": "C",
+   "title": "",
+   "start": 3000,
+   "min": 50,
+   "rpe": 3,
+   "pain": [],
+   "note": "",
+   "ex": [
+    {
+     "id": "bbsquat",
+     "kind": "w",
+     "sets": [
+      {
+       "w": 42.5,
+       "r": 5,
+       "fb": "hard"
+      },
+      {
+       "w": 42.5,
+       "r": 4,
+       "fb": "hard"
+      }
+     ]
+    },
+    {
+     "id": "squat",
+     "kind": "w",
+     "sets": [
+      {
+       "w": 16,
+       "r": 10,
+       "fb": "ok"
+      },
+      {
+       "w": 16,
+       "r": 10,
+       "fb": "ok"
+      },
+      {
+       "w": 16,
+       "r": 10,
+       "fb": "ok"
+      }
+     ]
+    },
+    {
+     "id": "rope",
+     "kind": "time",
+     "sets": [
+      {
+       "w": 0,
+       "r": 45,
+       "fb": null
+      },
+      {
+       "w": 0,
+       "r": 45,
+       "fb": null
+      },
+      {
+       "w": 0,
+       "r": 45,
+       "fb": null
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "v1",
+   "date": "2026-03-10",
+   "type": "volley",
+   "prog": null,
+   "title": "",
+   "start": 3500,
+   "min": 90,
+   "rpe": 3,
+   "pain": [],
+   "note": "",
+   "ex": [],
+   "kcal": 500
+  },
+  {
+   "id": "o1",
+   "date": "2026-03-16",
+   "type": "other",
+   "prog": null,
+   "title": "Бег",
+   "start": 4000,
+   "min": 30,
+   "rpe": 2,
+   "pain": [
+    "Колено"
+   ],
+   "note": "легко",
+   "ex": [],
+   "kcal": 300
+  },
+  {
+   "id": "s4",
+   "date": "2026-03-16",
+   "type": "gym",
+   "prog": "A",
+   "title": "",
+   "start": 4500,
+   "min": 50,
+   "rpe": 3,
+   "pain": [],
+   "note": "",
+   "ex": [
+    {
+     "id": "dips",
+     "kind": "w",
+     "sets": [
+      {
+       "w": 0,
+       "r": 12,
+       "fb": "easy"
+      },
+      {
+       "w": 0,
+       "r": 12,
+       "fb": "ok"
+      },
+      {
+       "w": 0,
+       "r": 12,
+       "fb": "ok"
+      },
+      {
+       "w": 0,
+       "r": 12,
+       "fb": "ok"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "t1",
+   "date": "2026-03-17",
+   "type": "track",
+   "tid": "stretch",
+   "prog": null,
+   "title": "",
+   "start": 5000,
+   "min": 25,
+   "rpe": 0,
+   "pain": [],
+   "note": "",
+   "ex": []
+  },
+  {
+   "id": "t2",
+   "date": "2026-03-18",
+   "type": "track",
+   "tid": "pullday",
+   "prog": null,
+   "title": "",
+   "start": 6000,
+   "min": 0,
+   "rpe": 0,
+   "pain": [],
+   "note": "",
+   "ex": [],
+   "sl": [
+    4,
+    4,
+    5
+   ]
+  }
+ ],
+ "planStart": "2026-02-02",
+ "suggest": [
+  {
+   "id": "bbsquat",
+   "tg": 4,
+   "lo": 5,
+   "hi": 5,
+   "result": {
+    "w": 40,
+    "r": 5,
+    "hint": "Прошлый раз было тяжело при 42,5 кг. Начните с 40 кг"
+   }
+  },
+  {
+   "id": "dips",
+   "tg": 4,
+   "lo": 6,
+   "hi": 10,
+   "result": {
+    "w": 2.5,
+    "r": 6,
+    "hint": "Прошлый раз: 0 кг × 12. Пробуйте 2,5 кг"
+   }
+  },
+  {
+   "id": "dips",
+   "tg": 4,
+   "lo": 8,
+   "hi": 12,
+   "result": {
+    "w": 2.5,
+    "r": 8,
+    "hint": "Прошлый раз: 0 кг × 12. Пробуйте 2,5 кг"
+   }
+  },
+  {
+   "id": "plank",
+   "tg": 3,
+   "lo": 30,
+   "hi": 40,
+   "result": {
+    "w": 0,
+    "r": 30,
+    "hint": "Прошлый раз: 40 с. Верхняя граница во всех подходах: добавьте секунд или усложните вариант, начните с 30"
+   }
+  },
+  {
+   "id": "pushup",
+   "tg": 3,
+   "lo": 8,
+   "hi": 12,
+   "result": {
+    "w": 0,
+    "r": 8,
+    "hint": "Прошлый раз: 8 повт."
+   }
+  },
+  {
+   "id": "pullup",
+   "tg": 5,
+   "lo": 5,
+   "hi": 8,
+   "result": {
+    "w": 2.5,
+    "r": 5,
+    "hint": "Прошлый раз: 0 кг × 8. Пробуйте 2,5 кг"
+   }
+  },
+  {
+   "id": "dbrow",
+   "tg": 3,
+   "lo": 10,
+   "hi": 10,
+   "result": {
+    "w": 20,
+    "r": 9,
+    "hint": "Прошлый раз: 20 кг × 9"
+   }
+  },
+  {
+   "id": "squat",
+   "tg": 3,
+   "lo": 8,
+   "hi": 10,
+   "result": {
+    "w": 17,
+    "r": 8,
+    "hint": "Прошлый раз: 16 кг × 10. Пробуйте 17 кг"
+   }
+  },
+  {
+   "id": "rope",
+   "tg": 3,
+   "lo": 30,
+   "hi": 45,
+   "result": {
+    "w": 0,
+    "r": 30,
+    "hint": "Прошлый раз: 45 с. Верхняя граница во всех подходах: добавьте секунд или усложните вариант, начните с 30"
+   }
+  },
+  {
+   "id": "rdl",
+   "tg": 3,
+   "lo": 8,
+   "hi": 8,
+   "result": {
+    "w": 0,
+    "r": 8,
+    "first": true,
+    "hint": "Первый раз: начните с лёгкого веса"
+   }
+  },
+  {
+   "id": "hollow",
+   "tg": 3,
+   "lo": 20,
+   "hi": 40,
+   "result": {
+    "w": 0,
+    "r": 20,
+    "first": true,
+    "hint": ""
+   }
+  }
+ ],
+ "nextProg": "B",
+ "weekCounts": [
+  {
+   "ws": "2026-02-23",
+   "result": {
+    "gym": 1,
+    "volley": 0,
+    "friends": 0,
+    "other": 0,
+    "total": 1,
+    "t": {}
+   }
+  },
+  {
+   "ws": "2026-03-02",
+   "result": {
+    "gym": 1,
+    "volley": 0,
+    "friends": 0,
+    "other": 0,
+    "total": 1,
+    "t": {}
+   }
+  },
+  {
+   "ws": "2026-03-09",
+   "result": {
+    "gym": 1,
+    "volley": 1,
+    "friends": 0,
+    "other": 0,
+    "total": 2,
+    "t": {}
+   }
+  },
+  {
+   "ws": "2026-03-16",
+   "result": {
+    "gym": 1,
+    "volley": 0,
+    "friends": 0,
+    "other": 1,
+    "total": 2,
+    "t": {
+     "stretch": 1,
+     "pullday": 1
+    }
+   }
+  }
+ ],
+ "streak": 0,
+ "weekTotals": [
+  {
+   "ws": "2026-03-09",
+   "result": {
+    "min": 140,
+    "kcal": 500
+   }
+  },
+  {
+   "ws": "2026-03-16",
+   "result": {
+    "min": 105,
+    "kcal": 300
+   }
+  }
+ ],
+ "planWeek": [
+  {
+   "d": "2026-01-26",
+   "week": 0
+  },
+  {
+   "d": "2026-02-02",
+   "week": 1
+  },
+  {
+   "d": "2026-02-08",
+   "week": 1
+  },
+  {
+   "d": "2026-02-09",
+   "week": 2
+  },
+  {
+   "d": "2026-03-18",
+   "week": 7
+  },
+  {
+   "d": "2026-08-03",
+   "week": 27
+  },
+  {
+   "d": "2026-08-04",
+   "week": 27
+  },
+  {
+   "d": "2027-03-01",
+   "week": 57
+  }
+ ],
+ "planTotal": 26,
+ "weekFlags": [
+  {
+   "w": -1,
+   "deload": false,
+   "test": false,
+   "block": null
+  },
+  {
+   "w": 0,
+   "deload": false,
+   "test": false,
+   "block": null
+  },
+  {
+   "w": 1,
+   "deload": false,
+   "test": false,
+   "block": "База"
+  },
+  {
+   "w": 2,
+   "deload": false,
+   "test": false,
+   "block": "База"
+  },
+  {
+   "w": 3,
+   "deload": false,
+   "test": false,
+   "block": "База"
+  },
+  {
+   "w": 4,
+   "deload": false,
+   "test": true,
+   "block": "База"
+  },
+  {
+   "w": 5,
+   "deload": true,
+   "test": false,
+   "block": "База"
+  },
+  {
+   "w": 6,
+   "deload": false,
+   "test": false,
+   "block": "База"
+  },
+  {
+   "w": 7,
+   "deload": false,
+   "test": false,
+   "block": "База"
+  },
+  {
+   "w": 8,
+   "deload": false,
+   "test": true,
+   "block": "База"
+  },
+  {
+   "w": 9,
+   "deload": false,
+   "test": false,
+   "block": "Сила"
+  },
+  {
+   "w": 10,
+   "deload": true,
+   "test": false,
+   "block": "Сила"
+  },
+  {
+   "w": 11,
+   "deload": false,
+   "test": false,
+   "block": "Сила"
+  },
+  {
+   "w": 12,
+   "deload": false,
+   "test": true,
+   "block": "Сила"
+  },
+  {
+   "w": 13,
+   "deload": false,
+   "test": false,
+   "block": "Сила"
+  },
+  {
+   "w": 14,
+   "deload": false,
+   "test": false,
+   "block": "Сила"
+  },
+  {
+   "w": 15,
+   "deload": true,
+   "test": false,
+   "block": "Сила"
+  },
+  {
+   "w": 16,
+   "deload": false,
+   "test": true,
+   "block": "Сила"
+  },
+  {
+   "w": 17,
+   "deload": false,
+   "test": false,
+   "block": "Мощность и навыки"
+  },
+  {
+   "w": 18,
+   "deload": false,
+   "test": false,
+   "block": "Мощность и навыки"
+  },
+  {
+   "w": 19,
+   "deload": false,
+   "test": false,
+   "block": "Мощность и навыки"
+  },
+  {
+   "w": 20,
+   "deload": true,
+   "test": true,
+   "block": "Мощность и навыки"
+  },
+  {
+   "w": 21,
+   "deload": false,
+   "test": false,
+   "block": "Мощность и навыки"
+  },
+  {
+   "w": 22,
+   "deload": false,
+   "test": false,
+   "block": "Мощность и навыки"
+  },
+  {
+   "w": 23,
+   "deload": false,
+   "test": false,
+   "block": "Мощность и навыки"
+  },
+  {
+   "w": 24,
+   "deload": false,
+   "test": true,
+   "block": "Мощность и навыки"
+  },
+  {
+   "w": 25,
+   "deload": true,
+   "test": false,
+   "block": "Мощность и навыки"
+  },
+  {
+   "w": 26,
+   "deload": false,
+   "test": false,
+   "block": "Мощность и навыки"
+  },
+  {
+   "w": 27,
+   "deload": false,
+   "test": false,
+   "block": "Мощность и навыки"
+  },
+  {
+   "w": 28,
+   "deload": false,
+   "test": false,
+   "block": "Мощность и навыки"
+  }
+ ],
+ "deloadNow": false,
+ "maxStatusEmpty": {
+  "testWeek": false,
+  "cnt": 0,
+  "days": null,
+  "due": true,
+  "text": "Замеров пока нет. Сделайте стартовые, чтобы видеть прогресс."
+ },
+ "maxStatus": {
+  "testWeek": false,
+  "cnt": 1,
+  "days": 1,
+  "due": false,
+  "text": "Последний замер был 1 день назад."
+ },
+ "bestPush": 30,
+ "bestFs": 40,
+ "volleyNote": "",
+ "fmt": [
+  {
+   "n": 0,
+   "s": "0"
+  },
+  {
+   "n": 1,
+   "s": "1"
+  },
+  {
+   "n": 2.5,
+   "s": "2,5"
+  },
+  {
+   "n": 22.25,
+   "s": "22,3"
+  },
+  {
+   "n": 22.35,
+   "s": "22,4"
+  },
+  {
+   "n": 100,
+   "s": "100"
+  },
+  {
+   "n": 0.05,
+   "s": "0,1"
+  },
+  {
+   "n": 1234.56,
+   "s": "1234,6"
+  }
+ ],
+ "parseNum": [
+  {
+   "v": "12",
+   "n": 12
+  },
+  {
+   "v": "12,5",
+   "n": 12.5
+  },
+  {
+   "v": " 7.26",
+   "n": 7.3
+  },
+  {
+   "v": "abc",
+   "n": 0
+  },
+  {
+   "v": "-3",
+   "n": 0
+  },
+  {
+   "v": "",
+   "n": 0
+  },
+  {
+   "v": null,
+   "n": 0
+  },
+  {
+   "v": "1e2",
+   "n": 100
+  },
+  {
+   "v": "5kg",
+   "n": 5
+  },
+  {
+   "v": "2000",
+   "n": 1000
+  },
+  {
+   "v": ".5",
+   "n": 0.5
+  },
+  {
+   "v": "0,04",
+   "n": 0
+  }
+ ],
+ "plural": [
+  {
+   "n": 0,
+   "s": "подходов"
+  },
+  {
+   "n": 1,
+   "s": "подход"
+  },
+  {
+   "n": 2,
+   "s": "подхода"
+  },
+  {
+   "n": 4,
+   "s": "подхода"
+  },
+  {
+   "n": 5,
+   "s": "подходов"
+  },
+  {
+   "n": 11,
+   "s": "подходов"
+  },
+  {
+   "n": 12,
+   "s": "подходов"
+  },
+  {
+   "n": 21,
+   "s": "подход"
+  },
+  {
+   "n": 22,
+   "s": "подхода"
+  },
+  {
+   "n": 25,
+   "s": "подходов"
+  },
+  {
+   "n": 111,
+   "s": "подходов"
+  }
+ ],
+ "setReps": [
+  {
+   "tr": {
+    "base": 10,
+    "pctLo": 40,
+    "pctHi": 50
+   },
+   "result": {
+    "lo": 4,
+    "hi": 5
+   }
+  },
+  {
+   "tr": {
+    "base": 15,
+    "pctLo": 40,
+    "pctHi": 50
+   },
+   "result": {
+    "lo": 6,
+    "hi": 8
+   }
+  },
+  {
+   "tr": {
+    "base": 3,
+    "pctLo": 40,
+    "pctHi": 50
+   },
+   "result": {
+    "lo": 1,
+    "hi": 2
+   }
+  },
+  {
+   "tr": {
+    "base": 100,
+    "pctLo": 5,
+    "pctHi": 100
+   },
+   "result": {
+    "lo": 5,
+    "hi": 100
+   }
+  }
+ ],
+ "progBrief": [
+  {
+   "id": "A",
+   "text": "8 упражнений · 27 подходов · ~80 мин"
+  },
+  {
+   "id": "B",
+   "text": "8 упражнений · 27 подходов · ~80 мин"
+  },
+  {
+   "id": "C",
+   "text": "7 упражнений · 27 подходов · ~80 мин"
+  }
+ ],
+ "weights": {
+  "latest": 65
+ },
+ "buildActiveEx": [
+  {
+   "item": {
+    "id": "bbsquat",
+    "sets": 4,
+    "lo": 5,
+    "hi": 10
+   },
+   "deload": false,
+   "result": {
+    "id": "bbsquat",
+    "d": {
+     "name": "Присед со штангой",
+     "kind": "w",
+     "step": 2.5,
+     "tip": "Если техника не поставлена, начните с гоблет-приседа 4×8. Отдых 2–3 минуты.",
+     "rest": 150,
+     "per": ""
+    },
+    "tg": 4,
+    "lo": 5,
+    "hi": 10,
+    "hint": "Прошлый раз было тяжело при 42,5 кг. Начните с 40 кг",
+    "first": false,
+    "sets": [
+     {
+      "w": 40,
+      "r": 5,
+      "done": false,
+      "fb": null,
+      "touched": false
+     },
+     {
+      "w": 40,
+      "r": 5,
+      "done": false,
+      "fb": null,
+      "touched": false
+     },
+     {
+      "w": 40,
+      "r": 5,
+      "done": false,
+      "fb": null,
+      "touched": false
+     },
+     {
+      "w": 40,
+      "r": 5,
+      "done": false,
+      "fb": null,
+      "touched": false
+     }
+    ]
+   }
+  },
+  {
+   "item": {
+    "id": "dips",
+    "sets": 4,
+    "lo": 5,
+    "hi": 10
+   },
+   "deload": false,
+   "result": {
+    "id": "dips",
+    "d": {
+     "name": "Брусья",
+     "kind": "w",
+     "step": 2.5,
+     "tip": "Вес указывайте как дополнительный (0 — без веса). Когда получается 4×12, вешайте вес от 5 кг.",
+     "rest": 0,
+     "per": ""
+    },
+    "tg": 4,
+    "lo": 5,
+    "hi": 10,
+    "hint": "Прошлый раз: 0 кг × 12. Пробуйте 2,5 кг",
+    "first": false,
+    "sets": [
+     {
+      "w": 2.5,
+      "r": 5,
+      "done": false,
+      "fb": null,
+      "touched": false
+     },
+     {
+      "w": 2.5,
+      "r": 5,
+      "done": false,
+      "fb": null,
+      "touched": false
+     },
+     {
+      "w": 2.5,
+      "r": 5,
+      "done": false,
+      "fb": null,
+      "touched": false
+     },
+     {
+      "w": 2.5,
+      "r": 5,
+      "done": false,
+      "fb": null,
+      "touched": false
+     }
+    ]
+   }
+  },
+  {
+   "item": {
+    "id": "plank",
+    "sets": 4,
+    "lo": 5,
+    "hi": 10
+   },
+   "deload": false,
+   "result": {
+    "id": "plank",
+    "d": {
+     "name": "Планка",
+     "kind": "time",
+     "step": 5,
+     "tip": "Тело в одну линию от пяток до головы, не прогибайте поясницу. Значение в секундах.",
+     "rest": 60,
+     "per": ""
+    },
+    "tg": 4,
+    "lo": 5,
+    "hi": 10,
+    "hint": "Прошлый раз: 40 с",
+    "first": false,
+    "sets": [
+     {
+      "w": 0,
+      "r": 40,
+      "done": false,
+      "fb": null,
+      "touched": false
+     },
+     {
+      "w": 0,
+      "r": 40,
+      "done": false,
+      "fb": null,
+      "touched": false
+     },
+     {
+      "w": 0,
+      "r": 40,
+      "done": false,
+      "fb": null,
+      "touched": false
+     },
+     {
+      "w": 0,
+      "r": 40,
+      "done": false,
+      "fb": null,
+      "touched": false
+     }
+    ]
+   }
+  }
+ ],
+ "deloadWeek5": {
+  "planWeek": 5,
+  "deloadNow": true,
+  "active": {
+   "id": "bbsquat",
+   "d": {
+    "name": "Присед со штангой",
+    "kind": "w",
+    "step": 2.5,
+    "tip": "Если техника не поставлена, начните с гоблет-приседа 4×8. Отдых 2–3 минуты.",
+    "rest": 150,
+    "per": ""
+   },
+   "tg": 2,
+   "lo": 5,
+   "hi": 5,
+   "hint": "Прошлый раз было тяжело при 42,5 кг. Начните с 40 кг",
+   "first": false,
+   "sets": [
+    {
+     "w": 40,
+     "r": 5,
+     "done": false,
+     "fb": null,
+     "touched": false
+    },
+    {
+     "w": 40,
+     "r": 5,
+     "done": false,
+     "fb": null,
+     "touched": false
+    }
+   ]
+  },
+  "active3": {
+   "id": "dips",
+   "d": {
+    "name": "Брусья",
+    "kind": "w",
+    "step": 2.5,
+    "tip": "Вес указывайте как дополнительный (0 — без веса). Когда получается 4×12, вешайте вес от 5 кг.",
+    "rest": 0,
+    "per": ""
+   },
+   "tg": 2,
+   "lo": 6,
+   "hi": 10,
+   "hint": "Прошлый раз: 0 кг × 12. Пробуйте 2,5 кг",
+   "first": false,
+   "sets": [
+    {
+     "w": 2.5,
+     "r": 6,
+     "done": false,
+     "fb": null,
+     "touched": false
+    },
+    {
+     "w": 2.5,
+     "r": 6,
+     "done": false,
+     "fb": null,
+     "touched": false
+    }
+   ]
+  }
+ },
+ "importDirty": {
+  "app": "dnevnik-trenirovok",
+  "version": 3,
+  "sessions": [
+   {
+    "id": "a1",
+    "date": "2026-03-01",
+    "type": "gym",
+    "prog": "A",
+    "title": "A · ноги и жимы",
+    "start": 1700000000000,
+    "min": 55.4,
+    "rpe": 9,
+    "pain": [
+     "Плечо",
+     "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "a",
+     "b",
+     "c",
+     "d",
+     "e",
+     "f"
+    ],
+    "note": "ok",
+    "ex": [
+     {
+      "id": "dips",
+      "name": "Брусья",
+      "kind": "w",
+      "sets": [
+       {
+        "w": "12,5",
+        "r": "8",
+        "fb": "hard"
+       },
+       {
+        "w": -4,
+        "r": "abc",
+        "fb": "weird"
+       }
+      ]
+     },
+     {
+      "id": "nosets"
+     },
+     null,
+     {
+      "sets": []
+     }
+    ],
+    "kcal": "420.6"
+   },
+   {
+    "id": "a2",
+    "date": "2026-03-02",
+    "type": "handstand",
+    "min": 15
+   },
+   {
+    "id": "a3",
+    "date": "2026-03-03",
+    "type": "stretch",
+    "min": 25,
+    "kcal": 100
+   },
+   {
+    "id": "a4",
+    "date": "2026-03-04",
+    "type": "pullday",
+    "sl": [
+     5,
+     5,
+     "6",
+     5000,
+     -1
+    ]
+   },
+   {
+    "id": "a5",
+    "date": "2026-03-05",
+    "type": "unknown-type",
+    "title": "Что-то"
+   },
+   {
+    "id": "bad1",
+    "date": "05.03.2026",
+    "type": "gym"
+   },
+   {
+    "id": "bad2",
+    "type": "gym"
+   },
+   "garbage",
+   42,
+   null,
+   {
+    "id": "a6",
+    "date": "2026-03-06",
+    "type": "other",
+    "title": "Плавание",
+    "min": 40,
+    "rpe": 2,
+    "kcal": 250,
+    "note": "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn"
+   },
+   {
+    "date": "2026-03-07",
+    "type": "volley",
+    "min": 90
+   },
+   {
+    "id": "a7",
+    "date": "2026-03-08",
+    "type": "track",
+    "tid": "handstand",
+    "min": 15,
+    "sl": "notarray"
+   }
+  ],
+  "programs": [
+   {
+    "id": "A",
+    "title": "Моя A",
+    "rot": true,
+    "warm": [
+     "Раз",
+     "",
+     "Два",
+     3
+    ],
+    "items": [
+     {
+      "id": "dips",
+      "sets": 99,
+      "lo": 0,
+      "hi": -5
+     },
+     {
+      "id": "rdl"
+     },
+     {
+      "sets": 3
+     },
+     null
+    ]
+   },
+   {
+    "id": "p-x",
+    "title": "",
+    "items": "bad"
+   },
+   {
+    "title": "без id"
+   },
+   null
+  ],
+  "customExercises": [
+   {
+    "id": "x-1",
+    "name": "Мой жим",
+    "kind": "w",
+    "step": 99,
+    "tip": "Совет"
+   },
+   {
+    "id": "x-2",
+    "name": "Секундомер",
+    "kind": "weird",
+    "step": -3
+   },
+   {
+    "id": "x-3"
+   },
+   null
+  ],
+  "plan": {
+   "name": "Чужой план",
+   "start": "2026-01-05",
+   "protein": 1,
+   "volleyHints": 0,
+   "deloadEvery": 50,
+   "testEvery": -3,
+   "blocks": [
+    {
+     "id": "b1",
+     "name": "Раз",
+     "weeks": 500,
+     "text": "t"
+    },
+    {
+     "weeks": "x"
+    }
+   ],
+   "days": [
+    {
+     "k": "gym",
+     "prog": "A",
+     "note": "n"
+    },
+    {
+     "k": "swim"
+    },
+    null
+   ],
+   "rules": [
+    {
+     "t": "Правило",
+     "d": "Текст"
+    },
+    {},
+    null
+   ],
+   "metrics": [
+    {
+     "id": "push",
+     "name": "Отжимания",
+     "unit": "раз",
+     "goal": "40",
+     "dir": -5
+    },
+    {
+     "name": "Без id",
+     "goal": ""
+    },
+    {
+     "id": "z",
+     "goal": null
+    }
+   ],
+   "tracks": [
+    {
+     "id": "handstand",
+     "name": "Стойка",
+     "kind": "timed",
+     "goal": 99,
+     "ic": "nope",
+     "steps": [
+      {
+       "n": "Шаг",
+       "t": "x"
+      },
+      {
+       "t": "без названия"
+      }
+     ],
+     "items": [
+      {
+       "n": "a",
+       "d": "b",
+       "t": "c"
+      }
+     ],
+     "cur": 99
+    },
+    {
+     "id": "pullday",
+     "name": "Подтяг",
+     "kind": "sets",
+     "metric": "push",
+     "pctLo": 1,
+     "pctHi": 500,
+     "dayTarget": 0,
+     "base": 0
+    },
+    null
+   ]
+  },
+  "maxes": [
+   {
+    "id": "m1",
+    "date": "2026-03-01",
+    "m": "push",
+    "v": "31,5"
+   },
+   {
+    "id": "bad",
+    "date": "x",
+    "m": "push",
+    "v": 1
+   },
+   {
+    "date": "2026-03-02",
+    "m": "pull",
+    "v": 5
+   },
+   {
+    "date": "2026-03-02",
+    "v": 5
+   }
+  ],
+  "weekLog": {
+   "2026-03-02": {
+    "kg": "66,4",
+    "note": "хорошо"
+   },
+   "2026-03-09": {
+    "kg": 0,
+    "note": ""
+   },
+   "bad": {
+    "kg": 70
+   },
+   "2026-03-16": {
+    "note": "только заметка"
+   }
+  },
+  "templates": [
+   {
+    "id": "t1",
+    "name": "Шаблон",
+    "plan": {
+     "name": "P",
+     "start": "2026-02-02",
+     "blocks": [
+      {
+       "name": "Б",
+       "weeks": 3
+      }
+     ],
+     "days": []
+    },
+    "programs": [
+     {
+      "id": "A",
+      "title": "A",
+      "items": [
+       {
+        "id": "dips",
+        "sets": 3,
+        "lo": 6,
+        "hi": 10
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "name": "без плана"
+   },
+   null
+  ]
+ },
+ "importDraft": {
+  "list": [
+   {
+    "id": "a1",
+    "date": "2026-03-01",
+    "type": "gym",
+    "prog": "A",
+    "title": "A · ноги и жимы",
+    "start": 1700000000000,
+    "min": 55,
+    "rpe": 5,
+    "pain": [
+     "Плечо",
+     "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "a",
+     "b",
+     "c",
+     "d"
+    ],
+    "note": "ok",
+    "ex": [
+     {
+      "id": "dips",
+      "name": "Брусья",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 12.5,
+        "r": 8,
+        "fb": "hard"
+       },
+       {
+        "w": 0,
+        "r": 0,
+        "fb": null
+       }
+      ]
+     }
+    ],
+    "kcal": 421
+   },
+   {
+    "id": "a2",
+    "date": "2026-03-02",
+    "type": "track",
+    "prog": null,
+    "title": "",
+    "start": 0,
+    "min": 15,
+    "rpe": 0,
+    "pain": [],
+    "note": "",
+    "ex": [],
+    "tid": "handstand"
+   },
+   {
+    "id": "a3",
+    "date": "2026-03-03",
+    "type": "track",
+    "prog": null,
+    "title": "",
+    "start": 0,
+    "min": 25,
+    "rpe": 0,
+    "pain": [],
+    "note": "",
+    "ex": [],
+    "tid": "stretch",
+    "kcal": 100
+   },
+   {
+    "id": "a4",
+    "date": "2026-03-04",
+    "type": "track",
+    "prog": null,
+    "title": "",
+    "start": 0,
+    "min": 0,
+    "rpe": 0,
+    "pain": [],
+    "note": "",
+    "ex": [],
+    "tid": "pullday",
+    "sl": [
+     5,
+     5,
+     6,
+     999,
+     0
+    ]
+   },
+   {
+    "id": "a5",
+    "date": "2026-03-05",
+    "type": "gym",
+    "prog": null,
+    "title": "Что-то",
+    "start": 0,
+    "min": 0,
+    "rpe": 0,
+    "pain": [],
+    "note": "",
+    "ex": []
+   },
+   {
+    "id": "a6",
+    "date": "2026-03-06",
+    "type": "other",
+    "prog": null,
+    "title": "Плавание",
+    "start": 0,
+    "min": 40,
+    "rpe": 2,
+    "pain": [],
+    "note": "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+    "ex": [],
+    "kcal": 250
+   },
+   {
+    "id": "mmvt8yo0v5tzc",
+    "date": "2026-03-07",
+    "type": "volley",
+    "prog": null,
+    "title": "",
+    "start": 0,
+    "min": 90,
+    "rpe": 0,
+    "pain": [],
+    "note": "",
+    "ex": []
+   },
+   {
+    "id": "a7",
+    "date": "2026-03-08",
+    "type": "track",
+    "prog": null,
+    "title": "",
+    "start": 0,
+    "min": 15,
+    "rpe": 0,
+    "pain": [],
+    "note": "",
+    "ex": [],
+    "tid": "handstand"
+   }
+  ],
+  "skipped": 5,
+  "programs": [
+   {
+    "id": "A",
+    "title": "Моя A",
+    "rot": true,
+    "warm": [
+     "Раз",
+     "Два",
+     "3"
+    ],
+    "items": [
+     {
+      "id": "dips",
+      "sets": 10,
+      "lo": 8,
+      "hi": 8
+     },
+     {
+      "id": "rdl",
+      "sets": 3,
+      "lo": 8,
+      "hi": 8
+     }
+    ]
+   },
+   {
+    "id": "p-x",
+    "title": "Программа",
+    "rot": false,
+    "warm": [],
+    "items": []
+   }
+  ],
+  "customEx": [
+   {
+    "id": "x-1",
+    "name": "Мой жим",
+    "kind": "w",
+    "step": 50,
+    "tip": "Совет"
+   },
+   {
+    "id": "x-2",
+    "name": "Секундомер",
+    "kind": "w",
+    "step": 1,
+    "tip": ""
+   }
+  ],
+  "plan": {
+   "name": "Чужой план",
+   "start": "2026-01-05",
+   "protein": true,
+   "volleyHints": false,
+   "deloadEvery": 20,
+   "testEvery": 0,
+   "blocks": [
+    {
+     "id": "b1",
+     "name": "Раз",
+     "weeks": 104,
+     "text": "t"
+    },
+    {
+     "id": "b2mmvt8yo0zvsc6",
+     "name": "Блок",
+     "weeks": 1,
+     "text": ""
+    }
+   ],
+   "days": [
+    {
+     "k": "gym",
+     "prog": "A",
+     "note": "n"
+    },
+    {
+     "k": "rest",
+     "prog": "",
+     "note": ""
+    },
+    {
+     "k": "rest",
+     "prog": "",
+     "note": ""
+    },
+    {
+     "k": "rest",
+     "prog": "",
+     "note": ""
+    },
+    {
+     "k": "rest",
+     "prog": "",
+     "note": ""
+    },
+    {
+     "k": "rest",
+     "prog": "",
+     "note": ""
+    },
+    {
+     "k": "rest",
+     "prog": "",
+     "note": ""
+    }
+   ],
+   "rules": [
+    {
+     "t": "Правило",
+     "d": "Текст"
+    }
+   ],
+   "metrics": [
+    {
+     "id": "push",
+     "name": "Отжимания",
+     "unit": "раз",
+     "goal": 40,
+     "goalText": "",
+     "dir": -1,
+     "how": ""
+    },
+    {
+     "id": "m-mmvt8yo0rty2y",
+     "name": "Без id",
+     "unit": "раз",
+     "goal": null,
+     "goalText": "",
+     "dir": 1,
+     "how": ""
+    },
+    {
+     "id": "z",
+     "name": "Показатель",
+     "unit": "раз",
+     "goal": null,
+     "goalText": "",
+     "dir": 1,
+     "how": ""
+    }
+   ],
+   "tracks": [
+    {
+     "id": "handstand",
+     "name": "Стойка",
+     "kind": "timed",
+     "ic": "star",
+     "goal": 7,
+     "goalText": "",
+     "dur": 20,
+     "intro": "",
+     "steps": [
+      {
+       "n": "Шаг",
+       "t": "x"
+      }
+     ],
+     "cur": 12,
+     "items": [
+      {
+       "n": "a",
+       "d": "b",
+       "t": "c"
+      }
+     ],
+     "metric": "",
+     "pctLo": 40,
+     "pctHi": 50,
+     "dayTarget": 8,
+     "base": 10,
+     "tip": ""
+    },
+    {
+     "id": "pullday",
+     "name": "Подтяг",
+     "kind": "sets",
+     "ic": "gym",
+     "goal": 0,
+     "goalText": "",
+     "dur": 20,
+     "intro": "",
+     "steps": [],
+     "cur": 0,
+     "items": [],
+     "metric": "push",
+     "pctLo": 5,
+     "pctHi": 100,
+     "dayTarget": 8,
+     "base": 10,
+     "tip": ""
+    },
+    {
+     "id": "t-mmvt8yo0jr3oz",
+     "name": "Занятие",
+     "kind": "timed",
+     "ic": "star",
+     "goal": 0,
+     "goalText": "",
+     "dur": 20,
+     "intro": "",
+     "steps": [],
+     "cur": 0,
+     "items": [],
+     "metric": "",
+     "pctLo": 40,
+     "pctHi": 50,
+     "dayTarget": 8,
+     "base": 10,
+     "tip": ""
+    }
+   ]
+  },
+  "maxes": [
+   {
+    "id": "m1",
+    "date": "2026-03-01",
+    "m": "push",
+    "v": 31.5
+   },
+   {
+    "id": "mmvt8yo0z89dz",
+    "date": "2026-03-02",
+    "m": "pull",
+    "v": 5
+   }
+  ],
+  "wlog": {
+   "2026-03-02": {
+    "kg": 66.4,
+    "note": "хорошо"
+   },
+   "2026-03-16": {
+    "kg": 0,
+    "note": "только заметка"
+   }
+  },
+  "templates": [
+   {
+    "id": "t1",
+    "name": "Шаблон",
+    "plan": {
+     "name": "P",
+     "start": "",
+     "protein": false,
+     "volleyHints": false,
+     "deloadEvery": 0,
+     "testEvery": 0,
+     "blocks": [
+      {
+       "id": "b1mmvt8yo00xz1q",
+       "name": "Б",
+       "weeks": 3,
+       "text": ""
+      }
+     ],
+     "days": [
+      {
+       "k": "rest",
+       "prog": "",
+       "note": ""
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": ""
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": ""
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": ""
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": ""
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": ""
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": ""
+      }
+     ],
+     "rules": [],
+     "metrics": [],
+     "tracks": []
+    },
+    "programs": [
+     {
+      "id": "A",
+      "title": "A",
+      "rot": false,
+      "warm": [],
+      "items": [
+       {
+        "id": "dips",
+        "sets": 3,
+        "lo": 6,
+        "hi": 10
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "afterReplace": {
+  "sessions": [
+   {
+    "id": "a1",
+    "date": "2026-03-01",
+    "type": "gym",
+    "prog": "A",
+    "title": "A · ноги и жимы",
+    "start": 1700000000000,
+    "min": 55,
+    "rpe": 5,
+    "pain": [
+     "Плечо",
+     "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "a",
+     "b",
+     "c",
+     "d"
+    ],
+    "note": "ok",
+    "ex": [
+     {
+      "id": "dips",
+      "name": "Брусья",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 12.5,
+        "r": 8,
+        "fb": "hard"
+       },
+       {
+        "w": 0,
+        "r": 0,
+        "fb": null
+       }
+      ]
+     }
+    ],
+    "kcal": 421
+   },
+   {
+    "id": "a2",
+    "date": "2026-03-02",
+    "type": "track",
+    "prog": null,
+    "title": "",
+    "start": 0,
+    "min": 15,
+    "rpe": 0,
+    "pain": [],
+    "note": "",
+    "ex": [],
+    "tid": "handstand"
+   },
+   {
+    "id": "a3",
+    "date": "2026-03-03",
+    "type": "track",
+    "prog": null,
+    "title": "",
+    "start": 0,
+    "min": 25,
+    "rpe": 0,
+    "pain": [],
+    "note": "",
+    "ex": [],
+    "tid": "stretch",
+    "kcal": 100
+   },
+   {
+    "id": "a4",
+    "date": "2026-03-04",
+    "type": "track",
+    "prog": null,
+    "title": "",
+    "start": 0,
+    "min": 0,
+    "rpe": 0,
+    "pain": [],
+    "note": "",
+    "ex": [],
+    "tid": "pullday",
+    "sl": [
+     5,
+     5,
+     6,
+     999,
+     0
+    ]
+   },
+   {
+    "id": "a5",
+    "date": "2026-03-05",
+    "type": "gym",
+    "prog": null,
+    "title": "Что-то",
+    "start": 0,
+    "min": 0,
+    "rpe": 0,
+    "pain": [],
+    "note": "",
+    "ex": []
+   },
+   {
+    "id": "a6",
+    "date": "2026-03-06",
+    "type": "other",
+    "prog": null,
+    "title": "Плавание",
+    "start": 0,
+    "min": 40,
+    "rpe": 2,
+    "pain": [],
+    "note": "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+    "ex": [],
+    "kcal": 250
+   },
+   {
+    "id": "mmvt8yo02f6l0",
+    "date": "2026-03-07",
+    "type": "volley",
+    "prog": null,
+    "title": "",
+    "start": 0,
+    "min": 90,
+    "rpe": 0,
+    "pain": [],
+    "note": "",
+    "ex": []
+   },
+   {
+    "id": "a7",
+    "date": "2026-03-08",
+    "type": "track",
+    "prog": null,
+    "title": "",
+    "start": 0,
+    "min": 15,
+    "rpe": 0,
+    "pain": [],
+    "note": "",
+    "ex": [],
+    "tid": "handstand"
+   }
+  ],
+  "programs": [
+   {
+    "id": "A",
+    "title": "Моя A",
+    "rot": true,
+    "warm": [
+     "Раз",
+     "Два",
+     "3"
+    ],
+    "items": [
+     {
+      "id": "dips",
+      "sets": 10,
+      "lo": 8,
+      "hi": 8
+     },
+     {
+      "id": "rdl",
+      "sets": 3,
+      "lo": 8,
+      "hi": 8
+     }
+    ]
+   },
+   {
+    "id": "p-x",
+    "title": "Программа",
+    "rot": false,
+    "warm": [],
+    "items": []
+   }
+  ],
+  "customEx": [
+   {
+    "id": "x-1",
+    "name": "Мой жим",
+    "kind": "w",
+    "step": 50,
+    "tip": "Совет"
+   },
+   {
+    "id": "x-2",
+    "name": "Секундомер",
+    "kind": "w",
+    "step": 1,
+    "tip": ""
+   }
+  ],
+  "plan": {
+   "name": "Чужой план",
+   "start": "2026-01-05",
+   "protein": true,
+   "volleyHints": false,
+   "deloadEvery": 20,
+   "testEvery": 0,
+   "blocks": [
+    {
+     "id": "b1",
+     "name": "Раз",
+     "weeks": 104,
+     "text": "t"
+    },
+    {
+     "id": "b2mmvt8yo0xgnsh",
+     "name": "Блок",
+     "weeks": 1,
+     "text": ""
+    }
+   ],
+   "days": [
+    {
+     "k": "gym",
+     "prog": "A",
+     "note": "n"
+    },
+    {
+     "k": "rest",
+     "prog": "",
+     "note": ""
+    },
+    {
+     "k": "rest",
+     "prog": "",
+     "note": ""
+    },
+    {
+     "k": "rest",
+     "prog": "",
+     "note": ""
+    },
+    {
+     "k": "rest",
+     "prog": "",
+     "note": ""
+    },
+    {
+     "k": "rest",
+     "prog": "",
+     "note": ""
+    },
+    {
+     "k": "rest",
+     "prog": "",
+     "note": ""
+    }
+   ],
+   "rules": [
+    {
+     "t": "Правило",
+     "d": "Текст"
+    }
+   ],
+   "metrics": [
+    {
+     "id": "push",
+     "name": "Отжимания",
+     "unit": "раз",
+     "goal": 40,
+     "goalText": "",
+     "dir": -1,
+     "how": ""
+    },
+    {
+     "id": "m-mmvt8yo0p2nr3",
+     "name": "Без id",
+     "unit": "раз",
+     "goal": null,
+     "goalText": "",
+     "dir": 1,
+     "how": ""
+    },
+    {
+     "id": "z",
+     "name": "Показатель",
+     "unit": "раз",
+     "goal": null,
+     "goalText": "",
+     "dir": 1,
+     "how": ""
+    }
+   ],
+   "tracks": [
+    {
+     "id": "handstand",
+     "name": "Стойка",
+     "kind": "timed",
+     "ic": "star",
+     "goal": 7,
+     "goalText": "",
+     "dur": 20,
+     "intro": "",
+     "steps": [
+      {
+       "n": "Шаг",
+       "t": "x"
+      }
+     ],
+     "cur": 12,
+     "items": [
+      {
+       "n": "a",
+       "d": "b",
+       "t": "c"
+      }
+     ],
+     "metric": "",
+     "pctLo": 40,
+     "pctHi": 50,
+     "dayTarget": 8,
+     "base": 10,
+     "tip": ""
+    },
+    {
+     "id": "pullday",
+     "name": "Подтяг",
+     "kind": "sets",
+     "ic": "gym",
+     "goal": 0,
+     "goalText": "",
+     "dur": 20,
+     "intro": "",
+     "steps": [],
+     "cur": 0,
+     "items": [],
+     "metric": "push",
+     "pctLo": 5,
+     "pctHi": 100,
+     "dayTarget": 8,
+     "base": 10,
+     "tip": ""
+    },
+    {
+     "id": "t-mmvt8yo020xm9",
+     "name": "Занятие",
+     "kind": "timed",
+     "ic": "star",
+     "goal": 0,
+     "goalText": "",
+     "dur": 20,
+     "intro": "",
+     "steps": [],
+     "cur": 0,
+     "items": [],
+     "metric": "",
+     "pctLo": 40,
+     "pctHi": 50,
+     "dayTarget": 8,
+     "base": 10,
+     "tip": ""
+    }
+   ]
+  },
+  "maxes": [
+   {
+    "id": "m1",
+    "date": "2026-03-01",
+    "m": "push",
+    "v": 31.5
+   },
+   {
+    "id": "mmvt8yo0xwjok",
+    "date": "2026-03-02",
+    "m": "pull",
+    "v": 5
+   }
+  ],
+  "wlog": {
+   "2026-03-02": {
+    "kg": 66.4,
+    "note": "хорошо"
+   },
+   "2026-03-16": {
+    "kg": 0,
+    "note": "только заметка"
+   }
+  },
+  "templates": [
+   {
+    "id": "t1",
+    "name": "Шаблон",
+    "plan": {
+     "name": "P",
+     "start": "",
+     "protein": false,
+     "volleyHints": false,
+     "deloadEvery": 0,
+     "testEvery": 0,
+     "blocks": [
+      {
+       "id": "b1mmvt8yo047uuy",
+       "name": "Б",
+       "weeks": 3,
+       "text": ""
+      }
+     ],
+     "days": [
+      {
+       "k": "rest",
+       "prog": "",
+       "note": ""
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": ""
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": ""
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": ""
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": ""
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": ""
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": ""
+      }
+     ],
+     "rules": [],
+     "metrics": [],
+     "tracks": []
+    },
+    "programs": [
+     {
+      "id": "A",
+      "title": "A",
+      "rot": false,
+      "warm": [],
+      "items": [
+       {
+        "id": "dips",
+        "sets": 3,
+        "lo": 6,
+        "hi": 10
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "afterMerge": {
+  "sessions": [
+   {
+    "id": "s1",
+    "date": "2026-02-23",
+    "type": "gym",
+    "prog": "A",
+    "title": "",
+    "start": 1000,
+    "min": 50,
+    "rpe": 3,
+    "pain": [],
+    "note": "",
+    "ex": [
+     {
+      "id": "bbsquat",
+      "name": "Присед со штангой",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 40,
+        "r": 5,
+        "fb": "ok"
+       },
+       {
+        "w": 40,
+        "r": 5,
+        "fb": "ok"
+       },
+       {
+        "w": 40,
+        "r": 5,
+        "fb": "ok"
+       },
+       {
+        "w": 40,
+        "r": 5,
+        "fb": "ok"
+       }
+      ]
+     },
+     {
+      "id": "dips",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 0,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 10,
+        "fb": "ok"
+       }
+      ]
+     },
+     {
+      "id": "plank",
+      "kind": "time",
+      "sets": [
+       {
+        "w": 0,
+        "r": 40,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 40,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 40,
+        "fb": null
+       }
+      ]
+     },
+     {
+      "id": "pushup",
+      "kind": "bw",
+      "sets": [
+       {
+        "w": 0,
+        "r": 9,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": null
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "s2",
+    "date": "2026-03-02",
+    "type": "gym",
+    "prog": "B",
+    "title": "",
+    "start": 2000,
+    "min": 50,
+    "rpe": 3,
+    "pain": [],
+    "note": "",
+    "ex": [
+     {
+      "id": "pullup",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 0,
+        "r": 8,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": "easy"
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": "ok"
+       }
+      ]
+     },
+     {
+      "id": "dbrow",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 20,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 20,
+        "r": 10,
+        "fb": "hard"
+       },
+       {
+        "w": 20,
+        "r": 9,
+        "fb": "ok"
+       }
+      ]
+     },
+     {
+      "id": "squat",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "s3",
+    "date": "2026-03-09",
+    "type": "gym",
+    "prog": "C",
+    "title": "",
+    "start": 3000,
+    "min": 50,
+    "rpe": 3,
+    "pain": [],
+    "note": "",
+    "ex": [
+     {
+      "id": "bbsquat",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 42.5,
+        "r": 5,
+        "fb": "hard"
+       },
+       {
+        "w": 42.5,
+        "r": 4,
+        "fb": "hard"
+       }
+      ]
+     },
+     {
+      "id": "squat",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       }
+      ]
+     },
+     {
+      "id": "rope",
+      "kind": "time",
+      "sets": [
+       {
+        "w": 0,
+        "r": 45,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 45,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 45,
+        "fb": null
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "v1",
+    "date": "2026-03-10",
+    "type": "volley",
+    "prog": null,
+    "title": "",
+    "start": 3500,
+    "min": 90,
+    "rpe": 3,
+    "pain": [],
+    "note": "",
+    "ex": [],
+    "kcal": 500
+   },
+   {
+    "id": "a1",
+    "date": "2026-03-01",
+    "type": "gym",
+    "prog": "A",
+    "title": "A · ноги и жимы",
+    "start": 1700000000000,
+    "min": 55,
+    "rpe": 5,
+    "pain": [
+     "Плечо",
+     "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "a",
+     "b",
+     "c",
+     "d"
+    ],
+    "note": "ok",
+    "ex": [
+     {
+      "id": "dips",
+      "name": "Брусья",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 12.5,
+        "r": 8,
+        "fb": "hard"
+       },
+       {
+        "w": 0,
+        "r": 0,
+        "fb": null
+       }
+      ]
+     }
+    ],
+    "kcal": 421
+   },
+   {
+    "id": "a2",
+    "date": "2026-03-02",
+    "type": "track",
+    "prog": null,
+    "title": "",
+    "start": 0,
+    "min": 15,
+    "rpe": 0,
+    "pain": [],
+    "note": "",
+    "ex": [],
+    "tid": "handstand"
+   },
+   {
+    "id": "a3",
+    "date": "2026-03-03",
+    "type": "track",
+    "prog": null,
+    "title": "",
+    "start": 0,
+    "min": 25,
+    "rpe": 0,
+    "pain": [],
+    "note": "",
+    "ex": [],
+    "tid": "stretch",
+    "kcal": 100
+   },
+   {
+    "id": "a4",
+    "date": "2026-03-04",
+    "type": "track",
+    "prog": null,
+    "title": "",
+    "start": 0,
+    "min": 0,
+    "rpe": 0,
+    "pain": [],
+    "note": "",
+    "ex": [],
+    "tid": "pullday",
+    "sl": [
+     5,
+     5,
+     6,
+     999,
+     0
+    ]
+   },
+   {
+    "id": "a5",
+    "date": "2026-03-05",
+    "type": "gym",
+    "prog": null,
+    "title": "Что-то",
+    "start": 0,
+    "min": 0,
+    "rpe": 0,
+    "pain": [],
+    "note": "",
+    "ex": []
+   },
+   {
+    "id": "a6",
+    "date": "2026-03-06",
+    "type": "other",
+    "prog": null,
+    "title": "Плавание",
+    "start": 0,
+    "min": 40,
+    "rpe": 2,
+    "pain": [],
+    "note": "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+    "ex": [],
+    "kcal": 250
+   },
+   {
+    "id": "mmvt8yo0xyupp",
+    "date": "2026-03-07",
+    "type": "volley",
+    "prog": null,
+    "title": "",
+    "start": 0,
+    "min": 90,
+    "rpe": 0,
+    "pain": [],
+    "note": "",
+    "ex": []
+   },
+   {
+    "id": "a7",
+    "date": "2026-03-08",
+    "type": "track",
+    "prog": null,
+    "title": "",
+    "start": 0,
+    "min": 15,
+    "rpe": 0,
+    "pain": [],
+    "note": "",
+    "ex": [],
+    "tid": "handstand"
+   }
+  ],
+  "programs": [
+   {
+    "id": "A",
+    "title": "A · ноги и жимы",
+    "rot": true,
+    "warm": [
+     "Скакалка 2–3 минуты",
+     "Суставная разминка сверху вниз",
+     "Запястья (обязательно): круги, упоры пальцами вперёд и назад",
+     "Разведения резины перед грудью, 10–15 раз",
+     "Лопаточные подтягивания 2×8, руки прямые",
+     "Махи ногами вперёд и в стороны",
+     "Затем 10–15 минут практики стойки на руках, пока вы свежие"
+    ],
+    "items": [
+     {
+      "id": "boxjump",
+      "sets": 4,
+      "lo": 3,
+      "hi": 3
+     },
+     {
+      "id": "bbsquat",
+      "sets": 4,
+      "lo": 5,
+      "hi": 5
+     },
+     {
+      "id": "dips",
+      "sets": 4,
+      "lo": 6,
+      "hi": 10
+     },
+     {
+      "id": "rdl",
+      "sets": 3,
+      "lo": 8,
+      "hi": 8
+     },
+     {
+      "id": "pikepu",
+      "sets": 3,
+      "lo": 6,
+      "hi": 10
+     },
+     {
+      "id": "bulgar",
+      "sets": 3,
+      "lo": 8,
+      "hi": 8
+     },
+     {
+      "id": "calf1",
+      "sets": 3,
+      "lo": 12,
+      "hi": 12
+     },
+     {
+      "id": "hollow",
+      "sets": 3,
+      "lo": 20,
+      "hi": 40
+     }
+    ]
+   },
+   {
+    "id": "B",
+    "title": "B · тяга и взрывная сила",
+    "rot": true,
+    "warm": [
+     "Скакалка 2–3 минуты",
+     "Суставная разминка сверху вниз",
+     "Запястья (обязательно): круги, упоры пальцами вперёд и назад",
+     "Разведения резины перед грудью, 10–15 раз",
+     "Лопаточные подтягивания 2×8, руки прямые",
+     "Махи ногами вперёд и в стороны",
+     "Затем 10–15 минут практики стойки на руках, пока вы свежие"
+    ],
+    "items": [
+     {
+      "id": "medball",
+      "sets": 4,
+      "lo": 5,
+      "hi": 5
+     },
+     {
+      "id": "pullup",
+      "sets": 5,
+      "lo": 5,
+      "hi": 8
+     },
+     {
+      "id": "dbrow",
+      "sets": 3,
+      "lo": 10,
+      "hi": 10
+     },
+     {
+      "id": "clappush",
+      "sets": 3,
+      "lo": 5,
+      "hi": 5
+     },
+     {
+      "id": "pullover",
+      "sets": 3,
+      "lo": 10,
+      "hi": 10
+     },
+     {
+      "id": "facepull",
+      "sets": 3,
+      "lo": 15,
+      "hi": 15
+     },
+     {
+      "id": "legraise",
+      "sets": 3,
+      "lo": 8,
+      "hi": 12
+     },
+     {
+      "id": "medrot",
+      "sets": 3,
+      "lo": 6,
+      "hi": 6
+     }
+    ]
+   },
+   {
+    "id": "C",
+    "title": "C · калистеника и прыжок",
+    "rot": true,
+    "warm": [
+     "Скакалка 2–3 минуты",
+     "Суставная разминка сверху вниз",
+     "Запястья (обязательно): круги, упоры пальцами вперёд и назад",
+     "Разведения резины перед грудью, 10–15 раз",
+     "Лопаточные подтягивания 2×8, руки прямые",
+     "Махи ногами вперёд и в стороны",
+     "Затем 10–15 минут практики стойки на руках, пока вы свежие"
+    ],
+    "items": [
+     {
+      "id": "runjump",
+      "sets": 5,
+      "lo": 3,
+      "hi": 3
+     },
+     {
+      "id": "pistol",
+      "sets": 3,
+      "lo": 5,
+      "hi": 5
+     },
+     {
+      "id": "pullup",
+      "sets": 5,
+      "lo": 5,
+      "hi": 8
+     },
+     {
+      "id": "dips",
+      "sets": 4,
+      "lo": 8,
+      "hi": 12
+     },
+     {
+      "id": "pushup",
+      "sets": 3,
+      "lo": 8,
+      "hi": 12
+     },
+     {
+      "id": "nordic",
+      "sets": 3,
+      "lo": 4,
+      "hi": 6
+     },
+     {
+      "id": "lsit",
+      "sets": 4,
+      "lo": 10,
+      "hi": 20
+     }
+    ]
+   },
+   {
+    "id": "p-x",
+    "title": "Программа",
+    "rot": false,
+    "warm": [],
+    "items": []
+   }
+  ],
+  "customEx": [
+   {
+    "id": "x-1",
+    "name": "Старое",
+    "kind": "w",
+    "step": 1,
+    "tip": ""
+   },
+   {
+    "id": "x-2",
+    "name": "Секундомер",
+    "kind": "w",
+    "step": 1,
+    "tip": ""
+   }
+  ],
+  "plan": {
+   "name": "План на 6 месяцев",
+   "start": "2026-02-02",
+   "protein": true,
+   "volleyHints": true,
+   "deloadEvery": 5,
+   "testEvery": 4,
+   "blocks": [
+    {
+     "id": "b1",
+     "name": "База",
+     "weeks": 8,
+     "text": "Техника, связки и запястья, стойка у стены, растяжка. Веса умеренные, плиометрика лёгкая."
+    },
+    {
+     "id": "b2",
+     "name": "Сила",
+     "weeks": 8,
+     "text": "Подтягивания и брусья с весом, присед тяжелее, взрывные отжимания, отрыв носков от стены."
+    },
+    {
+     "id": "b3",
+     "name": "Мощность и навыки",
+     "weeks": 10,
+     "text": "Высокие прыжки, негативы в стойке, кик-апы, более глубокая растяжка."
+    }
+   ],
+   "days": [
+    {
+     "k": "gym",
+     "prog": "A",
+     "note": "Ноги и жимы"
+    },
+    {
+     "k": "home",
+     "prog": "",
+     "note": "Стойка 15 мин, растяжка 25 мин, турник в течение дня"
+    },
+    {
+     "k": "gym",
+     "prog": "B",
+     "note": "Тяга и взрывная сила"
+    },
+    {
+     "k": "home",
+     "prog": "",
+     "note": "Стойка, растяжка, турник — или игра"
+    },
+    {
+     "k": "gym",
+     "prog": "C",
+     "note": "Калистеника и прыжок"
+    },
+    {
+     "k": "vb",
+     "prog": "",
+     "note": "Игра или растяжка"
+    },
+    {
+     "k": "rest",
+     "prog": "",
+     "note": "Полный отдых"
+    }
+   ],
+   "rules": [
+    {
+     "t": "За день до игры",
+     "d": "Не ставьте тяжёлые ноги и прыжки."
+    },
+    {
+     "t": "Игра в день зала",
+     "d": "Уберите из тренировки прыжковый блок."
+    },
+    {
+     "t": "Ноги «забиты»",
+     "d": "Перенесите тренировку на ногах на день позже."
+    }
+   ],
+   "metrics": [
+    {
+     "id": "push",
+     "name": "Отжимания",
+     "unit": "раз",
+     "goal": 40,
+     "goalText": "40+",
+     "dir": 1,
+     "how": "Максимум подряд, строго: тело прямое, грудь почти касается пола."
+    },
+    {
+     "id": "pull",
+     "name": "Подтягивания",
+     "unit": "раз",
+     "goal": 15,
+     "goalText": "15–20 (40 — через 1,5–3 года)",
+     "dir": 1,
+     "how": "Из виса, подбородок над перекладиной, без раскачки."
+    },
+    {
+     "id": "dips",
+     "name": "Брусья",
+     "unit": "раз",
+     "goal": 20,
+     "goalText": "20+",
+     "dir": 1,
+     "how": "Полная амплитуда: плечи опускаются ниже локтей."
+    },
+    {
+     "id": "wall",
+     "name": "Стойка у стены",
+     "unit": "с",
+     "goal": 60,
+     "goalText": "60 с",
+     "dir": 1,
+     "how": "Грудью к стене. Секундомер до схода."
+    },
+    {
+     "id": "free",
+     "name": "Свободная стойка",
+     "unit": "с",
+     "goal": 15,
+     "goalText": "15–30 с",
+     "dir": 1,
+     "how": "Без опоры, лучшая попытка."
+    },
+    {
+     "id": "sj",
+     "name": "Прыжок с места",
+     "unit": "см",
+     "goal": null,
+     "goalText": "",
+     "dir": 1,
+     "how": "Отметка рукой на стене: высота касания минус высота вытянутой руки."
+    },
+    {
+     "id": "rj",
+     "name": "Прыжок с разбега",
+     "unit": "см",
+     "goal": null,
+     "goalText": "",
+     "dir": 1,
+     "how": "Так же, но с волейбольного разбега."
+    },
+    {
+     "id": "fs",
+     "name": "Продольный шпагат",
+     "unit": "см до пола",
+     "goal": 0,
+     "goalText": "0 (возможен за 6–12 мес)",
+     "dir": -1,
+     "how": "Расстояние от таза до пола."
+    },
+    {
+     "id": "ss",
+     "name": "Поперечный шпагат",
+     "unit": "см до пола",
+     "goal": 0,
+     "goalText": "0 (долгосрочно, 1–2+ года)",
+     "dir": -1,
+     "how": "Расстояние от таза до пола."
+    },
+    {
+     "id": "m-mmvt8yo0toekr",
+     "name": "Без id",
+     "unit": "раз",
+     "goal": null,
+     "goalText": "",
+     "dir": 1,
+     "how": ""
+    },
+    {
+     "id": "z",
+     "name": "Показатель",
+     "unit": "раз",
+     "goal": null,
+     "goalText": "",
+     "dir": 1,
+     "how": ""
+    }
+   ],
+   "tracks": [
+    {
+     "id": "handstand",
+     "name": "Стойка на руках",
+     "kind": "timed",
+     "ic": "star",
+     "goal": 5,
+     "goalText": "5–6",
+     "dur": 15,
+     "intro": "Стойка любит частоту: 10–15 минут 5–6 раз в неделю лучше, чем час раз в неделю. Практикуйте после разминки, пока свежие. Переходите дальше, только когда уверенно делаете текущий шаг.",
+     "steps": [
+      {
+       "n": "Выход колесом",
+       "t": "Научитесь безопасно падать: переставьте одну руку и шагните ногами вбок. Первая неделя."
+      },
+      {
+       "n": "Стойка грудью к стене",
+       "t": "4–5 подходов по 20–60 с. Руки прямые, плечи толкают пол, тело ровное, как в холлоу-холде."
+      },
+      {
+       "n": "Отрыв носков от стены",
+       "t": "На пару секунд, когда держите 60 с у стены."
+      },
+      {
+       "n": "Кик-апы",
+       "t": "В свободную стойку, 10–15 минут у открытого места. Баланс держите пальцами, давя в пол."
+      },
+      {
+       "n": "Негативы отжиманий в стойке",
+       "t": "У стены медленно опускаетесь, встаёте ногами на пол, повторяете. Основа: пайк-отжимания с возвышения, 3×10."
+      }
+     ],
+     "cur": 1,
+     "items": [],
+     "metric": "",
+     "pctLo": 40,
+     "pctHi": 50,
+     "dayTarget": 8,
+     "base": 10,
+     "tip": ""
+    },
+    {
+     "id": "stretch",
+     "name": "Растяжка",
+     "kind": "timed",
+     "ic": "stretch",
+     "goal": 3,
+     "goalText": "3–4",
+     "dur": 25,
+     "intro": "В домашние дни 20–30 минут, после зала 5–10 минут. До дискомфорта, не до боли: боль в колене на шпагате — сигнал сразу остановиться. Приём «напряжение — расслабление»: в конечной позиции 5–8 с давите ногами в пол, на выдохе расслабьтесь и опуститесь чуть ниже, повторите 2–3 раза.",
+     "steps": [],
+     "cur": 0,
+     "items": [
+      {
+       "n": "Выпад с коленом у стены (couch stretch)",
+       "d": "2×60 с на ногу",
+       "t": "Сгибатели бедра, продольный шпагат"
+      },
+      {
+       "n": "Полушпагат, наклон к прямой ноге",
+       "d": "2×60 с на ногу",
+       "t": "Задняя поверхность бедра"
+      },
+      {
+       "n": "Продольный шпагат на блоках или стульях",
+       "d": "2×60 с на ногу",
+       "t": "Постепенно снижайте опору"
+      },
+      {
+       "n": "Лягушка",
+       "d": "2×60 с",
+       "t": "Поперечный шпагат"
+      },
+      {
+       "n": "Складка с широко разведёнными ногами",
+       "d": "2×60 с",
+       "t": "Поперечный шпагат"
+      },
+      {
+       "n": "Коссак-приседы",
+       "d": "2×8 на сторону",
+       "t": "Активная гибкость"
+      },
+      {
+       "n": "Мостик",
+       "d": "3×10–20 с",
+       "t": "Грудной отдел и плечи, нужно для стойки"
+      },
+      {
+       "n": "Плечи: руки на стене, грудь вниз",
+       "d": "2×45 с",
+       "t": "Ровная линия в стойке"
+      }
+     ],
+     "metric": "",
+     "pctLo": 40,
+     "pctHi": 50,
+     "dayTarget": 8,
+     "base": 10,
+     "tip": ""
+    },
+    {
+     "id": "pullday",
+     "name": "Подтягивания в течение дня",
+     "kind": "sets",
+     "ic": "gym",
+     "goal": 0,
+     "goalText": "",
+     "dur": 20,
+     "intro": "",
+     "steps": [],
+     "cur": 0,
+     "items": [],
+     "metric": "pull",
+     "pctLo": 40,
+     "pctHi": 50,
+     "dayTarget": 8,
+     "base": 10,
+     "tip": "В дни без зала делайте 5–8 лёгких подходов, между ними минимум 30–60 минут. Ни одного до отказа. Так же можно делать отжимания. Пересчитывайте максимум раз в 4 недели."
+    },
+    {
+     "id": "t-mmvt8yo0hqcln",
+     "name": "Занятие",
+     "kind": "timed",
+     "ic": "star",
+     "goal": 0,
+     "goalText": "",
+     "dur": 20,
+     "intro": "",
+     "steps": [],
+     "cur": 0,
+     "items": [],
+     "metric": "",
+     "pctLo": 40,
+     "pctHi": 50,
+     "dayTarget": 8,
+     "base": 10,
+     "tip": ""
+    }
+   ]
+  },
+  "maxes": [
+   {
+    "id": "m1",
+    "date": "2026-02-01",
+    "m": "push",
+    "v": 20
+   },
+   {
+    "id": "mmvt8yo041bvd",
+    "date": "2026-03-02",
+    "m": "pull",
+    "v": 5
+   }
+  ],
+  "wlog": {
+   "2026-03-02": {
+    "kg": 70,
+    "note": "старая"
+   },
+   "2026-03-16": {
+    "kg": 0,
+    "note": "только заметка"
+   }
+  },
+  "templates": [
+   {
+    "id": "t1",
+    "name": "Шаблон",
+    "plan": {
+     "name": "P",
+     "start": "",
+     "protein": false,
+     "volleyHints": false,
+     "deloadEvery": 0,
+     "testEvery": 0,
+     "blocks": [
+      {
+       "id": "b1mmvt8yo0c0sno",
+       "name": "Б",
+       "weeks": 3,
+       "text": ""
+      }
+     ],
+     "days": [
+      {
+       "k": "rest",
+       "prog": "",
+       "note": ""
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": ""
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": ""
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": ""
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": ""
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": ""
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": ""
+      }
+     ],
+     "rules": [],
+     "metrics": [],
+     "tracks": []
+    },
+    "programs": [
+     {
+      "id": "A",
+      "title": "A",
+      "rot": false,
+      "warm": [],
+      "items": [
+       {
+        "id": "dips",
+        "sets": 3,
+        "lo": 6,
+        "hi": 10
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "baseForMerge": {
+  "sessions": [
+   {
+    "id": "s1",
+    "date": "2026-02-23",
+    "type": "gym",
+    "prog": "A",
+    "title": "",
+    "start": 1000,
+    "min": 50,
+    "rpe": 3,
+    "pain": [],
+    "note": "",
+    "ex": [
+     {
+      "id": "bbsquat",
+      "name": "Присед со штангой",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 40,
+        "r": 5,
+        "fb": "ok"
+       },
+       {
+        "w": 40,
+        "r": 5,
+        "fb": "ok"
+       },
+       {
+        "w": 40,
+        "r": 5,
+        "fb": "ok"
+       },
+       {
+        "w": 40,
+        "r": 5,
+        "fb": "ok"
+       }
+      ]
+     },
+     {
+      "id": "dips",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 0,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 10,
+        "fb": "ok"
+       }
+      ]
+     },
+     {
+      "id": "plank",
+      "kind": "time",
+      "sets": [
+       {
+        "w": 0,
+        "r": 40,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 40,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 40,
+        "fb": null
+       }
+      ]
+     },
+     {
+      "id": "pushup",
+      "kind": "bw",
+      "sets": [
+       {
+        "w": 0,
+        "r": 9,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": null
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "s2",
+    "date": "2026-03-02",
+    "type": "gym",
+    "prog": "B",
+    "title": "",
+    "start": 2000,
+    "min": 50,
+    "rpe": 3,
+    "pain": [],
+    "note": "",
+    "ex": [
+     {
+      "id": "pullup",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 0,
+        "r": 8,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": "easy"
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": "ok"
+       }
+      ]
+     },
+     {
+      "id": "dbrow",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 20,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 20,
+        "r": 10,
+        "fb": "hard"
+       },
+       {
+        "w": 20,
+        "r": 9,
+        "fb": "ok"
+       }
+      ]
+     },
+     {
+      "id": "squat",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "s3",
+    "date": "2026-03-09",
+    "type": "gym",
+    "prog": "C",
+    "title": "",
+    "start": 3000,
+    "min": 50,
+    "rpe": 3,
+    "pain": [],
+    "note": "",
+    "ex": [
+     {
+      "id": "bbsquat",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 42.5,
+        "r": 5,
+        "fb": "hard"
+       },
+       {
+        "w": 42.5,
+        "r": 4,
+        "fb": "hard"
+       }
+      ]
+     },
+     {
+      "id": "squat",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       }
+      ]
+     },
+     {
+      "id": "rope",
+      "kind": "time",
+      "sets": [
+       {
+        "w": 0,
+        "r": 45,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 45,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 45,
+        "fb": null
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "v1",
+    "date": "2026-03-10",
+    "type": "volley",
+    "prog": null,
+    "title": "",
+    "start": 3500,
+    "min": 90,
+    "rpe": 3,
+    "pain": [],
+    "note": "",
+    "ex": [],
+    "kcal": 500
+   }
+  ],
+  "programs": [
+   {
+    "id": "A",
+    "title": "A · ноги и жимы",
+    "rot": true,
+    "warm": [
+     "Скакалка 2–3 минуты",
+     "Суставная разминка сверху вниз",
+     "Запястья (обязательно): круги, упоры пальцами вперёд и назад",
+     "Разведения резины перед грудью, 10–15 раз",
+     "Лопаточные подтягивания 2×8, руки прямые",
+     "Махи ногами вперёд и в стороны",
+     "Затем 10–15 минут практики стойки на руках, пока вы свежие"
+    ],
+    "items": [
+     {
+      "id": "boxjump",
+      "sets": 4,
+      "lo": 3,
+      "hi": 3
+     },
+     {
+      "id": "bbsquat",
+      "sets": 4,
+      "lo": 5,
+      "hi": 5
+     },
+     {
+      "id": "dips",
+      "sets": 4,
+      "lo": 6,
+      "hi": 10
+     },
+     {
+      "id": "rdl",
+      "sets": 3,
+      "lo": 8,
+      "hi": 8
+     },
+     {
+      "id": "pikepu",
+      "sets": 3,
+      "lo": 6,
+      "hi": 10
+     },
+     {
+      "id": "bulgar",
+      "sets": 3,
+      "lo": 8,
+      "hi": 8
+     },
+     {
+      "id": "calf1",
+      "sets": 3,
+      "lo": 12,
+      "hi": 12
+     },
+     {
+      "id": "hollow",
+      "sets": 3,
+      "lo": 20,
+      "hi": 40
+     }
+    ]
+   },
+   {
+    "id": "B",
+    "title": "B · тяга и взрывная сила",
+    "rot": true,
+    "warm": [
+     "Скакалка 2–3 минуты",
+     "Суставная разминка сверху вниз",
+     "Запястья (обязательно): круги, упоры пальцами вперёд и назад",
+     "Разведения резины перед грудью, 10–15 раз",
+     "Лопаточные подтягивания 2×8, руки прямые",
+     "Махи ногами вперёд и в стороны",
+     "Затем 10–15 минут практики стойки на руках, пока вы свежие"
+    ],
+    "items": [
+     {
+      "id": "medball",
+      "sets": 4,
+      "lo": 5,
+      "hi": 5
+     },
+     {
+      "id": "pullup",
+      "sets": 5,
+      "lo": 5,
+      "hi": 8
+     },
+     {
+      "id": "dbrow",
+      "sets": 3,
+      "lo": 10,
+      "hi": 10
+     },
+     {
+      "id": "clappush",
+      "sets": 3,
+      "lo": 5,
+      "hi": 5
+     },
+     {
+      "id": "pullover",
+      "sets": 3,
+      "lo": 10,
+      "hi": 10
+     },
+     {
+      "id": "facepull",
+      "sets": 3,
+      "lo": 15,
+      "hi": 15
+     },
+     {
+      "id": "legraise",
+      "sets": 3,
+      "lo": 8,
+      "hi": 12
+     },
+     {
+      "id": "medrot",
+      "sets": 3,
+      "lo": 6,
+      "hi": 6
+     }
+    ]
+   },
+   {
+    "id": "C",
+    "title": "C · калистеника и прыжок",
+    "rot": true,
+    "warm": [
+     "Скакалка 2–3 минуты",
+     "Суставная разминка сверху вниз",
+     "Запястья (обязательно): круги, упоры пальцами вперёд и назад",
+     "Разведения резины перед грудью, 10–15 раз",
+     "Лопаточные подтягивания 2×8, руки прямые",
+     "Махи ногами вперёд и в стороны",
+     "Затем 10–15 минут практики стойки на руках, пока вы свежие"
+    ],
+    "items": [
+     {
+      "id": "runjump",
+      "sets": 5,
+      "lo": 3,
+      "hi": 3
+     },
+     {
+      "id": "pistol",
+      "sets": 3,
+      "lo": 5,
+      "hi": 5
+     },
+     {
+      "id": "pullup",
+      "sets": 5,
+      "lo": 5,
+      "hi": 8
+     },
+     {
+      "id": "dips",
+      "sets": 4,
+      "lo": 8,
+      "hi": 12
+     },
+     {
+      "id": "pushup",
+      "sets": 3,
+      "lo": 8,
+      "hi": 12
+     },
+     {
+      "id": "nordic",
+      "sets": 3,
+      "lo": 4,
+      "hi": 6
+     },
+     {
+      "id": "lsit",
+      "sets": 4,
+      "lo": 10,
+      "hi": 20
+     }
+    ]
+   }
+  ],
+  "customEx": [
+   {
+    "id": "x-1",
+    "name": "Старое",
+    "kind": "w",
+    "step": 1,
+    "tip": ""
+   }
+  ],
+  "plan": {
+   "name": "План на 6 месяцев",
+   "start": "2026-02-02",
+   "protein": true,
+   "volleyHints": true,
+   "deloadEvery": 5,
+   "testEvery": 4,
+   "blocks": [
+    {
+     "id": "b1",
+     "name": "База",
+     "weeks": 8,
+     "text": "Техника, связки и запястья, стойка у стены, растяжка. Веса умеренные, плиометрика лёгкая."
+    },
+    {
+     "id": "b2",
+     "name": "Сила",
+     "weeks": 8,
+     "text": "Подтягивания и брусья с весом, присед тяжелее, взрывные отжимания, отрыв носков от стены."
+    },
+    {
+     "id": "b3",
+     "name": "Мощность и навыки",
+     "weeks": 10,
+     "text": "Высокие прыжки, негативы в стойке, кик-апы, более глубокая растяжка."
+    }
+   ],
+   "days": [
+    {
+     "k": "gym",
+     "prog": "A",
+     "note": "Ноги и жимы"
+    },
+    {
+     "k": "home",
+     "prog": "",
+     "note": "Стойка 15 мин, растяжка 25 мин, турник в течение дня"
+    },
+    {
+     "k": "gym",
+     "prog": "B",
+     "note": "Тяга и взрывная сила"
+    },
+    {
+     "k": "home",
+     "prog": "",
+     "note": "Стойка, растяжка, турник — или игра"
+    },
+    {
+     "k": "gym",
+     "prog": "C",
+     "note": "Калистеника и прыжок"
+    },
+    {
+     "k": "vb",
+     "prog": "",
+     "note": "Игра или растяжка"
+    },
+    {
+     "k": "rest",
+     "prog": "",
+     "note": "Полный отдых"
+    }
+   ],
+   "rules": [
+    {
+     "t": "За день до игры",
+     "d": "Не ставьте тяжёлые ноги и прыжки."
+    },
+    {
+     "t": "Игра в день зала",
+     "d": "Уберите из тренировки прыжковый блок."
+    },
+    {
+     "t": "Ноги «забиты»",
+     "d": "Перенесите тренировку на ногах на день позже."
+    }
+   ],
+   "metrics": [
+    {
+     "id": "push",
+     "name": "Отжимания",
+     "unit": "раз",
+     "goal": 40,
+     "goalText": "40+",
+     "dir": 1,
+     "how": "Максимум подряд, строго: тело прямое, грудь почти касается пола."
+    },
+    {
+     "id": "pull",
+     "name": "Подтягивания",
+     "unit": "раз",
+     "goal": 15,
+     "goalText": "15–20 (40 — через 1,5–3 года)",
+     "dir": 1,
+     "how": "Из виса, подбородок над перекладиной, без раскачки."
+    },
+    {
+     "id": "dips",
+     "name": "Брусья",
+     "unit": "раз",
+     "goal": 20,
+     "goalText": "20+",
+     "dir": 1,
+     "how": "Полная амплитуда: плечи опускаются ниже локтей."
+    },
+    {
+     "id": "wall",
+     "name": "Стойка у стены",
+     "unit": "с",
+     "goal": 60,
+     "goalText": "60 с",
+     "dir": 1,
+     "how": "Грудью к стене. Секундомер до схода."
+    },
+    {
+     "id": "free",
+     "name": "Свободная стойка",
+     "unit": "с",
+     "goal": 15,
+     "goalText": "15–30 с",
+     "dir": 1,
+     "how": "Без опоры, лучшая попытка."
+    },
+    {
+     "id": "sj",
+     "name": "Прыжок с места",
+     "unit": "см",
+     "goal": null,
+     "goalText": "",
+     "dir": 1,
+     "how": "Отметка рукой на стене: высота касания минус высота вытянутой руки."
+    },
+    {
+     "id": "rj",
+     "name": "Прыжок с разбега",
+     "unit": "см",
+     "goal": null,
+     "goalText": "",
+     "dir": 1,
+     "how": "Так же, но с волейбольного разбега."
+    },
+    {
+     "id": "fs",
+     "name": "Продольный шпагат",
+     "unit": "см до пола",
+     "goal": 0,
+     "goalText": "0 (возможен за 6–12 мес)",
+     "dir": -1,
+     "how": "Расстояние от таза до пола."
+    },
+    {
+     "id": "ss",
+     "name": "Поперечный шпагат",
+     "unit": "см до пола",
+     "goal": 0,
+     "goalText": "0 (долгосрочно, 1–2+ года)",
+     "dir": -1,
+     "how": "Расстояние от таза до пола."
+    }
+   ],
+   "tracks": [
+    {
+     "id": "handstand",
+     "name": "Стойка на руках",
+     "kind": "timed",
+     "ic": "star",
+     "goal": 5,
+     "goalText": "5–6",
+     "dur": 15,
+     "intro": "Стойка любит частоту: 10–15 минут 5–6 раз в неделю лучше, чем час раз в неделю. Практикуйте после разминки, пока свежие. Переходите дальше, только когда уверенно делаете текущий шаг.",
+     "steps": [
+      {
+       "n": "Выход колесом",
+       "t": "Научитесь безопасно падать: переставьте одну руку и шагните ногами вбок. Первая неделя."
+      },
+      {
+       "n": "Стойка грудью к стене",
+       "t": "4–5 подходов по 20–60 с. Руки прямые, плечи толкают пол, тело ровное, как в холлоу-холде."
+      },
+      {
+       "n": "Отрыв носков от стены",
+       "t": "На пару секунд, когда держите 60 с у стены."
+      },
+      {
+       "n": "Кик-апы",
+       "t": "В свободную стойку, 10–15 минут у открытого места. Баланс держите пальцами, давя в пол."
+      },
+      {
+       "n": "Негативы отжиманий в стойке",
+       "t": "У стены медленно опускаетесь, встаёте ногами на пол, повторяете. Основа: пайк-отжимания с возвышения, 3×10."
+      }
+     ],
+     "cur": 1,
+     "items": [],
+     "metric": "",
+     "pctLo": 40,
+     "pctHi": 50,
+     "dayTarget": 8,
+     "base": 10,
+     "tip": ""
+    },
+    {
+     "id": "stretch",
+     "name": "Растяжка",
+     "kind": "timed",
+     "ic": "stretch",
+     "goal": 3,
+     "goalText": "3–4",
+     "dur": 25,
+     "intro": "В домашние дни 20–30 минут, после зала 5–10 минут. До дискомфорта, не до боли: боль в колене на шпагате — сигнал сразу остановиться. Приём «напряжение — расслабление»: в конечной позиции 5–8 с давите ногами в пол, на выдохе расслабьтесь и опуститесь чуть ниже, повторите 2–3 раза.",
+     "steps": [],
+     "cur": 0,
+     "items": [
+      {
+       "n": "Выпад с коленом у стены (couch stretch)",
+       "d": "2×60 с на ногу",
+       "t": "Сгибатели бедра, продольный шпагат"
+      },
+      {
+       "n": "Полушпагат, наклон к прямой ноге",
+       "d": "2×60 с на ногу",
+       "t": "Задняя поверхность бедра"
+      },
+      {
+       "n": "Продольный шпагат на блоках или стульях",
+       "d": "2×60 с на ногу",
+       "t": "Постепенно снижайте опору"
+      },
+      {
+       "n": "Лягушка",
+       "d": "2×60 с",
+       "t": "Поперечный шпагат"
+      },
+      {
+       "n": "Складка с широко разведёнными ногами",
+       "d": "2×60 с",
+       "t": "Поперечный шпагат"
+      },
+      {
+       "n": "Коссак-приседы",
+       "d": "2×8 на сторону",
+       "t": "Активная гибкость"
+      },
+      {
+       "n": "Мостик",
+       "d": "3×10–20 с",
+       "t": "Грудной отдел и плечи, нужно для стойки"
+      },
+      {
+       "n": "Плечи: руки на стене, грудь вниз",
+       "d": "2×45 с",
+       "t": "Ровная линия в стойке"
+      }
+     ],
+     "metric": "",
+     "pctLo": 40,
+     "pctHi": 50,
+     "dayTarget": 8,
+     "base": 10,
+     "tip": ""
+    },
+    {
+     "id": "pullday",
+     "name": "Подтягивания в течение дня",
+     "kind": "sets",
+     "ic": "gym",
+     "goal": 0,
+     "goalText": "",
+     "dur": 20,
+     "intro": "",
+     "steps": [],
+     "cur": 0,
+     "items": [],
+     "metric": "pull",
+     "pctLo": 40,
+     "pctHi": 50,
+     "dayTarget": 8,
+     "base": 10,
+     "tip": "В дни без зала делайте 5–8 лёгких подходов, между ними минимум 30–60 минут. Ни одного до отказа. Так же можно делать отжимания. Пересчитывайте максимум раз в 4 недели."
+    }
+   ]
+  },
+  "maxes": [
+   {
+    "id": "m1",
+    "date": "2026-02-01",
+    "m": "push",
+    "v": 20
+   }
+  ],
+  "wlog": {
+   "2026-03-02": {
+    "kg": 70,
+    "note": "старая"
+   }
+  },
+  "templates": []
+ },
+ "exportInput": {
+  "sessions": [
+   {
+    "id": "s1",
+    "date": "2026-02-23",
+    "type": "gym",
+    "prog": "A",
+    "title": "",
+    "start": 1000,
+    "min": 50,
+    "rpe": 3,
+    "pain": [],
+    "note": "",
+    "ex": [
+     {
+      "id": "bbsquat",
+      "name": "Присед со штангой",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 40,
+        "r": 5,
+        "fb": "ok"
+       },
+       {
+        "w": 40,
+        "r": 5,
+        "fb": "ok"
+       },
+       {
+        "w": 40,
+        "r": 5,
+        "fb": "ok"
+       },
+       {
+        "w": 40,
+        "r": 5,
+        "fb": "ok"
+       }
+      ]
+     },
+     {
+      "id": "dips",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 0,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 10,
+        "fb": "ok"
+       }
+      ]
+     },
+     {
+      "id": "plank",
+      "kind": "time",
+      "sets": [
+       {
+        "w": 0,
+        "r": 40,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 40,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 40,
+        "fb": null
+       }
+      ]
+     },
+     {
+      "id": "pushup",
+      "kind": "bw",
+      "sets": [
+       {
+        "w": 0,
+        "r": 9,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": null
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "s2",
+    "date": "2026-03-02",
+    "type": "gym",
+    "prog": "B",
+    "title": "",
+    "start": 2000,
+    "min": 50,
+    "rpe": 3,
+    "pain": [],
+    "note": "",
+    "ex": [
+     {
+      "id": "pullup",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 0,
+        "r": 8,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": "easy"
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": "ok"
+       }
+      ]
+     },
+     {
+      "id": "dbrow",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 20,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 20,
+        "r": 10,
+        "fb": "hard"
+       },
+       {
+        "w": 20,
+        "r": 9,
+        "fb": "ok"
+       }
+      ]
+     },
+     {
+      "id": "squat",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "s3",
+    "date": "2026-03-09",
+    "type": "gym",
+    "prog": "C",
+    "title": "",
+    "start": 3000,
+    "min": 50,
+    "rpe": 3,
+    "pain": [],
+    "note": "",
+    "ex": [
+     {
+      "id": "bbsquat",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 42.5,
+        "r": 5,
+        "fb": "hard"
+       },
+       {
+        "w": 42.5,
+        "r": 4,
+        "fb": "hard"
+       }
+      ]
+     },
+     {
+      "id": "squat",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       }
+      ]
+     },
+     {
+      "id": "rope",
+      "kind": "time",
+      "sets": [
+       {
+        "w": 0,
+        "r": 45,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 45,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 45,
+        "fb": null
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "v1",
+    "date": "2026-03-10",
+    "type": "volley",
+    "prog": null,
+    "title": "",
+    "start": 3500,
+    "min": 90,
+    "rpe": 3,
+    "pain": [],
+    "note": "",
+    "ex": [],
+    "kcal": 500
+   }
+  ],
+  "programs": [
+   {
+    "id": "A",
+    "title": "A · ноги и жимы",
+    "rot": true,
+    "warm": [
+     "Скакалка 2–3 минуты",
+     "Суставная разминка сверху вниз",
+     "Запястья (обязательно): круги, упоры пальцами вперёд и назад",
+     "Разведения резины перед грудью, 10–15 раз",
+     "Лопаточные подтягивания 2×8, руки прямые",
+     "Махи ногами вперёд и в стороны",
+     "Затем 10–15 минут практики стойки на руках, пока вы свежие"
+    ],
+    "items": [
+     {
+      "id": "boxjump",
+      "sets": 4,
+      "lo": 3,
+      "hi": 3
+     },
+     {
+      "id": "bbsquat",
+      "sets": 4,
+      "lo": 5,
+      "hi": 5
+     },
+     {
+      "id": "dips",
+      "sets": 4,
+      "lo": 6,
+      "hi": 10
+     },
+     {
+      "id": "rdl",
+      "sets": 3,
+      "lo": 8,
+      "hi": 8
+     },
+     {
+      "id": "pikepu",
+      "sets": 3,
+      "lo": 6,
+      "hi": 10
+     },
+     {
+      "id": "bulgar",
+      "sets": 3,
+      "lo": 8,
+      "hi": 8
+     },
+     {
+      "id": "calf1",
+      "sets": 3,
+      "lo": 12,
+      "hi": 12
+     },
+     {
+      "id": "hollow",
+      "sets": 3,
+      "lo": 20,
+      "hi": 40
+     }
+    ]
+   },
+   {
+    "id": "B",
+    "title": "B · тяга и взрывная сила",
+    "rot": true,
+    "warm": [
+     "Скакалка 2–3 минуты",
+     "Суставная разминка сверху вниз",
+     "Запястья (обязательно): круги, упоры пальцами вперёд и назад",
+     "Разведения резины перед грудью, 10–15 раз",
+     "Лопаточные подтягивания 2×8, руки прямые",
+     "Махи ногами вперёд и в стороны",
+     "Затем 10–15 минут практики стойки на руках, пока вы свежие"
+    ],
+    "items": [
+     {
+      "id": "medball",
+      "sets": 4,
+      "lo": 5,
+      "hi": 5
+     },
+     {
+      "id": "pullup",
+      "sets": 5,
+      "lo": 5,
+      "hi": 8
+     },
+     {
+      "id": "dbrow",
+      "sets": 3,
+      "lo": 10,
+      "hi": 10
+     },
+     {
+      "id": "clappush",
+      "sets": 3,
+      "lo": 5,
+      "hi": 5
+     },
+     {
+      "id": "pullover",
+      "sets": 3,
+      "lo": 10,
+      "hi": 10
+     },
+     {
+      "id": "facepull",
+      "sets": 3,
+      "lo": 15,
+      "hi": 15
+     },
+     {
+      "id": "legraise",
+      "sets": 3,
+      "lo": 8,
+      "hi": 12
+     },
+     {
+      "id": "medrot",
+      "sets": 3,
+      "lo": 6,
+      "hi": 6
+     }
+    ]
+   },
+   {
+    "id": "C",
+    "title": "C · калистеника и прыжок",
+    "rot": true,
+    "warm": [
+     "Скакалка 2–3 минуты",
+     "Суставная разминка сверху вниз",
+     "Запястья (обязательно): круги, упоры пальцами вперёд и назад",
+     "Разведения резины перед грудью, 10–15 раз",
+     "Лопаточные подтягивания 2×8, руки прямые",
+     "Махи ногами вперёд и в стороны",
+     "Затем 10–15 минут практики стойки на руках, пока вы свежие"
+    ],
+    "items": [
+     {
+      "id": "runjump",
+      "sets": 5,
+      "lo": 3,
+      "hi": 3
+     },
+     {
+      "id": "pistol",
+      "sets": 3,
+      "lo": 5,
+      "hi": 5
+     },
+     {
+      "id": "pullup",
+      "sets": 5,
+      "lo": 5,
+      "hi": 8
+     },
+     {
+      "id": "dips",
+      "sets": 4,
+      "lo": 8,
+      "hi": 12
+     },
+     {
+      "id": "pushup",
+      "sets": 3,
+      "lo": 8,
+      "hi": 12
+     },
+     {
+      "id": "nordic",
+      "sets": 3,
+      "lo": 4,
+      "hi": 6
+     },
+     {
+      "id": "lsit",
+      "sets": 4,
+      "lo": 10,
+      "hi": 20
+     }
+    ]
+   }
+  ],
+  "customEx": [
+   {
+    "id": "x-1",
+    "name": "Старое",
+    "kind": "w",
+    "step": 1,
+    "tip": ""
+   },
+   {
+    "id": "x-9",
+    "name": "Своё",
+    "kind": "time",
+    "step": 5,
+    "tip": "т"
+   }
+  ],
+  "plan": {
+   "name": "План на 6 месяцев",
+   "start": "2026-02-02",
+   "protein": true,
+   "volleyHints": true,
+   "deloadEvery": 5,
+   "testEvery": 4,
+   "blocks": [
+    {
+     "id": "b1",
+     "name": "База",
+     "weeks": 8,
+     "text": "Техника, связки и запястья, стойка у стены, растяжка. Веса умеренные, плиометрика лёгкая."
+    },
+    {
+     "id": "b2",
+     "name": "Сила",
+     "weeks": 8,
+     "text": "Подтягивания и брусья с весом, присед тяжелее, взрывные отжимания, отрыв носков от стены."
+    },
+    {
+     "id": "b3",
+     "name": "Мощность и навыки",
+     "weeks": 10,
+     "text": "Высокие прыжки, негативы в стойке, кик-апы, более глубокая растяжка."
+    }
+   ],
+   "days": [
+    {
+     "k": "gym",
+     "prog": "A",
+     "note": "Ноги и жимы"
+    },
+    {
+     "k": "home",
+     "prog": "",
+     "note": "Стойка 15 мин, растяжка 25 мин, турник в течение дня"
+    },
+    {
+     "k": "gym",
+     "prog": "B",
+     "note": "Тяга и взрывная сила"
+    },
+    {
+     "k": "home",
+     "prog": "",
+     "note": "Стойка, растяжка, турник — или игра"
+    },
+    {
+     "k": "gym",
+     "prog": "C",
+     "note": "Калистеника и прыжок"
+    },
+    {
+     "k": "vb",
+     "prog": "",
+     "note": "Игра или растяжка"
+    },
+    {
+     "k": "rest",
+     "prog": "",
+     "note": "Полный отдых"
+    }
+   ],
+   "rules": [
+    {
+     "t": "За день до игры",
+     "d": "Не ставьте тяжёлые ноги и прыжки."
+    },
+    {
+     "t": "Игра в день зала",
+     "d": "Уберите из тренировки прыжковый блок."
+    },
+    {
+     "t": "Ноги «забиты»",
+     "d": "Перенесите тренировку на ногах на день позже."
+    }
+   ],
+   "metrics": [
+    {
+     "id": "push",
+     "name": "Отжимания",
+     "unit": "раз",
+     "goal": 40,
+     "goalText": "40+",
+     "dir": 1,
+     "how": "Максимум подряд, строго: тело прямое, грудь почти касается пола."
+    },
+    {
+     "id": "pull",
+     "name": "Подтягивания",
+     "unit": "раз",
+     "goal": 15,
+     "goalText": "15–20 (40 — через 1,5–3 года)",
+     "dir": 1,
+     "how": "Из виса, подбородок над перекладиной, без раскачки."
+    },
+    {
+     "id": "dips",
+     "name": "Брусья",
+     "unit": "раз",
+     "goal": 20,
+     "goalText": "20+",
+     "dir": 1,
+     "how": "Полная амплитуда: плечи опускаются ниже локтей."
+    },
+    {
+     "id": "wall",
+     "name": "Стойка у стены",
+     "unit": "с",
+     "goal": 60,
+     "goalText": "60 с",
+     "dir": 1,
+     "how": "Грудью к стене. Секундомер до схода."
+    },
+    {
+     "id": "free",
+     "name": "Свободная стойка",
+     "unit": "с",
+     "goal": 15,
+     "goalText": "15–30 с",
+     "dir": 1,
+     "how": "Без опоры, лучшая попытка."
+    },
+    {
+     "id": "sj",
+     "name": "Прыжок с места",
+     "unit": "см",
+     "goal": null,
+     "goalText": "",
+     "dir": 1,
+     "how": "Отметка рукой на стене: высота касания минус высота вытянутой руки."
+    },
+    {
+     "id": "rj",
+     "name": "Прыжок с разбега",
+     "unit": "см",
+     "goal": null,
+     "goalText": "",
+     "dir": 1,
+     "how": "Так же, но с волейбольного разбега."
+    },
+    {
+     "id": "fs",
+     "name": "Продольный шпагат",
+     "unit": "см до пола",
+     "goal": 0,
+     "goalText": "0 (возможен за 6–12 мес)",
+     "dir": -1,
+     "how": "Расстояние от таза до пола."
+    },
+    {
+     "id": "ss",
+     "name": "Поперечный шпагат",
+     "unit": "см до пола",
+     "goal": 0,
+     "goalText": "0 (долгосрочно, 1–2+ года)",
+     "dir": -1,
+     "how": "Расстояние от таза до пола."
+    }
+   ],
+   "tracks": [
+    {
+     "id": "handstand",
+     "name": "Стойка на руках",
+     "kind": "timed",
+     "ic": "star",
+     "goal": 5,
+     "goalText": "5–6",
+     "dur": 15,
+     "intro": "Стойка любит частоту: 10–15 минут 5–6 раз в неделю лучше, чем час раз в неделю. Практикуйте после разминки, пока свежие. Переходите дальше, только когда уверенно делаете текущий шаг.",
+     "steps": [
+      {
+       "n": "Выход колесом",
+       "t": "Научитесь безопасно падать: переставьте одну руку и шагните ногами вбок. Первая неделя."
+      },
+      {
+       "n": "Стойка грудью к стене",
+       "t": "4–5 подходов по 20–60 с. Руки прямые, плечи толкают пол, тело ровное, как в холлоу-холде."
+      },
+      {
+       "n": "Отрыв носков от стены",
+       "t": "На пару секунд, когда держите 60 с у стены."
+      },
+      {
+       "n": "Кик-апы",
+       "t": "В свободную стойку, 10–15 минут у открытого места. Баланс держите пальцами, давя в пол."
+      },
+      {
+       "n": "Негативы отжиманий в стойке",
+       "t": "У стены медленно опускаетесь, встаёте ногами на пол, повторяете. Основа: пайк-отжимания с возвышения, 3×10."
+      }
+     ],
+     "cur": 1,
+     "items": [],
+     "metric": "",
+     "pctLo": 40,
+     "pctHi": 50,
+     "dayTarget": 8,
+     "base": 10,
+     "tip": ""
+    },
+    {
+     "id": "stretch",
+     "name": "Растяжка",
+     "kind": "timed",
+     "ic": "stretch",
+     "goal": 3,
+     "goalText": "3–4",
+     "dur": 25,
+     "intro": "В домашние дни 20–30 минут, после зала 5–10 минут. До дискомфорта, не до боли: боль в колене на шпагате — сигнал сразу остановиться. Приём «напряжение — расслабление»: в конечной позиции 5–8 с давите ногами в пол, на выдохе расслабьтесь и опуститесь чуть ниже, повторите 2–3 раза.",
+     "steps": [],
+     "cur": 0,
+     "items": [
+      {
+       "n": "Выпад с коленом у стены (couch stretch)",
+       "d": "2×60 с на ногу",
+       "t": "Сгибатели бедра, продольный шпагат"
+      },
+      {
+       "n": "Полушпагат, наклон к прямой ноге",
+       "d": "2×60 с на ногу",
+       "t": "Задняя поверхность бедра"
+      },
+      {
+       "n": "Продольный шпагат на блоках или стульях",
+       "d": "2×60 с на ногу",
+       "t": "Постепенно снижайте опору"
+      },
+      {
+       "n": "Лягушка",
+       "d": "2×60 с",
+       "t": "Поперечный шпагат"
+      },
+      {
+       "n": "Складка с широко разведёнными ногами",
+       "d": "2×60 с",
+       "t": "Поперечный шпагат"
+      },
+      {
+       "n": "Коссак-приседы",
+       "d": "2×8 на сторону",
+       "t": "Активная гибкость"
+      },
+      {
+       "n": "Мостик",
+       "d": "3×10–20 с",
+       "t": "Грудной отдел и плечи, нужно для стойки"
+      },
+      {
+       "n": "Плечи: руки на стене, грудь вниз",
+       "d": "2×45 с",
+       "t": "Ровная линия в стойке"
+      }
+     ],
+     "metric": "",
+     "pctLo": 40,
+     "pctHi": 50,
+     "dayTarget": 8,
+     "base": 10,
+     "tip": ""
+    },
+    {
+     "id": "pullday",
+     "name": "Подтягивания в течение дня",
+     "kind": "sets",
+     "ic": "gym",
+     "goal": 0,
+     "goalText": "",
+     "dur": 20,
+     "intro": "",
+     "steps": [],
+     "cur": 0,
+     "items": [],
+     "metric": "pull",
+     "pctLo": 40,
+     "pctHi": 50,
+     "dayTarget": 8,
+     "base": 10,
+     "tip": "В дни без зала делайте 5–8 лёгких подходов, между ними минимум 30–60 минут. Ни одного до отказа. Так же можно делать отжимания. Пересчитывайте максимум раз в 4 недели."
+    }
+   ]
+  },
+  "maxes": [
+   {
+    "id": "m1",
+    "date": "2026-02-01",
+    "m": "push",
+    "v": 20
+   }
+  ],
+  "wlog": {
+   "2026-03-02": {
+    "kg": 70,
+    "note": "старая"
+   }
+  },
+  "templates": [
+   {
+    "id": "tt",
+    "name": "Мой",
+    "plan": {
+     "name": "План на 6 месяцев",
+     "start": "",
+     "protein": true,
+     "volleyHints": true,
+     "deloadEvery": 5,
+     "testEvery": 4,
+     "blocks": [
+      {
+       "id": "b1",
+       "name": "База",
+       "weeks": 8,
+       "text": "Техника, связки и запястья, стойка у стены, растяжка. Веса умеренные, плиометрика лёгкая."
+      },
+      {
+       "id": "b2",
+       "name": "Сила",
+       "weeks": 8,
+       "text": "Подтягивания и брусья с весом, присед тяжелее, взрывные отжимания, отрыв носков от стены."
+      },
+      {
+       "id": "b3",
+       "name": "Мощность и навыки",
+       "weeks": 10,
+       "text": "Высокие прыжки, негативы в стойке, кик-апы, более глубокая растяжка."
+      }
+     ],
+     "days": [
+      {
+       "k": "gym",
+       "prog": "A",
+       "note": "Ноги и жимы"
+      },
+      {
+       "k": "home",
+       "prog": "",
+       "note": "Стойка 15 мин, растяжка 25 мин, турник в течение дня"
+      },
+      {
+       "k": "gym",
+       "prog": "B",
+       "note": "Тяга и взрывная сила"
+      },
+      {
+       "k": "home",
+       "prog": "",
+       "note": "Стойка, растяжка, турник — или игра"
+      },
+      {
+       "k": "gym",
+       "prog": "C",
+       "note": "Калистеника и прыжок"
+      },
+      {
+       "k": "vb",
+       "prog": "",
+       "note": "Игра или растяжка"
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": "Полный отдых"
+      }
+     ],
+     "rules": [
+      {
+       "t": "За день до игры",
+       "d": "Не ставьте тяжёлые ноги и прыжки."
+      },
+      {
+       "t": "Игра в день зала",
+       "d": "Уберите из тренировки прыжковый блок."
+      },
+      {
+       "t": "Ноги «забиты»",
+       "d": "Перенесите тренировку на ногах на день позже."
+      }
+     ],
+     "metrics": [
+      {
+       "id": "push",
+       "name": "Отжимания",
+       "unit": "раз",
+       "goal": 40,
+       "goalText": "40+",
+       "dir": 1,
+       "how": "Максимум подряд, строго: тело прямое, грудь почти касается пола."
+      },
+      {
+       "id": "pull",
+       "name": "Подтягивания",
+       "unit": "раз",
+       "goal": 15,
+       "goalText": "15–20 (40 — через 1,5–3 года)",
+       "dir": 1,
+       "how": "Из виса, подбородок над перекладиной, без раскачки."
+      },
+      {
+       "id": "dips",
+       "name": "Брусья",
+       "unit": "раз",
+       "goal": 20,
+       "goalText": "20+",
+       "dir": 1,
+       "how": "Полная амплитуда: плечи опускаются ниже локтей."
+      },
+      {
+       "id": "wall",
+       "name": "Стойка у стены",
+       "unit": "с",
+       "goal": 60,
+       "goalText": "60 с",
+       "dir": 1,
+       "how": "Грудью к стене. Секундомер до схода."
+      },
+      {
+       "id": "free",
+       "name": "Свободная стойка",
+       "unit": "с",
+       "goal": 15,
+       "goalText": "15–30 с",
+       "dir": 1,
+       "how": "Без опоры, лучшая попытка."
+      },
+      {
+       "id": "sj",
+       "name": "Прыжок с места",
+       "unit": "см",
+       "goal": null,
+       "goalText": "",
+       "dir": 1,
+       "how": "Отметка рукой на стене: высота касания минус высота вытянутой руки."
+      },
+      {
+       "id": "rj",
+       "name": "Прыжок с разбега",
+       "unit": "см",
+       "goal": null,
+       "goalText": "",
+       "dir": 1,
+       "how": "Так же, но с волейбольного разбега."
+      },
+      {
+       "id": "fs",
+       "name": "Продольный шпагат",
+       "unit": "см до пола",
+       "goal": 0,
+       "goalText": "0 (возможен за 6–12 мес)",
+       "dir": -1,
+       "how": "Расстояние от таза до пола."
+      },
+      {
+       "id": "ss",
+       "name": "Поперечный шпагат",
+       "unit": "см до пола",
+       "goal": 0,
+       "goalText": "0 (долгосрочно, 1–2+ года)",
+       "dir": -1,
+       "how": "Расстояние от таза до пола."
+      }
+     ],
+     "tracks": [
+      {
+       "id": "handstand",
+       "name": "Стойка на руках",
+       "kind": "timed",
+       "ic": "star",
+       "goal": 5,
+       "goalText": "5–6",
+       "dur": 15,
+       "intro": "Стойка любит частоту: 10–15 минут 5–6 раз в неделю лучше, чем час раз в неделю. Практикуйте после разминки, пока свежие. Переходите дальше, только когда уверенно делаете текущий шаг.",
+       "steps": [
+        {
+         "n": "Выход колесом",
+         "t": "Научитесь безопасно падать: переставьте одну руку и шагните ногами вбок. Первая неделя."
+        },
+        {
+         "n": "Стойка грудью к стене",
+         "t": "4–5 подходов по 20–60 с. Руки прямые, плечи толкают пол, тело ровное, как в холлоу-холде."
+        },
+        {
+         "n": "Отрыв носков от стены",
+         "t": "На пару секунд, когда держите 60 с у стены."
+        },
+        {
+         "n": "Кик-апы",
+         "t": "В свободную стойку, 10–15 минут у открытого места. Баланс держите пальцами, давя в пол."
+        },
+        {
+         "n": "Негативы отжиманий в стойке",
+         "t": "У стены медленно опускаетесь, встаёте ногами на пол, повторяете. Основа: пайк-отжимания с возвышения, 3×10."
+        }
+       ],
+       "cur": 1,
+       "items": [],
+       "metric": "",
+       "pctLo": 40,
+       "pctHi": 50,
+       "dayTarget": 8,
+       "base": 10,
+       "tip": ""
+      },
+      {
+       "id": "stretch",
+       "name": "Растяжка",
+       "kind": "timed",
+       "ic": "stretch",
+       "goal": 3,
+       "goalText": "3–4",
+       "dur": 25,
+       "intro": "В домашние дни 20–30 минут, после зала 5–10 минут. До дискомфорта, не до боли: боль в колене на шпагате — сигнал сразу остановиться. Приём «напряжение — расслабление»: в конечной позиции 5–8 с давите ногами в пол, на выдохе расслабьтесь и опуститесь чуть ниже, повторите 2–3 раза.",
+       "steps": [],
+       "cur": 0,
+       "items": [
+        {
+         "n": "Выпад с коленом у стены (couch stretch)",
+         "d": "2×60 с на ногу",
+         "t": "Сгибатели бедра, продольный шпагат"
+        },
+        {
+         "n": "Полушпагат, наклон к прямой ноге",
+         "d": "2×60 с на ногу",
+         "t": "Задняя поверхность бедра"
+        },
+        {
+         "n": "Продольный шпагат на блоках или стульях",
+         "d": "2×60 с на ногу",
+         "t": "Постепенно снижайте опору"
+        },
+        {
+         "n": "Лягушка",
+         "d": "2×60 с",
+         "t": "Поперечный шпагат"
+        },
+        {
+         "n": "Складка с широко разведёнными ногами",
+         "d": "2×60 с",
+         "t": "Поперечный шпагат"
+        },
+        {
+         "n": "Коссак-приседы",
+         "d": "2×8 на сторону",
+         "t": "Активная гибкость"
+        },
+        {
+         "n": "Мостик",
+         "d": "3×10–20 с",
+         "t": "Грудной отдел и плечи, нужно для стойки"
+        },
+        {
+         "n": "Плечи: руки на стене, грудь вниз",
+         "d": "2×45 с",
+         "t": "Ровная линия в стойке"
+        }
+       ],
+       "metric": "",
+       "pctLo": 40,
+       "pctHi": 50,
+       "dayTarget": 8,
+       "base": 10,
+       "tip": ""
+      },
+      {
+       "id": "pullday",
+       "name": "Подтягивания в течение дня",
+       "kind": "sets",
+       "ic": "gym",
+       "goal": 0,
+       "goalText": "",
+       "dur": 20,
+       "intro": "",
+       "steps": [],
+       "cur": 0,
+       "items": [],
+       "metric": "pull",
+       "pctLo": 40,
+       "pctHi": 50,
+       "dayTarget": 8,
+       "base": 10,
+       "tip": "В дни без зала делайте 5–8 лёгких подходов, между ними минимум 30–60 минут. Ни одного до отказа. Так же можно делать отжимания. Пересчитывайте максимум раз в 4 недели."
+      }
+     ]
+    },
+    "programs": [
+     {
+      "id": "A",
+      "title": "A · ноги и жимы",
+      "rot": true,
+      "warm": [
+       "Скакалка 2–3 минуты",
+       "Суставная разминка сверху вниз",
+       "Запястья (обязательно): круги, упоры пальцами вперёд и назад",
+       "Разведения резины перед грудью, 10–15 раз",
+       "Лопаточные подтягивания 2×8, руки прямые",
+       "Махи ногами вперёд и в стороны",
+       "Затем 10–15 минут практики стойки на руках, пока вы свежие"
+      ],
+      "items": [
+       {
+        "id": "boxjump",
+        "sets": 4,
+        "lo": 3,
+        "hi": 3
+       },
+       {
+        "id": "bbsquat",
+        "sets": 4,
+        "lo": 5,
+        "hi": 5
+       },
+       {
+        "id": "dips",
+        "sets": 4,
+        "lo": 6,
+        "hi": 10
+       },
+       {
+        "id": "rdl",
+        "sets": 3,
+        "lo": 8,
+        "hi": 8
+       },
+       {
+        "id": "pikepu",
+        "sets": 3,
+        "lo": 6,
+        "hi": 10
+       },
+       {
+        "id": "bulgar",
+        "sets": 3,
+        "lo": 8,
+        "hi": 8
+       },
+       {
+        "id": "calf1",
+        "sets": 3,
+        "lo": 12,
+        "hi": 12
+       },
+       {
+        "id": "hollow",
+        "sets": 3,
+        "lo": 20,
+        "hi": 40
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "exportOutput": {
+  "app": "dnevnik-trenirovok",
+  "version": 3,
+  "goal": {
+   "perWeek": 3
+  },
+  "note": "sessions: type = gym | volley | friends; в gym ex[].sets: w (кг), r (повторы или секунды), fb (easy | ok | hard). rpe: шкала 1-5. programs[].items: упражнения программы (id, sets, lo-hi повторов). kind: w = вес и повторы, bw = повторы, time = секунды.",
+  "sessions": [
+   {
+    "id": "s1",
+    "date": "2026-02-23",
+    "type": "gym",
+    "prog": "A",
+    "title": "",
+    "start": 1000,
+    "min": 50,
+    "rpe": 3,
+    "pain": [],
+    "note": "",
+    "ex": [
+     {
+      "id": "bbsquat",
+      "name": "Присед со штангой",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 40,
+        "r": 5,
+        "fb": "ok"
+       },
+       {
+        "w": 40,
+        "r": 5,
+        "fb": "ok"
+       },
+       {
+        "w": 40,
+        "r": 5,
+        "fb": "ok"
+       },
+       {
+        "w": 40,
+        "r": 5,
+        "fb": "ok"
+       }
+      ]
+     },
+     {
+      "id": "dips",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 0,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 10,
+        "fb": "ok"
+       }
+      ]
+     },
+     {
+      "id": "plank",
+      "kind": "time",
+      "sets": [
+       {
+        "w": 0,
+        "r": 40,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 40,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 40,
+        "fb": null
+       }
+      ]
+     },
+     {
+      "id": "pushup",
+      "kind": "bw",
+      "sets": [
+       {
+        "w": 0,
+        "r": 9,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": null
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "s2",
+    "date": "2026-03-02",
+    "type": "gym",
+    "prog": "B",
+    "title": "",
+    "start": 2000,
+    "min": 50,
+    "rpe": 3,
+    "pain": [],
+    "note": "",
+    "ex": [
+     {
+      "id": "pullup",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 0,
+        "r": 8,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": "easy"
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": "ok"
+       }
+      ]
+     },
+     {
+      "id": "dbrow",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 20,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 20,
+        "r": 10,
+        "fb": "hard"
+       },
+       {
+        "w": 20,
+        "r": 9,
+        "fb": "ok"
+       }
+      ]
+     },
+     {
+      "id": "squat",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "s3",
+    "date": "2026-03-09",
+    "type": "gym",
+    "prog": "C",
+    "title": "",
+    "start": 3000,
+    "min": 50,
+    "rpe": 3,
+    "pain": [],
+    "note": "",
+    "ex": [
+     {
+      "id": "bbsquat",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 42.5,
+        "r": 5,
+        "fb": "hard"
+       },
+       {
+        "w": 42.5,
+        "r": 4,
+        "fb": "hard"
+       }
+      ]
+     },
+     {
+      "id": "squat",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       }
+      ]
+     },
+     {
+      "id": "rope",
+      "kind": "time",
+      "sets": [
+       {
+        "w": 0,
+        "r": 45,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 45,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 45,
+        "fb": null
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "v1",
+    "date": "2026-03-10",
+    "type": "volley",
+    "prog": null,
+    "title": "",
+    "start": 3500,
+    "min": 90,
+    "rpe": 3,
+    "pain": [],
+    "note": "",
+    "ex": [],
+    "kcal": 500
+   }
+  ],
+  "programs": [
+   {
+    "id": "A",
+    "title": "A · ноги и жимы",
+    "rot": true,
+    "warm": [
+     "Скакалка 2–3 минуты",
+     "Суставная разминка сверху вниз",
+     "Запястья (обязательно): круги, упоры пальцами вперёд и назад",
+     "Разведения резины перед грудью, 10–15 раз",
+     "Лопаточные подтягивания 2×8, руки прямые",
+     "Махи ногами вперёд и в стороны",
+     "Затем 10–15 минут практики стойки на руках, пока вы свежие"
+    ],
+    "items": [
+     {
+      "id": "boxjump",
+      "name": "Прыжки на тумбу",
+      "sets": 4,
+      "lo": 3,
+      "hi": 3
+     },
+     {
+      "id": "bbsquat",
+      "name": "Присед со штангой",
+      "sets": 4,
+      "lo": 5,
+      "hi": 5
+     },
+     {
+      "id": "dips",
+      "name": "Брусья",
+      "sets": 4,
+      "lo": 6,
+      "hi": 10
+     },
+     {
+      "id": "rdl",
+      "name": "Румынская тяга",
+      "sets": 3,
+      "lo": 8,
+      "hi": 8
+     },
+     {
+      "id": "pikepu",
+      "name": "Пайк-отжимания, ноги на скамье",
+      "sets": 3,
+      "lo": 6,
+      "hi": 10
+     },
+     {
+      "id": "bulgar",
+      "name": "Болгарские выпады с гантелями",
+      "sets": 3,
+      "lo": 8,
+      "hi": 8
+     },
+     {
+      "id": "calf1",
+      "name": "Подъёмы на носок на одной ноге",
+      "sets": 3,
+      "lo": 12,
+      "hi": 12
+     },
+     {
+      "id": "hollow",
+      "name": "Холлоу-холд",
+      "sets": 3,
+      "lo": 20,
+      "hi": 40
+     }
+    ]
+   },
+   {
+    "id": "B",
+    "title": "B · тяга и взрывная сила",
+    "rot": true,
+    "warm": [
+     "Скакалка 2–3 минуты",
+     "Суставная разминка сверху вниз",
+     "Запястья (обязательно): круги, упоры пальцами вперёд и назад",
+     "Разведения резины перед грудью, 10–15 раз",
+     "Лопаточные подтягивания 2×8, руки прямые",
+     "Махи ногами вперёд и в стороны",
+     "Затем 10–15 минут практики стойки на руках, пока вы свежие"
+    ],
+    "items": [
+     {
+      "id": "medball",
+      "name": "Броски медбола из-за головы в пол",
+      "sets": 4,
+      "lo": 5,
+      "hi": 5
+     },
+     {
+      "id": "pullup",
+      "name": "Подтягивания",
+      "sets": 5,
+      "lo": 5,
+      "hi": 8
+     },
+     {
+      "id": "dbrow",
+      "name": "Тяга гантели в наклоне",
+      "sets": 3,
+      "lo": 10,
+      "hi": 10
+     },
+     {
+      "id": "clappush",
+      "name": "Отжимания взрывные или с хлопком",
+      "sets": 3,
+      "lo": 5,
+      "hi": 5
+     },
+     {
+      "id": "pullover",
+      "name": "Пуловер с гантелью лёжа",
+      "sets": 3,
+      "lo": 10,
+      "hi": 10
+     },
+     {
+      "id": "facepull",
+      "name": "Наружная ротация плеча + face pull",
+      "sets": 3,
+      "lo": 15,
+      "hi": 15
+     },
+     {
+      "id": "legraise",
+      "name": "Подъём ног в висе",
+      "sets": 3,
+      "lo": 8,
+      "hi": 12
+     },
+     {
+      "id": "medrot",
+      "name": "Вращательные броски медбола в стену",
+      "sets": 3,
+      "lo": 6,
+      "hi": 6
+     }
+    ]
+   },
+   {
+    "id": "C",
+    "title": "C · калистеника и прыжок",
+    "rot": true,
+    "warm": [
+     "Скакалка 2–3 минуты",
+     "Суставная разминка сверху вниз",
+     "Запястья (обязательно): круги, упоры пальцами вперёд и назад",
+     "Разведения резины перед грудью, 10–15 раз",
+     "Лопаточные подтягивания 2×8, руки прямые",
+     "Махи ногами вперёд и в стороны",
+     "Затем 10–15 минут практики стойки на руках, пока вы свежие"
+    ],
+    "items": [
+     {
+      "id": "runjump",
+      "name": "Прыжки с волейбольного разбега",
+      "sets": 5,
+      "lo": 3,
+      "hi": 3
+     },
+     {
+      "id": "pistol",
+      "name": "Присед на одной ноге к скамье",
+      "sets": 3,
+      "lo": 5,
+      "hi": 5
+     },
+     {
+      "id": "pullup",
+      "name": "Подтягивания",
+      "sets": 5,
+      "lo": 5,
+      "hi": 8
+     },
+     {
+      "id": "dips",
+      "name": "Брусья",
+      "sets": 4,
+      "lo": 8,
+      "hi": 12
+     },
+     {
+      "id": "pushup",
+      "name": "Отжимания",
+      "sets": 3,
+      "lo": 8,
+      "hi": 12
+     },
+     {
+      "id": "nordic",
+      "name": "Скандинавские сгибания (Nordic curl)",
+      "sets": 3,
+      "lo": 4,
+      "hi": 6
+     },
+     {
+      "id": "lsit",
+      "name": "L-sit (уголок) на брусьях",
+      "sets": 4,
+      "lo": 10,
+      "hi": 20
+     }
+    ]
+   }
+  ],
+  "customExercises": [
+   {
+    "id": "x-1",
+    "name": "Старое",
+    "kind": "w",
+    "step": 1,
+    "tip": ""
+   },
+   {
+    "id": "x-9",
+    "name": "Своё",
+    "kind": "time",
+    "step": 5,
+    "tip": "т"
+   }
+  ],
+  "plan": {
+   "name": "План на 6 месяцев",
+   "start": "2026-02-02",
+   "protein": true,
+   "volleyHints": true,
+   "deloadEvery": 5,
+   "testEvery": 4,
+   "blocks": [
+    {
+     "id": "b1",
+     "name": "База",
+     "weeks": 8,
+     "text": "Техника, связки и запястья, стойка у стены, растяжка. Веса умеренные, плиометрика лёгкая."
+    },
+    {
+     "id": "b2",
+     "name": "Сила",
+     "weeks": 8,
+     "text": "Подтягивания и брусья с весом, присед тяжелее, взрывные отжимания, отрыв носков от стены."
+    },
+    {
+     "id": "b3",
+     "name": "Мощность и навыки",
+     "weeks": 10,
+     "text": "Высокие прыжки, негативы в стойке, кик-апы, более глубокая растяжка."
+    }
+   ],
+   "days": [
+    {
+     "k": "gym",
+     "prog": "A",
+     "note": "Ноги и жимы"
+    },
+    {
+     "k": "home",
+     "prog": "",
+     "note": "Стойка 15 мин, растяжка 25 мин, турник в течение дня"
+    },
+    {
+     "k": "gym",
+     "prog": "B",
+     "note": "Тяга и взрывная сила"
+    },
+    {
+     "k": "home",
+     "prog": "",
+     "note": "Стойка, растяжка, турник — или игра"
+    },
+    {
+     "k": "gym",
+     "prog": "C",
+     "note": "Калистеника и прыжок"
+    },
+    {
+     "k": "vb",
+     "prog": "",
+     "note": "Игра или растяжка"
+    },
+    {
+     "k": "rest",
+     "prog": "",
+     "note": "Полный отдых"
+    }
+   ],
+   "rules": [
+    {
+     "t": "За день до игры",
+     "d": "Не ставьте тяжёлые ноги и прыжки."
+    },
+    {
+     "t": "Игра в день зала",
+     "d": "Уберите из тренировки прыжковый блок."
+    },
+    {
+     "t": "Ноги «забиты»",
+     "d": "Перенесите тренировку на ногах на день позже."
+    }
+   ],
+   "metrics": [
+    {
+     "id": "push",
+     "name": "Отжимания",
+     "unit": "раз",
+     "goal": 40,
+     "goalText": "40+",
+     "dir": 1,
+     "how": "Максимум подряд, строго: тело прямое, грудь почти касается пола."
+    },
+    {
+     "id": "pull",
+     "name": "Подтягивания",
+     "unit": "раз",
+     "goal": 15,
+     "goalText": "15–20 (40 — через 1,5–3 года)",
+     "dir": 1,
+     "how": "Из виса, подбородок над перекладиной, без раскачки."
+    },
+    {
+     "id": "dips",
+     "name": "Брусья",
+     "unit": "раз",
+     "goal": 20,
+     "goalText": "20+",
+     "dir": 1,
+     "how": "Полная амплитуда: плечи опускаются ниже локтей."
+    },
+    {
+     "id": "wall",
+     "name": "Стойка у стены",
+     "unit": "с",
+     "goal": 60,
+     "goalText": "60 с",
+     "dir": 1,
+     "how": "Грудью к стене. Секундомер до схода."
+    },
+    {
+     "id": "free",
+     "name": "Свободная стойка",
+     "unit": "с",
+     "goal": 15,
+     "goalText": "15–30 с",
+     "dir": 1,
+     "how": "Без опоры, лучшая попытка."
+    },
+    {
+     "id": "sj",
+     "name": "Прыжок с места",
+     "unit": "см",
+     "goal": null,
+     "goalText": "",
+     "dir": 1,
+     "how": "Отметка рукой на стене: высота касания минус высота вытянутой руки."
+    },
+    {
+     "id": "rj",
+     "name": "Прыжок с разбега",
+     "unit": "см",
+     "goal": null,
+     "goalText": "",
+     "dir": 1,
+     "how": "Так же, но с волейбольного разбега."
+    },
+    {
+     "id": "fs",
+     "name": "Продольный шпагат",
+     "unit": "см до пола",
+     "goal": 0,
+     "goalText": "0 (возможен за 6–12 мес)",
+     "dir": -1,
+     "how": "Расстояние от таза до пола."
+    },
+    {
+     "id": "ss",
+     "name": "Поперечный шпагат",
+     "unit": "см до пола",
+     "goal": 0,
+     "goalText": "0 (долгосрочно, 1–2+ года)",
+     "dir": -1,
+     "how": "Расстояние от таза до пола."
+    }
+   ],
+   "tracks": [
+    {
+     "id": "handstand",
+     "name": "Стойка на руках",
+     "kind": "timed",
+     "ic": "star",
+     "goal": 5,
+     "goalText": "5–6",
+     "dur": 15,
+     "intro": "Стойка любит частоту: 10–15 минут 5–6 раз в неделю лучше, чем час раз в неделю. Практикуйте после разминки, пока свежие. Переходите дальше, только когда уверенно делаете текущий шаг.",
+     "steps": [
+      {
+       "n": "Выход колесом",
+       "t": "Научитесь безопасно падать: переставьте одну руку и шагните ногами вбок. Первая неделя."
+      },
+      {
+       "n": "Стойка грудью к стене",
+       "t": "4–5 подходов по 20–60 с. Руки прямые, плечи толкают пол, тело ровное, как в холлоу-холде."
+      },
+      {
+       "n": "Отрыв носков от стены",
+       "t": "На пару секунд, когда держите 60 с у стены."
+      },
+      {
+       "n": "Кик-апы",
+       "t": "В свободную стойку, 10–15 минут у открытого места. Баланс держите пальцами, давя в пол."
+      },
+      {
+       "n": "Негативы отжиманий в стойке",
+       "t": "У стены медленно опускаетесь, встаёте ногами на пол, повторяете. Основа: пайк-отжимания с возвышения, 3×10."
+      }
+     ],
+     "cur": 1,
+     "items": [],
+     "metric": "",
+     "pctLo": 40,
+     "pctHi": 50,
+     "dayTarget": 8,
+     "base": 10,
+     "tip": ""
+    },
+    {
+     "id": "stretch",
+     "name": "Растяжка",
+     "kind": "timed",
+     "ic": "stretch",
+     "goal": 3,
+     "goalText": "3–4",
+     "dur": 25,
+     "intro": "В домашние дни 20–30 минут, после зала 5–10 минут. До дискомфорта, не до боли: боль в колене на шпагате — сигнал сразу остановиться. Приём «напряжение — расслабление»: в конечной позиции 5–8 с давите ногами в пол, на выдохе расслабьтесь и опуститесь чуть ниже, повторите 2–3 раза.",
+     "steps": [],
+     "cur": 0,
+     "items": [
+      {
+       "n": "Выпад с коленом у стены (couch stretch)",
+       "d": "2×60 с на ногу",
+       "t": "Сгибатели бедра, продольный шпагат"
+      },
+      {
+       "n": "Полушпагат, наклон к прямой ноге",
+       "d": "2×60 с на ногу",
+       "t": "Задняя поверхность бедра"
+      },
+      {
+       "n": "Продольный шпагат на блоках или стульях",
+       "d": "2×60 с на ногу",
+       "t": "Постепенно снижайте опору"
+      },
+      {
+       "n": "Лягушка",
+       "d": "2×60 с",
+       "t": "Поперечный шпагат"
+      },
+      {
+       "n": "Складка с широко разведёнными ногами",
+       "d": "2×60 с",
+       "t": "Поперечный шпагат"
+      },
+      {
+       "n": "Коссак-приседы",
+       "d": "2×8 на сторону",
+       "t": "Активная гибкость"
+      },
+      {
+       "n": "Мостик",
+       "d": "3×10–20 с",
+       "t": "Грудной отдел и плечи, нужно для стойки"
+      },
+      {
+       "n": "Плечи: руки на стене, грудь вниз",
+       "d": "2×45 с",
+       "t": "Ровная линия в стойке"
+      }
+     ],
+     "metric": "",
+     "pctLo": 40,
+     "pctHi": 50,
+     "dayTarget": 8,
+     "base": 10,
+     "tip": ""
+    },
+    {
+     "id": "pullday",
+     "name": "Подтягивания в течение дня",
+     "kind": "sets",
+     "ic": "gym",
+     "goal": 0,
+     "goalText": "",
+     "dur": 20,
+     "intro": "",
+     "steps": [],
+     "cur": 0,
+     "items": [],
+     "metric": "pull",
+     "pctLo": 40,
+     "pctHi": 50,
+     "dayTarget": 8,
+     "base": 10,
+     "tip": "В дни без зала делайте 5–8 лёгких подходов, между ними минимум 30–60 минут. Ни одного до отказа. Так же можно делать отжимания. Пересчитывайте максимум раз в 4 недели."
+    }
+   ]
+  },
+  "maxes": [
+   {
+    "id": "m1",
+    "date": "2026-02-01",
+    "m": "push",
+    "v": 20
+   }
+  ],
+  "weekLog": {
+   "2026-03-02": {
+    "kg": 70,
+    "note": "старая"
+   }
+  },
+  "templates": [
+   {
+    "id": "tt",
+    "name": "Мой",
+    "plan": {
+     "name": "План на 6 месяцев",
+     "start": "",
+     "protein": true,
+     "volleyHints": true,
+     "deloadEvery": 5,
+     "testEvery": 4,
+     "blocks": [
+      {
+       "id": "b1",
+       "name": "База",
+       "weeks": 8,
+       "text": "Техника, связки и запястья, стойка у стены, растяжка. Веса умеренные, плиометрика лёгкая."
+      },
+      {
+       "id": "b2",
+       "name": "Сила",
+       "weeks": 8,
+       "text": "Подтягивания и брусья с весом, присед тяжелее, взрывные отжимания, отрыв носков от стены."
+      },
+      {
+       "id": "b3",
+       "name": "Мощность и навыки",
+       "weeks": 10,
+       "text": "Высокие прыжки, негативы в стойке, кик-апы, более глубокая растяжка."
+      }
+     ],
+     "days": [
+      {
+       "k": "gym",
+       "prog": "A",
+       "note": "Ноги и жимы"
+      },
+      {
+       "k": "home",
+       "prog": "",
+       "note": "Стойка 15 мин, растяжка 25 мин, турник в течение дня"
+      },
+      {
+       "k": "gym",
+       "prog": "B",
+       "note": "Тяга и взрывная сила"
+      },
+      {
+       "k": "home",
+       "prog": "",
+       "note": "Стойка, растяжка, турник — или игра"
+      },
+      {
+       "k": "gym",
+       "prog": "C",
+       "note": "Калистеника и прыжок"
+      },
+      {
+       "k": "vb",
+       "prog": "",
+       "note": "Игра или растяжка"
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": "Полный отдых"
+      }
+     ],
+     "rules": [
+      {
+       "t": "За день до игры",
+       "d": "Не ставьте тяжёлые ноги и прыжки."
+      },
+      {
+       "t": "Игра в день зала",
+       "d": "Уберите из тренировки прыжковый блок."
+      },
+      {
+       "t": "Ноги «забиты»",
+       "d": "Перенесите тренировку на ногах на день позже."
+      }
+     ],
+     "metrics": [
+      {
+       "id": "push",
+       "name": "Отжимания",
+       "unit": "раз",
+       "goal": 40,
+       "goalText": "40+",
+       "dir": 1,
+       "how": "Максимум подряд, строго: тело прямое, грудь почти касается пола."
+      },
+      {
+       "id": "pull",
+       "name": "Подтягивания",
+       "unit": "раз",
+       "goal": 15,
+       "goalText": "15–20 (40 — через 1,5–3 года)",
+       "dir": 1,
+       "how": "Из виса, подбородок над перекладиной, без раскачки."
+      },
+      {
+       "id": "dips",
+       "name": "Брусья",
+       "unit": "раз",
+       "goal": 20,
+       "goalText": "20+",
+       "dir": 1,
+       "how": "Полная амплитуда: плечи опускаются ниже локтей."
+      },
+      {
+       "id": "wall",
+       "name": "Стойка у стены",
+       "unit": "с",
+       "goal": 60,
+       "goalText": "60 с",
+       "dir": 1,
+       "how": "Грудью к стене. Секундомер до схода."
+      },
+      {
+       "id": "free",
+       "name": "Свободная стойка",
+       "unit": "с",
+       "goal": 15,
+       "goalText": "15–30 с",
+       "dir": 1,
+       "how": "Без опоры, лучшая попытка."
+      },
+      {
+       "id": "sj",
+       "name": "Прыжок с места",
+       "unit": "см",
+       "goal": null,
+       "goalText": "",
+       "dir": 1,
+       "how": "Отметка рукой на стене: высота касания минус высота вытянутой руки."
+      },
+      {
+       "id": "rj",
+       "name": "Прыжок с разбега",
+       "unit": "см",
+       "goal": null,
+       "goalText": "",
+       "dir": 1,
+       "how": "Так же, но с волейбольного разбега."
+      },
+      {
+       "id": "fs",
+       "name": "Продольный шпагат",
+       "unit": "см до пола",
+       "goal": 0,
+       "goalText": "0 (возможен за 6–12 мес)",
+       "dir": -1,
+       "how": "Расстояние от таза до пола."
+      },
+      {
+       "id": "ss",
+       "name": "Поперечный шпагат",
+       "unit": "см до пола",
+       "goal": 0,
+       "goalText": "0 (долгосрочно, 1–2+ года)",
+       "dir": -1,
+       "how": "Расстояние от таза до пола."
+      }
+     ],
+     "tracks": [
+      {
+       "id": "handstand",
+       "name": "Стойка на руках",
+       "kind": "timed",
+       "ic": "star",
+       "goal": 5,
+       "goalText": "5–6",
+       "dur": 15,
+       "intro": "Стойка любит частоту: 10–15 минут 5–6 раз в неделю лучше, чем час раз в неделю. Практикуйте после разминки, пока свежие. Переходите дальше, только когда уверенно делаете текущий шаг.",
+       "steps": [
+        {
+         "n": "Выход колесом",
+         "t": "Научитесь безопасно падать: переставьте одну руку и шагните ногами вбок. Первая неделя."
+        },
+        {
+         "n": "Стойка грудью к стене",
+         "t": "4–5 подходов по 20–60 с. Руки прямые, плечи толкают пол, тело ровное, как в холлоу-холде."
+        },
+        {
+         "n": "Отрыв носков от стены",
+         "t": "На пару секунд, когда держите 60 с у стены."
+        },
+        {
+         "n": "Кик-апы",
+         "t": "В свободную стойку, 10–15 минут у открытого места. Баланс держите пальцами, давя в пол."
+        },
+        {
+         "n": "Негативы отжиманий в стойке",
+         "t": "У стены медленно опускаетесь, встаёте ногами на пол, повторяете. Основа: пайк-отжимания с возвышения, 3×10."
+        }
+       ],
+       "cur": 1,
+       "items": [],
+       "metric": "",
+       "pctLo": 40,
+       "pctHi": 50,
+       "dayTarget": 8,
+       "base": 10,
+       "tip": ""
+      },
+      {
+       "id": "stretch",
+       "name": "Растяжка",
+       "kind": "timed",
+       "ic": "stretch",
+       "goal": 3,
+       "goalText": "3–4",
+       "dur": 25,
+       "intro": "В домашние дни 20–30 минут, после зала 5–10 минут. До дискомфорта, не до боли: боль в колене на шпагате — сигнал сразу остановиться. Приём «напряжение — расслабление»: в конечной позиции 5–8 с давите ногами в пол, на выдохе расслабьтесь и опуститесь чуть ниже, повторите 2–3 раза.",
+       "steps": [],
+       "cur": 0,
+       "items": [
+        {
+         "n": "Выпад с коленом у стены (couch stretch)",
+         "d": "2×60 с на ногу",
+         "t": "Сгибатели бедра, продольный шпагат"
+        },
+        {
+         "n": "Полушпагат, наклон к прямой ноге",
+         "d": "2×60 с на ногу",
+         "t": "Задняя поверхность бедра"
+        },
+        {
+         "n": "Продольный шпагат на блоках или стульях",
+         "d": "2×60 с на ногу",
+         "t": "Постепенно снижайте опору"
+        },
+        {
+         "n": "Лягушка",
+         "d": "2×60 с",
+         "t": "Поперечный шпагат"
+        },
+        {
+         "n": "Складка с широко разведёнными ногами",
+         "d": "2×60 с",
+         "t": "Поперечный шпагат"
+        },
+        {
+         "n": "Коссак-приседы",
+         "d": "2×8 на сторону",
+         "t": "Активная гибкость"
+        },
+        {
+         "n": "Мостик",
+         "d": "3×10–20 с",
+         "t": "Грудной отдел и плечи, нужно для стойки"
+        },
+        {
+         "n": "Плечи: руки на стене, грудь вниз",
+         "d": "2×45 с",
+         "t": "Ровная линия в стойке"
+        }
+       ],
+       "metric": "",
+       "pctLo": 40,
+       "pctHi": 50,
+       "dayTarget": 8,
+       "base": 10,
+       "tip": ""
+      },
+      {
+       "id": "pullday",
+       "name": "Подтягивания в течение дня",
+       "kind": "sets",
+       "ic": "gym",
+       "goal": 0,
+       "goalText": "",
+       "dur": 20,
+       "intro": "",
+       "steps": [],
+       "cur": 0,
+       "items": [],
+       "metric": "pull",
+       "pctLo": 40,
+       "pctHi": 50,
+       "dayTarget": 8,
+       "base": 10,
+       "tip": "В дни без зала делайте 5–8 лёгких подходов, между ними минимум 30–60 минут. Ни одного до отказа. Так же можно делать отжимания. Пересчитывайте максимум раз в 4 недели."
+      }
+     ]
+    },
+    "programs": [
+     {
+      "id": "A",
+      "title": "A · ноги и жимы",
+      "rot": true,
+      "warm": [
+       "Скакалка 2–3 минуты",
+       "Суставная разминка сверху вниз",
+       "Запястья (обязательно): круги, упоры пальцами вперёд и назад",
+       "Разведения резины перед грудью, 10–15 раз",
+       "Лопаточные подтягивания 2×8, руки прямые",
+       "Махи ногами вперёд и в стороны",
+       "Затем 10–15 минут практики стойки на руках, пока вы свежие"
+      ],
+      "items": [
+       {
+        "id": "boxjump",
+        "sets": 4,
+        "lo": 3,
+        "hi": 3
+       },
+       {
+        "id": "bbsquat",
+        "sets": 4,
+        "lo": 5,
+        "hi": 5
+       },
+       {
+        "id": "dips",
+        "sets": 4,
+        "lo": 6,
+        "hi": 10
+       },
+       {
+        "id": "rdl",
+        "sets": 3,
+        "lo": 8,
+        "hi": 8
+       },
+       {
+        "id": "pikepu",
+        "sets": 3,
+        "lo": 6,
+        "hi": 10
+       },
+       {
+        "id": "bulgar",
+        "sets": 3,
+        "lo": 8,
+        "hi": 8
+       },
+       {
+        "id": "calf1",
+        "sets": 3,
+        "lo": 12,
+        "hi": 12
+       },
+       {
+        "id": "hollow",
+        "sets": 3,
+        "lo": 20,
+        "hi": 40
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "exercises": [
+   {
+    "id": "squat",
+    "name": "Приседания с гантелью у груди",
+    "kind": "w",
+    "step": 1,
+    "defaultSets": 3,
+    "defaultReps": [
+     8,
+     10
+    ],
+    "tip": "Гантель у груди, спина прямая, колени смотрят туда же, куда носки. Опускайтесь до параллели бёдер с полом."
+   },
+   {
+    "id": "dbbench",
+    "name": "Жим гантелей лёжа",
+    "kind": "w",
+    "step": 1,
+    "defaultSets": 3,
+    "defaultReps": [
+     8,
+     10
+    ],
+    "tip": "Лопатки сведены, стопы на полу. Опускайте гантели медленно, до лёгкого растяжения в груди."
+   },
+   {
+    "id": "pulldown",
+    "name": "Тяга верхнего блока",
+    "kind": "w",
+    "step": 2.5,
+    "defaultSets": 3,
+    "defaultReps": [
+     8,
+     10
+    ],
+    "tip": "Тяните рукоять к верху груди, не раскачивайтесь корпусом, локти вниз."
+   },
+   {
+    "id": "rdl",
+    "name": "Румынская тяга",
+    "kind": "w",
+    "step": 1,
+    "defaultSets": 3,
+    "defaultReps": [
+     8,
+     10
+    ],
+    "tip": "Колени слегка согнуты, таз уходит назад, спина прямая. Гантели скользят вдоль ног."
+   },
+   {
+    "id": "plank",
+    "name": "Планка",
+    "kind": "time",
+    "step": 5,
+    "defaultSets": 3,
+    "defaultReps": [
+     30,
+     40
+    ],
+    "tip": "Тело в одну линию от пяток до головы, не прогибайте поясницу. Значение в секундах."
+   },
+   {
+    "id": "lunge",
+    "name": "Выпады с гантелями",
+    "kind": "w",
+    "step": 1,
+    "defaultSets": 3,
+    "defaultReps": [
+     8,
+     10
+    ],
+    "tip": "Повторы на каждую ногу. Колено передней ноги не выходит далеко за носок, корпус прямой."
+   },
+   {
+    "id": "ohp",
+    "name": "Жим гантелей сидя над головой",
+    "kind": "w",
+    "step": 1,
+    "defaultSets": 3,
+    "defaultReps": [
+     8,
+     10
+    ],
+    "tip": "Не прогибайте поясницу, спина прижата к спинке. Поднимайте гантели ровно над плечами."
+   },
+   {
+    "id": "dbrow",
+    "name": "Тяга гантели в наклоне",
+    "kind": "w",
+    "step": 1,
+    "defaultSets": 3,
+    "defaultReps": [
+     8,
+     10
+    ],
+    "tip": "Одна рука и колено на скамье. Тяните локоть к поясу, плечо не поднимайте к уху. Повторы на каждую руку."
+   },
+   {
+    "id": "bridge",
+    "name": "Ягодичный мостик",
+    "kind": "w",
+    "step": 2.5,
+    "defaultSets": 3,
+    "defaultReps": [
+     8,
+     10
+    ],
+    "tip": "Можно начать без веса (0). Вверху напрягите ягодицы на секунду, поясницу не прогибайте."
+   },
+   {
+    "id": "boxjump",
+    "name": "Прыжки на тумбу",
+    "kind": "bw",
+    "step": 1,
+    "defaultSets": 3,
+    "defaultReps": [
+     5,
+     6
+    ],
+    "tip": "Мягкое приземление на согнутые ноги, затем спуститесь шагом. Тумба невысокая, пока техника не уверенная."
+   },
+   {
+    "id": "jumpsquat",
+    "name": "Приседания с прыжком",
+    "kind": "bw",
+    "step": 1,
+    "defaultSets": 3,
+    "defaultReps": [
+     6,
+     8
+    ],
+    "tip": "Присядьте, выпрыгните вверх, приземляйтесь мягко на согнутые ноги."
+   },
+   {
+    "id": "rope",
+    "name": "Скакалка",
+    "kind": "time",
+    "step": 5,
+    "defaultSets": 3,
+    "defaultReps": [
+     30,
+     45
+    ],
+    "tip": "Лёгкие прыжки на носках. Значение в секундах."
+   },
+   {
+    "id": "cuff",
+    "name": "Ротаторная манжета с резинкой",
+    "kind": "bw",
+    "step": 1,
+    "defaultSets": 2,
+    "defaultReps": [
+     12,
+     15
+    ],
+    "tip": "Локоть прижат к боку, поворачивайте предплечье наружу против сопротивления резинки. Защищает плечо для атакующего удара."
+   },
+   {
+    "id": "calf",
+    "name": "Подъёмы на носки",
+    "kind": "bw",
+    "step": 1,
+    "defaultSets": 3,
+    "defaultReps": [
+     12,
+     15
+    ],
+    "tip": "Поднимайтесь максимально высоко, опускайтесь медленно. Укрепляет голеностоп и помогает прыжку."
+   },
+   {
+    "id": "sideplank",
+    "name": "Боковая планка",
+    "kind": "time",
+    "step": 5,
+    "defaultSets": 2,
+    "defaultReps": [
+     20,
+     30
+    ],
+    "tip": "Тело в одну линию, таз не проваливается. Значение в секундах на каждую сторону."
+   },
+   {
+    "id": "pushup",
+    "name": "Отжимания",
+    "kind": "bw",
+    "step": 1,
+    "defaultSets": 3,
+    "defaultReps": [
+     8,
+     12
+    ],
+    "tip": "Тело прямое, локти под углом около 45° к корпусу. Если тяжело, отжимайтесь от скамьи или с колен."
+   },
+   {
+    "id": "airsquat",
+    "name": "Приседания без веса",
+    "kind": "bw",
+    "step": 1,
+    "defaultSets": 3,
+    "defaultReps": [
+     12,
+     15
+    ],
+    "tip": "Стопы на ширине плеч, колени по линии носков, спина прямая."
+   },
+   {
+    "id": "gluteb",
+    "name": "Ягодичный мостик без веса",
+    "kind": "bw",
+    "step": 1,
+    "defaultSets": 3,
+    "defaultReps": [
+     12,
+     15
+    ],
+    "tip": "Вверху напрягите ягодицы на секунду, поясницу не прогибайте."
+   },
+   {
+    "id": "superman",
+    "name": "Лодочка (разгибания спины)",
+    "kind": "bw",
+    "step": 1,
+    "defaultSets": 3,
+    "defaultReps": [
+     10,
+     12
+    ],
+    "tip": "Лёжа на животе, поднимайте руки и ноги плавно, без рывков, и задерживайтесь на секунду."
+   },
+   {
+    "id": "bbsquat",
+    "name": "Присед со штангой",
+    "kind": "w",
+    "step": 2.5,
+    "defaultSets": 4,
+    "defaultReps": [
+     5,
+     5
+    ],
+    "tip": "Если техника не поставлена, начните с гоблет-приседа 4×8. Отдых 2–3 минуты."
+   },
+   {
+    "id": "dips",
+    "name": "Брусья",
+    "kind": "w",
+    "step": 2.5,
+    "defaultSets": 4,
+    "defaultReps": [
+     6,
+     10
+    ],
+    "tip": "Вес указывайте как дополнительный (0 — без веса). Когда получается 4×12, вешайте вес от 5 кг."
+   },
+   {
+    "id": "pikepu",
+    "name": "Пайк-отжимания, ноги на скамье",
+    "kind": "bw",
+    "step": 1,
+    "defaultSets": 3,
+    "defaultReps": [
+     6,
+     10
+    ],
+    "tip": "Основа для отжиманий в стойке на руках. Таз высоко, голова движется между руками."
+   },
+   {
+    "id": "bulgar",
+    "name": "Болгарские выпады с гантелями",
+    "kind": "w",
+    "step": 1,
+    "defaultSets": 3,
+    "defaultReps": [
+     8,
+     8
+    ],
+    "tip": "Повторы на каждую ногу. Колено не заваливается внутрь."
+   },
+   {
+    "id": "calf1",
+    "name": "Подъёмы на носок на одной ноге",
+    "kind": "bw",
+    "step": 1,
+    "defaultSets": 3,
+    "defaultReps": [
+     12,
+     12
+    ],
+    "tip": "Икры напрямую влияют на прыжок. Повторы на каждую ногу."
+   },
+   {
+    "id": "hollow",
+    "name": "Холлоу-холд",
+    "kind": "time",
+    "step": 5,
+    "defaultSets": 3,
+    "defaultReps": [
+     20,
+     40
+    ],
+    "tip": "Линия тела для стойки на руках: поясница прижата к полу. Значение в секундах."
+   },
+   {
+    "id": "medball",
+    "name": "Броски медбола из-за головы в пол",
+    "kind": "w",
+    "step": 1,
+    "defaultSets": 4,
+    "defaultReps": [
+     5,
+     5
+    ],
+    "tip": "Максимально взрывно, имитация удара. Вес указывайте как вес медбола."
+   },
+   {
+    "id": "pullup",
+    "name": "Подтягивания",
+    "kind": "w",
+    "step": 2.5,
+    "defaultSets": 5,
+    "defaultReps": [
+     5,
+     8
+    ],
+    "tip": "Вес указывайте как дополнительный (0 — без веса). Когда получается 5×10, добавляйте вес. В тренировке C — около 60% от максимума, отдых 60–90 с."
+   },
+   {
+    "id": "clappush",
+    "name": "Отжимания взрывные или с хлопком",
+    "kind": "bw",
+    "step": 1,
+    "defaultSets": 3,
+    "defaultReps": [
+     5,
+     5
+    ],
+    "tip": "С 3-го месяца; до этого просто быстрые отжимания."
+   },
+   {
+    "id": "pullover",
+    "name": "Пуловер с гантелью лёжа",
+    "kind": "w",
+    "step": 1,
+    "defaultSets": 3,
+    "defaultReps": [
+     10,
+     10
+    ],
+    "tip": "Работает на замах."
+   },
+   {
+    "id": "facepull",
+    "name": "Наружная ротация плеча + face pull",
+    "kind": "bw",
+    "step": 1,
+    "defaultSets": 3,
+    "defaultReps": [
+     15,
+     15
+    ],
+    "tip": "Суперсетом: 3×15 ротации и 3×15 face pull. Это защита ударного плеча, не пропускайте."
+   },
+   {
+    "id": "legraise",
+    "name": "Подъём ног в висе",
+    "kind": "bw",
+    "step": 1,
+    "defaultSets": 3,
+    "defaultReps": [
+     8,
+     12
+    ],
+    "tip": "Начните с согнутых коленей."
+   },
+   {
+    "id": "medrot",
+    "name": "Вращательные броски медбола в стену",
+    "kind": "w",
+    "step": 1,
+    "defaultSets": 3,
+    "defaultReps": [
+     6,
+     6
+    ],
+    "tip": "Повторы на каждую сторону. Сила корпуса при ударе."
+   },
+   {
+    "id": "runjump",
+    "name": "Прыжки с волейбольного разбега",
+    "kind": "bw",
+    "step": 1,
+    "defaultSets": 5,
+    "defaultReps": [
+     3,
+     3
+    ],
+    "tip": "Полный отдых между подходами: важно качество."
+   },
+   {
+    "id": "pistol",
+    "name": "Присед на одной ноге к скамье",
+    "kind": "bw",
+    "step": 1,
+    "defaultSets": 3,
+    "defaultReps": [
+     5,
+     5
+    ],
+    "tip": "Повторы на каждую ногу. Опускайте скамью по мере прогресса, цель — пистолет."
+   },
+   {
+    "id": "nordic",
+    "name": "Скандинавские сгибания (Nordic curl)",
+    "kind": "bw",
+    "step": 1,
+    "defaultSets": 3,
+    "defaultReps": [
+     4,
+     6
+    ],
+    "tip": "Медленно опускайтесь, ноги держит партнёр или опора. Защищают колени."
+   },
+   {
+    "id": "lsit",
+    "name": "L-sit (уголок) на брусьях",
+    "kind": "time",
+    "step": 5,
+    "defaultSets": 4,
+    "defaultReps": [
+     10,
+     20
+    ],
+    "tip": "Начните с согнутых ног. Значение в секундах."
+   },
+   {
+    "id": "x-1",
+    "name": "Старое",
+    "kind": "w",
+    "step": 1,
+    "defaultSets": 3,
+    "defaultReps": [
+     8,
+     10
+    ],
+    "tip": ""
+   },
+   {
+    "id": "x-9",
+    "name": "Своё",
+    "kind": "time",
+    "step": 5,
+    "defaultSets": 3,
+    "defaultReps": [
+     30,
+     45
+    ],
+    "tip": "т"
+   }
+  ]
+ },
+ "roundTripDraft": {
+  "list": [
+   {
+    "id": "s1",
+    "date": "2026-02-23",
+    "type": "gym",
+    "prog": "A",
+    "title": "",
+    "start": 1000,
+    "min": 50,
+    "rpe": 3,
+    "pain": [],
+    "note": "",
+    "ex": [
+     {
+      "id": "bbsquat",
+      "name": "Присед со штангой",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 40,
+        "r": 5,
+        "fb": "ok"
+       },
+       {
+        "w": 40,
+        "r": 5,
+        "fb": "ok"
+       },
+       {
+        "w": 40,
+        "r": 5,
+        "fb": "ok"
+       },
+       {
+        "w": 40,
+        "r": 5,
+        "fb": "ok"
+       }
+      ]
+     },
+     {
+      "id": "dips",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 0,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 10,
+        "fb": "ok"
+       }
+      ]
+     },
+     {
+      "id": "plank",
+      "kind": "time",
+      "sets": [
+       {
+        "w": 0,
+        "r": 40,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 40,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 40,
+        "fb": null
+       }
+      ]
+     },
+     {
+      "id": "pushup",
+      "kind": "bw",
+      "sets": [
+       {
+        "w": 0,
+        "r": 9,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": null
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "s2",
+    "date": "2026-03-02",
+    "type": "gym",
+    "prog": "B",
+    "title": "",
+    "start": 2000,
+    "min": 50,
+    "rpe": 3,
+    "pain": [],
+    "note": "",
+    "ex": [
+     {
+      "id": "pullup",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 0,
+        "r": 8,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": "easy"
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": "ok"
+       },
+       {
+        "w": 0,
+        "r": 8,
+        "fb": "ok"
+       }
+      ]
+     },
+     {
+      "id": "dbrow",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 20,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 20,
+        "r": 10,
+        "fb": "hard"
+       },
+       {
+        "w": 20,
+        "r": 9,
+        "fb": "ok"
+       }
+      ]
+     },
+     {
+      "id": "squat",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "s3",
+    "date": "2026-03-09",
+    "type": "gym",
+    "prog": "C",
+    "title": "",
+    "start": 3000,
+    "min": 50,
+    "rpe": 3,
+    "pain": [],
+    "note": "",
+    "ex": [
+     {
+      "id": "bbsquat",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 42.5,
+        "r": 5,
+        "fb": "hard"
+       },
+       {
+        "w": 42.5,
+        "r": 4,
+        "fb": "hard"
+       }
+      ]
+     },
+     {
+      "id": "squat",
+      "kind": "w",
+      "sets": [
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       },
+       {
+        "w": 16,
+        "r": 10,
+        "fb": "ok"
+       }
+      ]
+     },
+     {
+      "id": "rope",
+      "kind": "time",
+      "sets": [
+       {
+        "w": 0,
+        "r": 45,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 45,
+        "fb": null
+       },
+       {
+        "w": 0,
+        "r": 45,
+        "fb": null
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "v1",
+    "date": "2026-03-10",
+    "type": "volley",
+    "prog": null,
+    "title": "",
+    "start": 3500,
+    "min": 90,
+    "rpe": 3,
+    "pain": [],
+    "note": "",
+    "ex": [],
+    "kcal": 500
+   }
+  ],
+  "skipped": 0,
+  "programs": [
+   {
+    "id": "A",
+    "title": "A · ноги и жимы",
+    "rot": true,
+    "warm": [
+     "Скакалка 2–3 минуты",
+     "Суставная разминка сверху вниз",
+     "Запястья (обязательно): круги, упоры пальцами вперёд и назад",
+     "Разведения резины перед грудью, 10–15 раз",
+     "Лопаточные подтягивания 2×8, руки прямые",
+     "Махи ногами вперёд и в стороны",
+     "Затем 10–15 минут практики стойки на руках, пока вы свежие"
+    ],
+    "items": [
+     {
+      "id": "boxjump",
+      "sets": 4,
+      "lo": 3,
+      "hi": 3
+     },
+     {
+      "id": "bbsquat",
+      "sets": 4,
+      "lo": 5,
+      "hi": 5
+     },
+     {
+      "id": "dips",
+      "sets": 4,
+      "lo": 6,
+      "hi": 10
+     },
+     {
+      "id": "rdl",
+      "sets": 3,
+      "lo": 8,
+      "hi": 8
+     },
+     {
+      "id": "pikepu",
+      "sets": 3,
+      "lo": 6,
+      "hi": 10
+     },
+     {
+      "id": "bulgar",
+      "sets": 3,
+      "lo": 8,
+      "hi": 8
+     },
+     {
+      "id": "calf1",
+      "sets": 3,
+      "lo": 12,
+      "hi": 12
+     },
+     {
+      "id": "hollow",
+      "sets": 3,
+      "lo": 20,
+      "hi": 40
+     }
+    ]
+   },
+   {
+    "id": "B",
+    "title": "B · тяга и взрывная сила",
+    "rot": true,
+    "warm": [
+     "Скакалка 2–3 минуты",
+     "Суставная разминка сверху вниз",
+     "Запястья (обязательно): круги, упоры пальцами вперёд и назад",
+     "Разведения резины перед грудью, 10–15 раз",
+     "Лопаточные подтягивания 2×8, руки прямые",
+     "Махи ногами вперёд и в стороны",
+     "Затем 10–15 минут практики стойки на руках, пока вы свежие"
+    ],
+    "items": [
+     {
+      "id": "medball",
+      "sets": 4,
+      "lo": 5,
+      "hi": 5
+     },
+     {
+      "id": "pullup",
+      "sets": 5,
+      "lo": 5,
+      "hi": 8
+     },
+     {
+      "id": "dbrow",
+      "sets": 3,
+      "lo": 10,
+      "hi": 10
+     },
+     {
+      "id": "clappush",
+      "sets": 3,
+      "lo": 5,
+      "hi": 5
+     },
+     {
+      "id": "pullover",
+      "sets": 3,
+      "lo": 10,
+      "hi": 10
+     },
+     {
+      "id": "facepull",
+      "sets": 3,
+      "lo": 15,
+      "hi": 15
+     },
+     {
+      "id": "legraise",
+      "sets": 3,
+      "lo": 8,
+      "hi": 12
+     },
+     {
+      "id": "medrot",
+      "sets": 3,
+      "lo": 6,
+      "hi": 6
+     }
+    ]
+   },
+   {
+    "id": "C",
+    "title": "C · калистеника и прыжок",
+    "rot": true,
+    "warm": [
+     "Скакалка 2–3 минуты",
+     "Суставная разминка сверху вниз",
+     "Запястья (обязательно): круги, упоры пальцами вперёд и назад",
+     "Разведения резины перед грудью, 10–15 раз",
+     "Лопаточные подтягивания 2×8, руки прямые",
+     "Махи ногами вперёд и в стороны",
+     "Затем 10–15 минут практики стойки на руках, пока вы свежие"
+    ],
+    "items": [
+     {
+      "id": "runjump",
+      "sets": 5,
+      "lo": 3,
+      "hi": 3
+     },
+     {
+      "id": "pistol",
+      "sets": 3,
+      "lo": 5,
+      "hi": 5
+     },
+     {
+      "id": "pullup",
+      "sets": 5,
+      "lo": 5,
+      "hi": 8
+     },
+     {
+      "id": "dips",
+      "sets": 4,
+      "lo": 8,
+      "hi": 12
+     },
+     {
+      "id": "pushup",
+      "sets": 3,
+      "lo": 8,
+      "hi": 12
+     },
+     {
+      "id": "nordic",
+      "sets": 3,
+      "lo": 4,
+      "hi": 6
+     },
+     {
+      "id": "lsit",
+      "sets": 4,
+      "lo": 10,
+      "hi": 20
+     }
+    ]
+   }
+  ],
+  "customEx": [
+   {
+    "id": "x-1",
+    "name": "Старое",
+    "kind": "w",
+    "step": 1,
+    "tip": ""
+   },
+   {
+    "id": "x-9",
+    "name": "Своё",
+    "kind": "time",
+    "step": 5,
+    "tip": "т"
+   }
+  ],
+  "plan": {
+   "name": "План на 6 месяцев",
+   "start": "2026-02-02",
+   "protein": true,
+   "volleyHints": true,
+   "deloadEvery": 5,
+   "testEvery": 4,
+   "blocks": [
+    {
+     "id": "b1",
+     "name": "База",
+     "weeks": 8,
+     "text": "Техника, связки и запястья, стойка у стены, растяжка. Веса умеренные, плиометрика лёгкая."
+    },
+    {
+     "id": "b2",
+     "name": "Сила",
+     "weeks": 8,
+     "text": "Подтягивания и брусья с весом, присед тяжелее, взрывные отжимания, отрыв носков от стены."
+    },
+    {
+     "id": "b3",
+     "name": "Мощность и навыки",
+     "weeks": 10,
+     "text": "Высокие прыжки, негативы в стойке, кик-апы, более глубокая растяжка."
+    }
+   ],
+   "days": [
+    {
+     "k": "gym",
+     "prog": "A",
+     "note": "Ноги и жимы"
+    },
+    {
+     "k": "home",
+     "prog": "",
+     "note": "Стойка 15 мин, растяжка 25 мин, турник в течение дня"
+    },
+    {
+     "k": "gym",
+     "prog": "B",
+     "note": "Тяга и взрывная сила"
+    },
+    {
+     "k": "home",
+     "prog": "",
+     "note": "Стойка, растяжка, турник — или игра"
+    },
+    {
+     "k": "gym",
+     "prog": "C",
+     "note": "Калистеника и прыжок"
+    },
+    {
+     "k": "vb",
+     "prog": "",
+     "note": "Игра или растяжка"
+    },
+    {
+     "k": "rest",
+     "prog": "",
+     "note": "Полный отдых"
+    }
+   ],
+   "rules": [
+    {
+     "t": "За день до игры",
+     "d": "Не ставьте тяжёлые ноги и прыжки."
+    },
+    {
+     "t": "Игра в день зала",
+     "d": "Уберите из тренировки прыжковый блок."
+    },
+    {
+     "t": "Ноги «забиты»",
+     "d": "Перенесите тренировку на ногах на день позже."
+    }
+   ],
+   "metrics": [
+    {
+     "id": "push",
+     "name": "Отжимания",
+     "unit": "раз",
+     "goal": 40,
+     "goalText": "40+",
+     "dir": 1,
+     "how": "Максимум подряд, строго: тело прямое, грудь почти касается пола."
+    },
+    {
+     "id": "pull",
+     "name": "Подтягивания",
+     "unit": "раз",
+     "goal": 15,
+     "goalText": "15–20 (40 — через 1,5–3 года)",
+     "dir": 1,
+     "how": "Из виса, подбородок над перекладиной, без раскачки."
+    },
+    {
+     "id": "dips",
+     "name": "Брусья",
+     "unit": "раз",
+     "goal": 20,
+     "goalText": "20+",
+     "dir": 1,
+     "how": "Полная амплитуда: плечи опускаются ниже локтей."
+    },
+    {
+     "id": "wall",
+     "name": "Стойка у стены",
+     "unit": "с",
+     "goal": 60,
+     "goalText": "60 с",
+     "dir": 1,
+     "how": "Грудью к стене. Секундомер до схода."
+    },
+    {
+     "id": "free",
+     "name": "Свободная стойка",
+     "unit": "с",
+     "goal": 15,
+     "goalText": "15–30 с",
+     "dir": 1,
+     "how": "Без опоры, лучшая попытка."
+    },
+    {
+     "id": "sj",
+     "name": "Прыжок с места",
+     "unit": "см",
+     "goal": null,
+     "goalText": "",
+     "dir": 1,
+     "how": "Отметка рукой на стене: высота касания минус высота вытянутой руки."
+    },
+    {
+     "id": "rj",
+     "name": "Прыжок с разбега",
+     "unit": "см",
+     "goal": null,
+     "goalText": "",
+     "dir": 1,
+     "how": "Так же, но с волейбольного разбега."
+    },
+    {
+     "id": "fs",
+     "name": "Продольный шпагат",
+     "unit": "см до пола",
+     "goal": 0,
+     "goalText": "0 (возможен за 6–12 мес)",
+     "dir": -1,
+     "how": "Расстояние от таза до пола."
+    },
+    {
+     "id": "ss",
+     "name": "Поперечный шпагат",
+     "unit": "см до пола",
+     "goal": 0,
+     "goalText": "0 (долгосрочно, 1–2+ года)",
+     "dir": -1,
+     "how": "Расстояние от таза до пола."
+    }
+   ],
+   "tracks": [
+    {
+     "id": "handstand",
+     "name": "Стойка на руках",
+     "kind": "timed",
+     "ic": "star",
+     "goal": 5,
+     "goalText": "5–6",
+     "dur": 15,
+     "intro": "Стойка любит частоту: 10–15 минут 5–6 раз в неделю лучше, чем час раз в неделю. Практикуйте после разминки, пока свежие. Переходите дальше, только когда уверенно делаете текущий шаг.",
+     "steps": [
+      {
+       "n": "Выход колесом",
+       "t": "Научитесь безопасно падать: переставьте одну руку и шагните ногами вбок. Первая неделя."
+      },
+      {
+       "n": "Стойка грудью к стене",
+       "t": "4–5 подходов по 20–60 с. Руки прямые, плечи толкают пол, тело ровное, как в холлоу-холде."
+      },
+      {
+       "n": "Отрыв носков от стены",
+       "t": "На пару секунд, когда держите 60 с у стены."
+      },
+      {
+       "n": "Кик-апы",
+       "t": "В свободную стойку, 10–15 минут у открытого места. Баланс держите пальцами, давя в пол."
+      },
+      {
+       "n": "Негативы отжиманий в стойке",
+       "t": "У стены медленно опускаетесь, встаёте ногами на пол, повторяете. Основа: пайк-отжимания с возвышения, 3×10."
+      }
+     ],
+     "cur": 1,
+     "items": [],
+     "metric": "",
+     "pctLo": 40,
+     "pctHi": 50,
+     "dayTarget": 8,
+     "base": 10,
+     "tip": ""
+    },
+    {
+     "id": "stretch",
+     "name": "Растяжка",
+     "kind": "timed",
+     "ic": "stretch",
+     "goal": 3,
+     "goalText": "3–4",
+     "dur": 25,
+     "intro": "В домашние дни 20–30 минут, после зала 5–10 минут. До дискомфорта, не до боли: боль в колене на шпагате — сигнал сразу остановиться. Приём «напряжение — расслабление»: в конечной позиции 5–8 с давите ногами в пол, на выдохе расслабьтесь и опуститесь чуть ниже, повторите 2–3 раза.",
+     "steps": [],
+     "cur": 0,
+     "items": [
+      {
+       "n": "Выпад с коленом у стены (couch stretch)",
+       "d": "2×60 с на ногу",
+       "t": "Сгибатели бедра, продольный шпагат"
+      },
+      {
+       "n": "Полушпагат, наклон к прямой ноге",
+       "d": "2×60 с на ногу",
+       "t": "Задняя поверхность бедра"
+      },
+      {
+       "n": "Продольный шпагат на блоках или стульях",
+       "d": "2×60 с на ногу",
+       "t": "Постепенно снижайте опору"
+      },
+      {
+       "n": "Лягушка",
+       "d": "2×60 с",
+       "t": "Поперечный шпагат"
+      },
+      {
+       "n": "Складка с широко разведёнными ногами",
+       "d": "2×60 с",
+       "t": "Поперечный шпагат"
+      },
+      {
+       "n": "Коссак-приседы",
+       "d": "2×8 на сторону",
+       "t": "Активная гибкость"
+      },
+      {
+       "n": "Мостик",
+       "d": "3×10–20 с",
+       "t": "Грудной отдел и плечи, нужно для стойки"
+      },
+      {
+       "n": "Плечи: руки на стене, грудь вниз",
+       "d": "2×45 с",
+       "t": "Ровная линия в стойке"
+      }
+     ],
+     "metric": "",
+     "pctLo": 40,
+     "pctHi": 50,
+     "dayTarget": 8,
+     "base": 10,
+     "tip": ""
+    },
+    {
+     "id": "pullday",
+     "name": "Подтягивания в течение дня",
+     "kind": "sets",
+     "ic": "gym",
+     "goal": 0,
+     "goalText": "",
+     "dur": 20,
+     "intro": "",
+     "steps": [],
+     "cur": 0,
+     "items": [],
+     "metric": "pull",
+     "pctLo": 40,
+     "pctHi": 50,
+     "dayTarget": 8,
+     "base": 10,
+     "tip": "В дни без зала делайте 5–8 лёгких подходов, между ними минимум 30–60 минут. Ни одного до отказа. Так же можно делать отжимания. Пересчитывайте максимум раз в 4 недели."
+    }
+   ]
+  },
+  "maxes": [
+   {
+    "id": "m1",
+    "date": "2026-02-01",
+    "m": "push",
+    "v": 20
+   }
+  ],
+  "wlog": {
+   "2026-03-02": {
+    "kg": 70,
+    "note": "старая"
+   }
+  },
+  "templates": [
+   {
+    "id": "tt",
+    "name": "Мой",
+    "plan": {
+     "name": "План на 6 месяцев",
+     "start": "",
+     "protein": true,
+     "volleyHints": true,
+     "deloadEvery": 5,
+     "testEvery": 4,
+     "blocks": [
+      {
+       "id": "b1",
+       "name": "База",
+       "weeks": 8,
+       "text": "Техника, связки и запястья, стойка у стены, растяжка. Веса умеренные, плиометрика лёгкая."
+      },
+      {
+       "id": "b2",
+       "name": "Сила",
+       "weeks": 8,
+       "text": "Подтягивания и брусья с весом, присед тяжелее, взрывные отжимания, отрыв носков от стены."
+      },
+      {
+       "id": "b3",
+       "name": "Мощность и навыки",
+       "weeks": 10,
+       "text": "Высокие прыжки, негативы в стойке, кик-апы, более глубокая растяжка."
+      }
+     ],
+     "days": [
+      {
+       "k": "gym",
+       "prog": "A",
+       "note": "Ноги и жимы"
+      },
+      {
+       "k": "home",
+       "prog": "",
+       "note": "Стойка 15 мин, растяжка 25 мин, турник в течение дня"
+      },
+      {
+       "k": "gym",
+       "prog": "B",
+       "note": "Тяга и взрывная сила"
+      },
+      {
+       "k": "home",
+       "prog": "",
+       "note": "Стойка, растяжка, турник — или игра"
+      },
+      {
+       "k": "gym",
+       "prog": "C",
+       "note": "Калистеника и прыжок"
+      },
+      {
+       "k": "vb",
+       "prog": "",
+       "note": "Игра или растяжка"
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": "Полный отдых"
+      }
+     ],
+     "rules": [
+      {
+       "t": "За день до игры",
+       "d": "Не ставьте тяжёлые ноги и прыжки."
+      },
+      {
+       "t": "Игра в день зала",
+       "d": "Уберите из тренировки прыжковый блок."
+      },
+      {
+       "t": "Ноги «забиты»",
+       "d": "Перенесите тренировку на ногах на день позже."
+      }
+     ],
+     "metrics": [
+      {
+       "id": "push",
+       "name": "Отжимания",
+       "unit": "раз",
+       "goal": 40,
+       "goalText": "40+",
+       "dir": 1,
+       "how": "Максимум подряд, строго: тело прямое, грудь почти касается пола."
+      },
+      {
+       "id": "pull",
+       "name": "Подтягивания",
+       "unit": "раз",
+       "goal": 15,
+       "goalText": "15–20 (40 — через 1,5–3 года)",
+       "dir": 1,
+       "how": "Из виса, подбородок над перекладиной, без раскачки."
+      },
+      {
+       "id": "dips",
+       "name": "Брусья",
+       "unit": "раз",
+       "goal": 20,
+       "goalText": "20+",
+       "dir": 1,
+       "how": "Полная амплитуда: плечи опускаются ниже локтей."
+      },
+      {
+       "id": "wall",
+       "name": "Стойка у стены",
+       "unit": "с",
+       "goal": 60,
+       "goalText": "60 с",
+       "dir": 1,
+       "how": "Грудью к стене. Секундомер до схода."
+      },
+      {
+       "id": "free",
+       "name": "Свободная стойка",
+       "unit": "с",
+       "goal": 15,
+       "goalText": "15–30 с",
+       "dir": 1,
+       "how": "Без опоры, лучшая попытка."
+      },
+      {
+       "id": "sj",
+       "name": "Прыжок с места",
+       "unit": "см",
+       "goal": null,
+       "goalText": "",
+       "dir": 1,
+       "how": "Отметка рукой на стене: высота касания минус высота вытянутой руки."
+      },
+      {
+       "id": "rj",
+       "name": "Прыжок с разбега",
+       "unit": "см",
+       "goal": null,
+       "goalText": "",
+       "dir": 1,
+       "how": "Так же, но с волейбольного разбега."
+      },
+      {
+       "id": "fs",
+       "name": "Продольный шпагат",
+       "unit": "см до пола",
+       "goal": 0,
+       "goalText": "0 (возможен за 6–12 мес)",
+       "dir": -1,
+       "how": "Расстояние от таза до пола."
+      },
+      {
+       "id": "ss",
+       "name": "Поперечный шпагат",
+       "unit": "см до пола",
+       "goal": 0,
+       "goalText": "0 (долгосрочно, 1–2+ года)",
+       "dir": -1,
+       "how": "Расстояние от таза до пола."
+      }
+     ],
+     "tracks": [
+      {
+       "id": "handstand",
+       "name": "Стойка на руках",
+       "kind": "timed",
+       "ic": "star",
+       "goal": 5,
+       "goalText": "5–6",
+       "dur": 15,
+       "intro": "Стойка любит частоту: 10–15 минут 5–6 раз в неделю лучше, чем час раз в неделю. Практикуйте после разминки, пока свежие. Переходите дальше, только когда уверенно делаете текущий шаг.",
+       "steps": [
+        {
+         "n": "Выход колесом",
+         "t": "Научитесь безопасно падать: переставьте одну руку и шагните ногами вбок. Первая неделя."
+        },
+        {
+         "n": "Стойка грудью к стене",
+         "t": "4–5 подходов по 20–60 с. Руки прямые, плечи толкают пол, тело ровное, как в холлоу-холде."
+        },
+        {
+         "n": "Отрыв носков от стены",
+         "t": "На пару секунд, когда держите 60 с у стены."
+        },
+        {
+         "n": "Кик-апы",
+         "t": "В свободную стойку, 10–15 минут у открытого места. Баланс держите пальцами, давя в пол."
+        },
+        {
+         "n": "Негативы отжиманий в стойке",
+         "t": "У стены медленно опускаетесь, встаёте ногами на пол, повторяете. Основа: пайк-отжимания с возвышения, 3×10."
+        }
+       ],
+       "cur": 1,
+       "items": [],
+       "metric": "",
+       "pctLo": 40,
+       "pctHi": 50,
+       "dayTarget": 8,
+       "base": 10,
+       "tip": ""
+      },
+      {
+       "id": "stretch",
+       "name": "Растяжка",
+       "kind": "timed",
+       "ic": "stretch",
+       "goal": 3,
+       "goalText": "3–4",
+       "dur": 25,
+       "intro": "В домашние дни 20–30 минут, после зала 5–10 минут. До дискомфорта, не до боли: боль в колене на шпагате — сигнал сразу остановиться. Приём «напряжение — расслабление»: в конечной позиции 5–8 с давите ногами в пол, на выдохе расслабьтесь и опуститесь чуть ниже, повторите 2–3 раза.",
+       "steps": [],
+       "cur": 0,
+       "items": [
+        {
+         "n": "Выпад с коленом у стены (couch stretch)",
+         "d": "2×60 с на ногу",
+         "t": "Сгибатели бедра, продольный шпагат"
+        },
+        {
+         "n": "Полушпагат, наклон к прямой ноге",
+         "d": "2×60 с на ногу",
+         "t": "Задняя поверхность бедра"
+        },
+        {
+         "n": "Продольный шпагат на блоках или стульях",
+         "d": "2×60 с на ногу",
+         "t": "Постепенно снижайте опору"
+        },
+        {
+         "n": "Лягушка",
+         "d": "2×60 с",
+         "t": "Поперечный шпагат"
+        },
+        {
+         "n": "Складка с широко разведёнными ногами",
+         "d": "2×60 с",
+         "t": "Поперечный шпагат"
+        },
+        {
+         "n": "Коссак-приседы",
+         "d": "2×8 на сторону",
+         "t": "Активная гибкость"
+        },
+        {
+         "n": "Мостик",
+         "d": "3×10–20 с",
+         "t": "Грудной отдел и плечи, нужно для стойки"
+        },
+        {
+         "n": "Плечи: руки на стене, грудь вниз",
+         "d": "2×45 с",
+         "t": "Ровная линия в стойке"
+        }
+       ],
+       "metric": "",
+       "pctLo": 40,
+       "pctHi": 50,
+       "dayTarget": 8,
+       "base": 10,
+       "tip": ""
+      },
+      {
+       "id": "pullday",
+       "name": "Подтягивания в течение дня",
+       "kind": "sets",
+       "ic": "gym",
+       "goal": 0,
+       "goalText": "",
+       "dur": 20,
+       "intro": "",
+       "steps": [],
+       "cur": 0,
+       "items": [],
+       "metric": "pull",
+       "pctLo": 40,
+       "pctHi": 50,
+       "dayTarget": 8,
+       "base": 10,
+       "tip": "В дни без зала делайте 5–8 лёгких подходов, между ними минимум 30–60 минут. Ни одного до отказа. Так же можно делать отжимания. Пересчитывайте максимум раз в 4 недели."
+      }
+     ]
+    },
+    "programs": [
+     {
+      "id": "A",
+      "title": "A · ноги и жимы",
+      "rot": true,
+      "warm": [
+       "Скакалка 2–3 минуты",
+       "Суставная разминка сверху вниз",
+       "Запястья (обязательно): круги, упоры пальцами вперёд и назад",
+       "Разведения резины перед грудью, 10–15 раз",
+       "Лопаточные подтягивания 2×8, руки прямые",
+       "Махи ногами вперёд и в стороны",
+       "Затем 10–15 минут практики стойки на руках, пока вы свежие"
+      ],
+      "items": [
+       {
+        "id": "boxjump",
+        "sets": 4,
+        "lo": 3,
+        "hi": 3
+       },
+       {
+        "id": "bbsquat",
+        "sets": 4,
+        "lo": 5,
+        "hi": 5
+       },
+       {
+        "id": "dips",
+        "sets": 4,
+        "lo": 6,
+        "hi": 10
+       },
+       {
+        "id": "rdl",
+        "sets": 3,
+        "lo": 8,
+        "hi": 8
+       },
+       {
+        "id": "pikepu",
+        "sets": 3,
+        "lo": 6,
+        "hi": 10
+       },
+       {
+        "id": "bulgar",
+        "sets": 3,
+        "lo": 8,
+        "hi": 8
+       },
+       {
+        "id": "calf1",
+        "sets": 3,
+        "lo": 12,
+        "hi": 12
+       },
+       {
+        "id": "hollow",
+        "sets": 3,
+        "lo": 20,
+        "hi": 40
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "templates": [
+  {
+   "id": "vb",
+   "result": {
+    "plan": {
+     "name": "План на 6 месяцев",
+     "start": "",
+     "protein": true,
+     "volleyHints": true,
+     "deloadEvery": 5,
+     "testEvery": 4,
+     "blocks": [
+      {
+       "id": "b1",
+       "name": "База",
+       "weeks": 8,
+       "text": "Техника, связки и запястья, стойка у стены, растяжка. Веса умеренные, плиометрика лёгкая."
+      },
+      {
+       "id": "b2",
+       "name": "Сила",
+       "weeks": 8,
+       "text": "Подтягивания и брусья с весом, присед тяжелее, взрывные отжимания, отрыв носков от стены."
+      },
+      {
+       "id": "b3",
+       "name": "Мощность и навыки",
+       "weeks": 10,
+       "text": "Высокие прыжки, негативы в стойке, кик-апы, более глубокая растяжка."
+      }
+     ],
+     "days": [
+      {
+       "k": "gym",
+       "prog": "A",
+       "note": "Ноги и жимы"
+      },
+      {
+       "k": "home",
+       "prog": "",
+       "note": "Стойка 15 мин, растяжка 25 мин, турник в течение дня"
+      },
+      {
+       "k": "gym",
+       "prog": "B",
+       "note": "Тяга и взрывная сила"
+      },
+      {
+       "k": "home",
+       "prog": "",
+       "note": "Стойка, растяжка, турник — или игра"
+      },
+      {
+       "k": "gym",
+       "prog": "C",
+       "note": "Калистеника и прыжок"
+      },
+      {
+       "k": "vb",
+       "prog": "",
+       "note": "Игра или растяжка"
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": "Полный отдых"
+      }
+     ],
+     "rules": [
+      {
+       "t": "За день до игры",
+       "d": "Не ставьте тяжёлые ноги и прыжки."
+      },
+      {
+       "t": "Игра в день зала",
+       "d": "Уберите из тренировки прыжковый блок."
+      },
+      {
+       "t": "Ноги «забиты»",
+       "d": "Перенесите тренировку на ногах на день позже."
+      }
+     ],
+     "metrics": [
+      {
+       "id": "push",
+       "name": "Отжимания",
+       "unit": "раз",
+       "goal": 40,
+       "goalText": "40+",
+       "dir": 1,
+       "how": "Максимум подряд, строго: тело прямое, грудь почти касается пола."
+      },
+      {
+       "id": "pull",
+       "name": "Подтягивания",
+       "unit": "раз",
+       "goal": 15,
+       "goalText": "15–20 (40 — через 1,5–3 года)",
+       "dir": 1,
+       "how": "Из виса, подбородок над перекладиной, без раскачки."
+      },
+      {
+       "id": "dips",
+       "name": "Брусья",
+       "unit": "раз",
+       "goal": 20,
+       "goalText": "20+",
+       "dir": 1,
+       "how": "Полная амплитуда: плечи опускаются ниже локтей."
+      },
+      {
+       "id": "wall",
+       "name": "Стойка у стены",
+       "unit": "с",
+       "goal": 60,
+       "goalText": "60 с",
+       "dir": 1,
+       "how": "Грудью к стене. Секундомер до схода."
+      },
+      {
+       "id": "free",
+       "name": "Свободная стойка",
+       "unit": "с",
+       "goal": 15,
+       "goalText": "15–30 с",
+       "dir": 1,
+       "how": "Без опоры, лучшая попытка."
+      },
+      {
+       "id": "sj",
+       "name": "Прыжок с места",
+       "unit": "см",
+       "goal": null,
+       "goalText": "",
+       "dir": 1,
+       "how": "Отметка рукой на стене: высота касания минус высота вытянутой руки."
+      },
+      {
+       "id": "rj",
+       "name": "Прыжок с разбега",
+       "unit": "см",
+       "goal": null,
+       "goalText": "",
+       "dir": 1,
+       "how": "Так же, но с волейбольного разбега."
+      },
+      {
+       "id": "fs",
+       "name": "Продольный шпагат",
+       "unit": "см до пола",
+       "goal": 0,
+       "goalText": "0 (возможен за 6–12 мес)",
+       "dir": -1,
+       "how": "Расстояние от таза до пола."
+      },
+      {
+       "id": "ss",
+       "name": "Поперечный шпагат",
+       "unit": "см до пола",
+       "goal": 0,
+       "goalText": "0 (долгосрочно, 1–2+ года)",
+       "dir": -1,
+       "how": "Расстояние от таза до пола."
+      }
+     ],
+     "tracks": [
+      {
+       "id": "handstand",
+       "name": "Стойка на руках",
+       "kind": "timed",
+       "goal": 5,
+       "goalText": "5–6",
+       "dur": 15,
+       "intro": "Стойка любит частоту: 10–15 минут 5–6 раз в неделю лучше, чем час раз в неделю. Практикуйте после разминки, пока свежие. Переходите дальше, только когда уверенно делаете текущий шаг.",
+       "steps": [
+        {
+         "n": "Выход колесом",
+         "t": "Научитесь безопасно падать: переставьте одну руку и шагните ногами вбок. Первая неделя."
+        },
+        {
+         "n": "Стойка грудью к стене",
+         "t": "4–5 подходов по 20–60 с. Руки прямые, плечи толкают пол, тело ровное, как в холлоу-холде."
+        },
+        {
+         "n": "Отрыв носков от стены",
+         "t": "На пару секунд, когда держите 60 с у стены."
+        },
+        {
+         "n": "Кик-апы",
+         "t": "В свободную стойку, 10–15 минут у открытого места. Баланс держите пальцами, давя в пол."
+        },
+        {
+         "n": "Негативы отжиманий в стойке",
+         "t": "У стены медленно опускаетесь, встаёте ногами на пол, повторяете. Основа: пайк-отжимания с возвышения, 3×10."
+        }
+       ],
+       "cur": 1,
+       "items": [],
+       "metric": "",
+       "pctLo": 40,
+       "pctHi": 50,
+       "dayTarget": 8,
+       "base": 10,
+       "tip": ""
+      },
+      {
+       "id": "stretch",
+       "name": "Растяжка",
+       "kind": "timed",
+       "goal": 3,
+       "goalText": "3–4",
+       "dur": 25,
+       "intro": "В домашние дни 20–30 минут, после зала 5–10 минут. До дискомфорта, не до боли: боль в колене на шпагате — сигнал сразу остановиться. Приём «напряжение — расслабление»: в конечной позиции 5–8 с давите ногами в пол, на выдохе расслабьтесь и опуститесь чуть ниже, повторите 2–3 раза.",
+       "steps": [],
+       "cur": 0,
+       "items": [
+        {
+         "n": "Выпад с коленом у стены (couch stretch)",
+         "d": "2×60 с на ногу",
+         "t": "Сгибатели бедра, продольный шпагат"
+        },
+        {
+         "n": "Полушпагат, наклон к прямой ноге",
+         "d": "2×60 с на ногу",
+         "t": "Задняя поверхность бедра"
+        },
+        {
+         "n": "Продольный шпагат на блоках или стульях",
+         "d": "2×60 с на ногу",
+         "t": "Постепенно снижайте опору"
+        },
+        {
+         "n": "Лягушка",
+         "d": "2×60 с",
+         "t": "Поперечный шпагат"
+        },
+        {
+         "n": "Складка с широко разведёнными ногами",
+         "d": "2×60 с",
+         "t": "Поперечный шпагат"
+        },
+        {
+         "n": "Коссак-приседы",
+         "d": "2×8 на сторону",
+         "t": "Активная гибкость"
+        },
+        {
+         "n": "Мостик",
+         "d": "3×10–20 с",
+         "t": "Грудной отдел и плечи, нужно для стойки"
+        },
+        {
+         "n": "Плечи: руки на стене, грудь вниз",
+         "d": "2×45 с",
+         "t": "Ровная линия в стойке"
+        }
+       ],
+       "metric": "",
+       "pctLo": 40,
+       "pctHi": 50,
+       "dayTarget": 8,
+       "base": 10,
+       "tip": ""
+      },
+      {
+       "id": "pullday",
+       "name": "Подтягивания в течение дня",
+       "kind": "sets",
+       "goal": 0,
+       "goalText": "",
+       "dur": 0,
+       "intro": "",
+       "steps": [],
+       "cur": 0,
+       "items": [],
+       "metric": "pull",
+       "pctLo": 40,
+       "pctHi": 50,
+       "dayTarget": 8,
+       "base": 10,
+       "tip": "В дни без зала делайте 5–8 лёгких подходов, между ними минимум 30–60 минут. Ни одного до отказа. Так же можно делать отжимания. Пересчитывайте максимум раз в 4 недели."
+      }
+     ]
+    },
+    "programs": []
+   }
+  },
+  {
+   "id": "girl",
+   "result": {
+    "plan": {
+     "name": "Зал 3 раза + волейбол",
+     "start": "",
+     "protein": false,
+     "volleyHints": true,
+     "deloadEvery": 5,
+     "testEvery": 4,
+     "blocks": [
+      {
+       "id": "b1",
+       "name": "Привыкание",
+       "weeks": 4,
+       "text": "Техника, лёгкие веса, запас 2–3 повтора до отказа."
+      },
+      {
+       "id": "b2",
+       "name": "Основа",
+       "weeks": 8,
+       "text": "Добавляйте вес или повторы по двойной прогрессии. Следите за коленями и плечами."
+      },
+      {
+       "id": "b3",
+       "name": "Усиление",
+       "weeks": 8,
+       "text": "Тяжелее присед и тяга, прыжки выше. Волейбол — по самочувствию."
+      }
+     ],
+     "days": [
+      {
+       "k": "rest",
+       "prog": "",
+       "note": "Отдых или растяжка 15 мин"
+      },
+      {
+       "k": "gym",
+       "prog": "A",
+       "note": "Верх и плечи, без ног перед игрой"
+      },
+      {
+       "k": "vb",
+       "prog": "",
+       "note": "Волейбол"
+      },
+      {
+       "k": "gym",
+       "prog": "B",
+       "note": "Ноги, ягодицы, лёгкий прыжок"
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": "Прогулка или растяжка"
+      },
+      {
+       "k": "gym",
+       "prog": "C",
+       "note": "Всё тело и кор"
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": "Полный отдых"
+      }
+     ],
+     "rules": [
+      {
+       "t": "Игра в день зала",
+       "d": "Уберите прыжковые упражнения, остальное по самочувствию."
+      },
+      {
+       "t": "Накануне игры",
+       "d": "Во вторник ноги не нагружаем. Тяжёлые приседы и выпады только в четверг."
+      },
+      {
+       "t": "Пропустили тренировку",
+       "d": "Не добирайте. Просто продолжайте по плану."
+      },
+      {
+       "t": "Боль в суставе",
+       "d": "Снизьте вес или замените упражнение. Если не проходит, к врачу."
+      }
+     ],
+     "metrics": [
+      {
+       "id": "sj",
+       "name": "Прыжок с места",
+       "unit": "см",
+       "goal": null,
+       "goalText": "",
+       "dir": 1,
+       "how": "Отметка рукой на стене: высота касания минус высота вытянутой руки."
+      },
+      {
+       "id": "rj",
+       "name": "Прыжок с разбега",
+       "unit": "см",
+       "goal": null,
+       "goalText": "",
+       "dir": 1,
+       "how": "Так же, но с волейбольного разбега."
+      },
+      {
+       "id": "push",
+       "name": "Отжимания",
+       "unit": "раз",
+       "goal": null,
+       "goalText": "",
+       "dir": 1,
+       "how": "Максимум подряд. Выберите один вариант (от пола или с колен) и не меняйте."
+      },
+      {
+       "id": "plank",
+       "name": "Планка",
+       "unit": "с",
+       "goal": 60,
+       "goalText": "60 с",
+       "dir": 1,
+       "how": "Тело прямой линией, секундомер до потери формы."
+      }
+     ],
+     "tracks": [
+      {
+       "id": "stretch",
+       "name": "Растяжка и мобильность",
+       "kind": "timed",
+       "goal": 2,
+       "goalText": "2–3",
+       "dur": 15,
+       "intro": "10–15 минут в дни без зала или после тренировки. До лёгкого натяжения, не до боли. Дышите ровно.",
+       "steps": [],
+       "cur": 0,
+       "items": [
+        {
+         "n": "Выпад с коленом у стены (couch stretch)",
+         "d": "2×60 с на ногу",
+         "t": "Сгибатели бедра, продольный шпагат"
+        },
+        {
+         "n": "Полушпагат, наклон к прямой ноге",
+         "d": "2×60 с на ногу",
+         "t": "Задняя поверхность бедра"
+        },
+        {
+         "n": "Продольный шпагат на блоках или стульях",
+         "d": "2×60 с на ногу",
+         "t": "Постепенно снижайте опору"
+        },
+        {
+         "n": "Лягушка",
+         "d": "2×60 с",
+         "t": "Поперечный шпагат"
+        },
+        {
+         "n": "Складка с широко разведёнными ногами",
+         "d": "2×60 с",
+         "t": "Поперечный шпагат"
+        },
+        {
+         "n": "Коссак-приседы",
+         "d": "2×8 на сторону",
+         "t": "Активная гибкость"
+        },
+        {
+         "n": "Мостик",
+         "d": "3×10–20 с",
+         "t": "Грудной отдел и плечи, нужно для стойки"
+        },
+        {
+         "n": "Плечи: руки на стене, грудь вниз",
+         "d": "2×45 с",
+         "t": "Ровная линия в стойке"
+        }
+       ],
+       "metric": "",
+       "pctLo": 40,
+       "pctHi": 50,
+       "dayTarget": 8,
+       "base": 10,
+       "tip": "",
+       "ic": "stretch"
+      }
+     ]
+    },
+    "programs": [
+     {
+      "id": "B",
+      "title": "B · ноги и ягодицы",
+      "rot": true,
+      "warm": [
+       "Скакалка 2–3 минуты",
+       "Суставная разминка сверху вниз",
+       "Запястья (обязательно): круги, упоры пальцами вперёд и назад",
+       "Разведения резины перед грудью, 10–15 раз",
+       "Лопаточные подтягивания 2×8, руки прямые",
+       "Махи ногами вперёд и в стороны",
+       "Затем 10–15 минут практики стойки на руках, пока вы свежие"
+      ],
+      "items": [
+       {
+        "id": "jumpsquat",
+        "sets": 3,
+        "lo": 6,
+        "hi": 8
+       },
+       {
+        "id": "squat",
+        "sets": 3,
+        "lo": 8,
+        "hi": 12
+       },
+       {
+        "id": "rdl",
+        "sets": 3,
+        "lo": 8,
+        "hi": 10
+       },
+       {
+        "id": "lunge",
+        "sets": 3,
+        "lo": 8,
+        "hi": 10
+       },
+       {
+        "id": "bridge",
+        "sets": 3,
+        "lo": 10,
+        "hi": 12
+       },
+       {
+        "id": "calf",
+        "sets": 3,
+        "lo": 12,
+        "hi": 15
+       },
+       {
+        "id": "plank",
+        "sets": 3,
+        "lo": 30,
+        "hi": 40
+       }
+      ]
+     },
+     {
+      "id": "A",
+      "title": "A · верх и плечи",
+      "rot": true,
+      "warm": [
+       "Скакалка 2–3 минуты",
+       "Суставная разминка сверху вниз",
+       "Запястья (обязательно): круги, упоры пальцами вперёд и назад",
+       "Разведения резины перед грудью, 10–15 раз",
+       "Лопаточные подтягивания 2×8, руки прямые",
+       "Махи ногами вперёд и в стороны",
+       "Затем 10–15 минут практики стойки на руках, пока вы свежие"
+      ],
+      "items": [
+       {
+        "id": "pulldown",
+        "sets": 3,
+        "lo": 8,
+        "hi": 12
+       },
+       {
+        "id": "dbbench",
+        "sets": 3,
+        "lo": 8,
+        "hi": 12
+       },
+       {
+        "id": "ohp",
+        "sets": 3,
+        "lo": 8,
+        "hi": 10
+       },
+       {
+        "id": "dbrow",
+        "sets": 3,
+        "lo": 10,
+        "hi": 12
+       },
+       {
+        "id": "facepull",
+        "sets": 3,
+        "lo": 12,
+        "hi": 15
+       },
+       {
+        "id": "cuff",
+        "sets": 2,
+        "lo": 12,
+        "hi": 15
+       },
+       {
+        "id": "sideplank",
+        "sets": 2,
+        "lo": 20,
+        "hi": 30
+       }
+      ]
+     },
+     {
+      "id": "C",
+      "title": "C · всё тело и кор",
+      "rot": true,
+      "warm": [
+       "Скакалка 2–3 минуты",
+       "Суставная разминка сверху вниз",
+       "Запястья (обязательно): круги, упоры пальцами вперёд и назад",
+       "Разведения резины перед грудью, 10–15 раз",
+       "Лопаточные подтягивания 2×8, руки прямые",
+       "Махи ногами вперёд и в стороны",
+       "Затем 10–15 минут практики стойки на руках, пока вы свежие"
+      ],
+      "items": [
+       {
+        "id": "bulgar",
+        "sets": 3,
+        "lo": 8,
+        "hi": 10
+       },
+       {
+        "id": "pushup",
+        "sets": 3,
+        "lo": 8,
+        "hi": 12
+       },
+       {
+        "id": "dbrow",
+        "sets": 3,
+        "lo": 10,
+        "hi": 12
+       },
+       {
+        "id": "bridge",
+        "sets": 3,
+        "lo": 10,
+        "hi": 12
+       },
+       {
+        "id": "hollow",
+        "sets": 3,
+        "lo": 20,
+        "hi": 30
+       },
+       {
+        "id": "superman",
+        "sets": 2,
+        "lo": 10,
+        "hi": 12
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "blank",
+   "result": {
+    "plan": {
+     "name": "Мой план",
+     "start": "",
+     "protein": false,
+     "volleyHints": false,
+     "deloadEvery": 0,
+     "testEvery": 4,
+     "blocks": [
+      {
+       "id": "b1",
+       "name": "Основной блок",
+       "weeks": 12,
+       "text": ""
+      }
+     ],
+     "days": [
+      {
+       "k": "gym",
+       "prog": "",
+       "note": ""
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": ""
+      },
+      {
+       "k": "gym",
+       "prog": "",
+       "note": ""
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": ""
+      },
+      {
+       "k": "gym",
+       "prog": "",
+       "note": ""
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": ""
+      },
+      {
+       "k": "rest",
+       "prog": "",
+       "note": ""
+      }
+     ],
+     "rules": [],
+     "metrics": [],
+     "tracks": []
+    },
+    "programs": []
+   }
+  }
+ ],
+ "lines": [
+  {
+   "text": "А | б\n\n В | г | д \nпусто |",
+   "parts": [
+    "t",
+    "d"
+   ],
+   "result": [
+    {
+     "t": "А",
+     "d": "б"
+    },
+    {
+     "t": "В",
+     "d": "г"
+    },
+    {
+     "t": "пусто",
+     "d": ""
+    }
+   ]
+  },
+  {
+   "text": "Шаг | описание\nБез описания",
+   "parts": [
+    "n",
+    "t"
+   ],
+   "result": [
+    {
+     "n": "Шаг",
+     "t": "описание"
+    },
+    {
+     "n": "Без описания",
+     "t": ""
+    }
+   ]
+  }
+ ],
+ "joinLines": "a | b | c\nx\ny | z"
+}

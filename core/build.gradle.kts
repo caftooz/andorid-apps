@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -29,6 +30,7 @@ dependencies {
     api(libs.androidx.compose.material.icons)
     api(libs.androidx.compose.ui.tooling.preview)
     api(libs.kotlinx.coroutines.android)
+    api(libs.kotlinx.serialization.json)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
     testImplementation(libs.junit)
