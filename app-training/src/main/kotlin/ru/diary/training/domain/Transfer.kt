@@ -141,7 +141,7 @@ object Transfer {
         }
     }
 
-    private fun customJson(c: CustomEx): JsonObject = buildJsonObject {
+    fun customJson(c: CustomEx): JsonObject = buildJsonObject {
         put("id", c.id); put("name", c.name); put("kind", c.kind); put("step", num(c.step)); put("tip", c.tip)
     }
 

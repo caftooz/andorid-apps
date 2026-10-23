@@ -1,5 +1,7 @@
 package ru.diary.training.domain
 
+import kotlinx.serialization.Serializable
+
 /** Подход: вес, повторы (или секунды), обратная связь `easy | ok | hard`. */
 data class SetResult(val w: Double, val r: Int, val fb: String? = null)
 
@@ -132,6 +134,7 @@ data class TrainingData(
 )
 
 /** Подход в активной тренировке. */
+@Serializable
 data class ActiveSet(
     val w: Double,
     val r: Int,
@@ -141,8 +144,10 @@ data class ActiveSet(
 )
 
 /** Снимок описания упражнения на момент начала тренировки. */
+@Serializable
 data class ExSnap(val name: String, val kind: String, val step: Double, val tip: String, val rest: Int, val per: String)
 
+@Serializable
 data class ActiveEx(
     val id: String,
     val d: ExSnap,
@@ -155,6 +160,7 @@ data class ActiveEx(
 )
 
 /** Идущая тренировка. Переживает закрытие приложения: хранится в Room после каждого действия. */
+@Serializable
 data class ActiveWorkout(
     val id: String,
     val prog: String?,
@@ -164,6 +170,9 @@ data class ActiveWorkout(
     val warm: Map<Int, Boolean>,
     val warmList: List<String>,
     val ex: List<ActiveEx>,
+    /** Момент окончания отдыха (мс), 0 — отдых не идёт. Хранится, чтобы таймер пережил перезапуск процесса. */
+    val restEnd: Long = 0L,
+    val restLabel: String = "",
 )
 
 /** Совет по весу и повторам для следующего подхода. */
