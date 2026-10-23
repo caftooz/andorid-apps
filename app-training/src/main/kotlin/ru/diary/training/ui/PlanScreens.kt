@@ -70,7 +70,6 @@ import ru.diary.training.domain.TrainingData
 import ru.diary.training.domain.WEEKLY_GOAL
 
 fun NavGraphBuilder.planGraph(nav: NavHostController, vm: TrainingViewModel, data: TrainingData, today: String) {
-    composable("plan") { PlanOverview(vm, data, today) { nav.navigate(it) } }
     composable("plan/days") { DaysEditor(vm, data, nav::popBackStack) }
     composable("plan/progs") { ProgramsScreen(vm, data, onBack = { nav.popBackStack() }, onEdit = { nav.navigate("plan/progs/$it") }) }
     composable("plan/progs/{id}", listOf(navArgument("id") { type = NavType.StringType })) { e ->
@@ -85,7 +84,7 @@ fun NavGraphBuilder.planGraph(nav: NavHostController, vm: TrainingViewModel, dat
 // ---------- обзор ----------
 
 @Composable
-private fun PlanOverview(vm: TrainingViewModel, data: TrainingData, today: String, go: (String) -> Unit) {
+internal fun PlanOverview(vm: TrainingViewModel, data: TrainingData, today: String, go: (String) -> Unit) {
     val plan = data.plan
     val di = Dates.dayIndex(today)
     var sel by rememberSaveable { mutableIntStateOf(di) }
@@ -158,9 +157,9 @@ private fun GoalRow(icon: String, color: androidx.compose.ui.graphics.Color, nam
 @Composable
 fun Accordion(title: String, content: @Composable () -> Unit) {
     var open by rememberSaveable(title) { mutableStateOf(false) }
-    DiaryCard {
+    DiaryCard(onClick = { open = !open }) {
         Row(
-            Modifier.fillMaxWidth().heightIn(min = MinTouch).clickable(role = Role.Button) { open = !open }.semantics { contentDescription = title + if (open) ", развёрнуто" else ", свёрнуто" },
+            Modifier.fillMaxWidth().heightIn(min = MinTouch).semantics { contentDescription = title + if (open) ", развёрнуто" else ", свёрнуто" },
             verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(title, style = MaterialTheme.typography.titleSmall)
@@ -232,7 +231,8 @@ private fun StartDateDialog(onDismiss: () -> Unit, onPick: (String) -> Unit) {
             }) { Text("Выбрать") }
         },
         dismissButton = { TextButton(onDismiss) { Text("Отмена") } },
-    ) { DatePicker(state) }
+        colors = androidx.compose.material3.DatePickerDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceContainerHighest),
+    ) { DatePicker(state, colors = androidx.compose.material3.DatePickerDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceContainerHighest)) }
 }
 
 // ---------- дни недели ----------

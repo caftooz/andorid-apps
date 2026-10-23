@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.AlertDialog
+import ru.diary.core.ui.DiaryAlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -56,7 +56,7 @@ class LiveIntegration(
     @Composable
     override fun FinishSummary(session: Session, onDismiss: () -> Unit) {
         val l = link as? NutritionLink.Ready
-        AlertDialog(
+        DiaryAlertDialog(
             onDismissRequest = onDismiss,
             title = { Text("Тренировка сохранена") },
             text = {

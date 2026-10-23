@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.AlertDialog
+import ru.diary.core.ui.DiaryAlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -88,7 +88,7 @@ fun UpdatePrompt(updater: Updater, enabled: Boolean = true) {
     val ready = state as? UpdateState.Ready
     LaunchedEffect(Unit) { Updater.installErrors.collect { /* ошибки показываются в разделе «Обновления» */ } }
     if (ready != null && enabled && dismissed != ready.info.version) {
-        AlertDialog(
+        DiaryAlertDialog(
             onDismissRequest = { dismissed = ready.info.version },
             title = { Text("Доступно обновление ${ready.info.version}") },
             text = {

@@ -5,7 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.material3.AlertDialog
+import ru.diary.core.ui.DiaryAlertDialog
 import androidx.compose.material3.TextButton
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
@@ -102,7 +102,7 @@ fun WorkoutScreen(vm: TrainingViewModel, data: TrainingData, active: ActiveWorko
         ) askNotif = true
     }
     if (askNotif) {
-        AlertDialog(
+        DiaryAlertDialog(
             onDismissRequest = { askNotif = false; vm.markNotificationsAsked() },
             title = { Text("Сигнал об окончании отдыха") },
             text = { Text("Разрешите уведомления, чтобы телефон сообщил об окончании отдыха, даже когда экран выключен.") },
@@ -180,7 +180,7 @@ private fun RestSettings(vm: TrainingViewModel) {
 @Composable
 private fun WarmCard(vm: TrainingViewModel, a: ActiveWorkout, open: Boolean, onToggle: () -> Unit) {
     val done = a.warmList.indices.count { a.warm[it] == true }
-    DiaryCard {
+    DiaryCard(onClick = if (!open) onToggle else null) {
         CardHeader("Разминка", "$done/${a.warmList.size}", open, onToggle)
         Reveal(open) {
             a.warmList.forEachIndexed { k, text ->
@@ -213,7 +213,7 @@ private fun CardHeader(title: String, count: String, open: Boolean, onToggle: ()
 private fun ExerciseCard(vm: TrainingViewModel, ex: ActiveEx, i: Int, open: Boolean, onToggle: () -> Unit, onRestStarted: () -> Unit, onOpenNext: (String?) -> Unit) {
     val done = Logic.doneCount(ex)
     val per = ex.d.per.takeIf { it.isNotEmpty() }?.let { BuiltinData.perLabel[it] }
-    DiaryCard {
+    DiaryCard(onClick = if (!open) onToggle else null) {
         CardHeader(ex.d.name, "$done/${ex.sets.size}", open, onToggle, subtitle = per)
         Reveal(open) {
             if (ex.d.tip.isNotEmpty()) Muted(ex.d.tip)

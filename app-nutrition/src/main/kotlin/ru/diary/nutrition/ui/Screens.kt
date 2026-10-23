@@ -30,6 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ru.diary.core.charts.GroupColumn
@@ -126,11 +127,10 @@ private fun DishRow(
         else -> "ел $ago ${Js.plural(ago, "день", "дня", "дней")} назад"
     }
     val stale = ago == null || ago >= 7
-    DiaryCard {
+    DiaryCard(onClick = onToggle) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Column(
-                Modifier.weight(1f).heightIn(min = MinTouch).clickable(role = Role.Button, onClick = onToggle)
-                    .semantics { contentDescription = d.name + ", " + txt + ", ${d.kcal} ккал, белок ${d.p} г" + if (open) ", развёрнуто" else "" },
+                Modifier.weight(1f).heightIn(min = MinTouch).semantics { stateDescription = if (open) "развёрнуто" else "свёрнуто" },
             ) {
                 Text(d.name, style = MaterialTheme.typography.titleSmall)
                 Text(
