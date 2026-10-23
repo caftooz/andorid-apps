@@ -192,6 +192,7 @@ internal object RestNotifier {
         v?.vibrate(VibrationEffect.createWaveform(PATTERN, -1))
     }
 
+    @android.annotation.SuppressLint("MissingPermission") // точный будильник только после проверки canScheduleExactAlarms
     fun scheduleBackupAlarm(c: Context, endAt: Long, label: String) {
         val am = c.getSystemService(AlarmManager::class.java)
         val pi = alarmIntent(c, label)

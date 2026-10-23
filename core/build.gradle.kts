@@ -17,6 +17,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+    lint {
+        // Версии библиотек закреплены осознанно: обновление проходит отдельным шагом с проверкой сборки.
+        disable += setOf("GradleDependency", "NewerVersionAvailable", "AndroidGradlePluginVersion")
+        abortOnError = true
+    }
     buildFeatures { compose = true }
     testOptions { unitTests.isIncludeAndroidResources = true }
 }

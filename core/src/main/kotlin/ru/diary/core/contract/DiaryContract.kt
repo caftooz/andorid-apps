@@ -1,6 +1,7 @@
 package ru.diary.core.contract
 
 import android.net.Uri
+import androidx.core.net.toUri
 
 /**
  * Контракт обмена данными между «Тренировками» и «Рационом».
@@ -37,8 +38,8 @@ object DiaryContract {
         const val AUTHORITY = "ru.diary.training.provider"
         const val PERMISSION = "ru.diary.training.permission.READ_DATA"
 
-        val META_URI: Uri = Uri.parse("content://$AUTHORITY/$PATH_META")
-        val DAYS_URI: Uri = Uri.parse("content://$AUTHORITY/$PATH_DAYS")
+        val META_URI: Uri = "content://$AUTHORITY/$PATH_META".toUri()
+        val DAYS_URI: Uri = "content://$AUTHORITY/$PATH_DAYS".toUri()
 
         object Meta {
             const val VERSION = "version"
@@ -67,8 +68,8 @@ object DiaryContract {
         const val AUTHORITY = "ru.diary.nutrition.provider"
         const val PERMISSION = "ru.diary.nutrition.permission.READ_DATA"
 
-        val META_URI: Uri = Uri.parse("content://$AUTHORITY/$PATH_META")
-        val DAYS_URI: Uri = Uri.parse("content://$AUTHORITY/$PATH_DAYS")
+        val META_URI: Uri = "content://$AUTHORITY/$PATH_META".toUri()
+        val DAYS_URI: Uri = "content://$AUTHORITY/$PATH_DAYS".toUri()
 
         object Meta {
             const val VERSION = "version"

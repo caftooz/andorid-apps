@@ -31,7 +31,7 @@ object Js {
         }
     }
 
-    private val WHITESPACE = charArrayOf(' ', '\t', '\n', '\r', '\u000B', '\u000C', ' ', '﻿', ' ', ' ')
+    private val WHITESPACE = charArrayOf(' ', '\t', '\n', '\r', '\u000B', '\u000C', ' ', '\uFEFF', ' ', ' ')
 
     private val NUMBER_STRING = Regex("""^[+-]?(\d+\.?\d*(?:[eE][+-]?\d+)?|\.\d+(?:[eE][+-]?\d+)?)$""")
 

@@ -153,7 +153,7 @@ object NutritionLogic {
      */
     fun ordered(data: NutritionData, today: String, byAge: Boolean): List<Dish> {
         val all = Catalog.all(data.custom)
-        val collator = java.text.Collator.getInstance(java.util.Locale("ru")).apply { strength = java.text.Collator.TERTIARY }
+        val collator = java.text.Collator.getInstance(java.util.Locale.forLanguageTag("ru")).apply { strength = java.text.Collator.TERTIARY }
         return all.map { d ->
             val last = lastEaten(data, d.id)
             Triple(d, if (last == null) 1_000_000 else Dates.daysBetween(last, today), d.name)
