@@ -1,5 +1,10 @@
 package ru.diary.training.ui
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -41,7 +46,7 @@ private val TABS = listOf(
 
 /** Корень интерфейса: идущая тренировка вытесняет вкладки, как в веб-версии. */
 @Composable
-fun TrainingRoot(vm: TrainingViewModel, integration: TrainingIntegration) {
+fun TrainingRoot(vm: TrainingViewModel, integration: LiveIntegration) {
     val ready by vm.ready.collectAsStateWithLifecycle()
     val data by vm.data.collectAsStateWithLifecycle()
     val active by vm.active.collectAsStateWithLifecycle()
@@ -59,6 +64,7 @@ fun TrainingRoot(vm: TrainingViewModel, integration: TrainingIntegration) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
         return
     }
+    integration.Overlay()
     val a = active
     if (a != null) {
         Scaffold(snackbarHost = { SnackbarHost(snackbar) }) { pad ->
@@ -86,7 +92,13 @@ fun TrainingRoot(vm: TrainingViewModel, integration: TrainingIntegration) {
             }
         },
     ) { pad ->
-        NavHost(nav, startDestination = "today", modifier = Modifier.padding(pad)) {
+        NavHost(
+            nav, startDestination = "today", modifier = Modifier.padding(pad),
+            enterTransition = { fadeIn(tween(240)) + slideInHorizontally(tween(280)) { it / 14 } },
+            exitTransition = { fadeOut(tween(120)) },
+            popEnterTransition = { fadeIn(tween(240)) + slideInHorizontally(tween(280)) { -it / 14 } },
+            popExitTransition = { fadeOut(tween(120)) + slideOutHorizontally(tween(200)) { it / 14 } },
+        ) {
             composable("today") {
                 TodayScreen(vm, d, today, onOpenTrack = { nav.navigate("today/track/$it") }, onGoto = { goto(nav, it) }, extraTiles = { integration.TodayTile() })
             }

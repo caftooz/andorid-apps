@@ -2,6 +2,7 @@ package ru.diary.training.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -45,6 +46,7 @@ import ru.diary.core.ui.MinTouch
 import ru.diary.core.ui.Muted
 import ru.diary.core.ui.PrimaryButton
 import ru.diary.core.ui.QuietButton
+import ru.diary.core.ui.Reveal
 import ru.diary.core.ui.SecondaryButton
 import ru.diary.core.ui.SectionTitle
 import ru.diary.core.util.Js
@@ -106,8 +108,8 @@ fun TodayScreen(
         SectionTitle("Записать")
         QuickButtons(quickQ) { quickQ = if (quickQ == it) null else it }
         val q = quickQ
-        if (q != null && q in setOf("volley", "friends", "other")) {
-            QuickLogForm(q, data, onSave = { form -> vm.logQuick(q, form) { Texts.typeName(it, plan).lowercase() }; quickQ = null }, onCancel = { quickQ = null })
+        Reveal(q != null && q in setOf("volley", "friends", "other")) {
+            if (q != null) QuickLogForm(q, data, onSave = { form -> vm.logQuick(q, form) { Texts.typeName(it, plan).lowercase() }; quickQ = null }, onCancel = { quickQ = null })
         }
         val counts = Logic.weekCounts(data.sessions, ws)
         plan.tracks.forEach { tr ->
@@ -138,7 +140,7 @@ fun TodayScreen(
                         SecondaryButton("Записать", { quickQ = key })
                     }
                 }
-                if (quickQ == key) {
+                Reveal(quickQ == key) {
                     QuickLogForm(key, data, onSave = { form -> vm.logQuick(key, form) { Texts.typeName(it, plan).lowercase() }; quickQ = null }, onCancel = { quickQ = null })
                 }
             }
@@ -357,9 +359,7 @@ private fun WeekStrip(data: TrainingData, today: String) {
                 Box(
                     Modifier.size(34.dp)
                         .background(if (main != null) color.copy(alpha = 0.18f) else Color.Transparent, CircleShape)
-                        .then(
-                            if (isToday) Modifier.background(Color.Transparent, CircleShape) else Modifier,
-                        ),
+                        .then(if (isToday) Modifier.border(2.dp, MaterialTheme.colorScheme.primary, CircleShape) else Modifier),
                     contentAlignment = Alignment.Center,
                 ) {
                     Icon(DiaryIcons.get(if (main != null) Texts.CAT_ICON.getValue(main) else Texts.dayIcon(day.k)), null, tint = color, modifier = Modifier.size(18.dp))

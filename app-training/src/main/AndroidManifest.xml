@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Читать данные «Тренировок» могут только приложения, подписанные тем же ключом. -->
+    <permission
+        android:name="ru.diary.training.permission.READ_DATA"
+        android:protectionLevel="signature" />
+
+    <!-- Разрешение на чтение данных «Рациона»: выдаётся системой, только если подпись совпадает. -->
+    <uses-permission android:name="ru.diary.nutrition.permission.READ_DATA" />
+
+    <!-- Видимость соседнего приложения на Android 11+. -->
+    <queries>
+        <package android:name="ru.diary.nutrition" />
+    </queries>
+
     <!-- Уведомление об окончании отдыха; запрашивается в момент первого подхода, а не при запуске. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -35,6 +48,12 @@
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
                 android:value="Таймер отдыха между подходами во время тренировки" />
         </service>
+
+        <provider
+            android:name=".TrainingProvider"
+            android:authorities="ru.diary.training.provider"
+            android:exported="true"
+            android:readPermission="ru.diary.training.permission.READ_DATA" />
 
         <receiver
             android:name=".rest.RestAlarmReceiver"

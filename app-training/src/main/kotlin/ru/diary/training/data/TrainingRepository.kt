@@ -28,7 +28,7 @@ import ru.diary.training.domain.WeekEntry
  * Хранилище дневника тренировок поверх Room. Наружу отдаёт целое состояние (`TrainingData`),
  * изменения принимает как чистую функцию `update { данные -> новые данные }` и записывает только то, что изменилось.
  */
-class TrainingRepository(private val db: TrainingDatabase) {
+class TrainingRepository(private val db: TrainingDatabase, private val onChanged: () -> Unit = {}) {
     private val dao = db.dao()
     private val writeLock = Mutex()
     private val json = Json { ignoreUnknownKeys = true }
@@ -73,11 +73,11 @@ class TrainingRepository(private val db: TrainingDatabase) {
     suspend fun update(transform: (TrainingData) -> TrainingData) = writeLock.withLock {
         val old = data.first()
         val new = transform(old)
-        if (new != old) writeDiff(old, new)
+        if (new != old) { writeDiff(old, new); onChanged() }
     }
 
     /** Полная замена данных (импорт «заменить», сброс). */
-    suspend fun replaceAll(new: TrainingData) = writeLock.withLock { writeAll(new) }
+    suspend fun replaceAll(new: TrainingData) = writeLock.withLock { writeAll(new); onChanged() }
 
     private suspend fun writeAll(d: TrainingData) {
         dao.replaceAll(

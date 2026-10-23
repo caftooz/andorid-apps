@@ -28,6 +28,10 @@ object DiaryIcons {
         "target" to circle(12f, 12f, 9f) + circle(12f, 12f, 5f) + circle(12f, 12f, 1f),
         "check" to "M5 12l5 5 9-10",
         "plus" to "M12 5v14M5 12h14",
+        "dish" to "M7 3v8M5 3v5a2 2 0 0 0 4 0V3M7 11v10M17 3c-2 2-3 5-3 8h3v10",
+        "book" to "M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM8 7h7M8 11h7",
+        "chart" to "M4 20V10M10 20V4M16 20v-8M22 20H2",
+        "gear" to circle(12f, 12f, 3f) + "M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2",
     )
 
     private val cache = HashMap<String, ImageVector>()

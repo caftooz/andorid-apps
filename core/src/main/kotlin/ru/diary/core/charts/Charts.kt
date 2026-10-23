@@ -1,6 +1,14 @@
 package ru.diary.core.charts
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -40,6 +48,14 @@ import kotlin.math.log10
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
+
+/** Прогресс появления графика 0..1: запускается при первом показе и при смене данных. */
+@Composable
+private fun revealProgress(key: Any?): Float {
+    val a = remember { Animatable(0f) }
+    LaunchedEffect(key) { a.snapTo(0f); a.animateTo(1f, tween(750, easing = FastOutSlowInEasing)) }
+    return a.value
+}
 
 data class ChartPoint(val label: String, val value: Double)
 
@@ -92,6 +108,7 @@ fun LineChart(
     val ink = MaterialTheme.colorScheme.onSurface
     val labelStyle = TextStyle(color = muted, fontSize = 11.sp)
     val valueStyle = TextStyle(color = ink, fontSize = 12.sp, fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
+    val reveal = revealProgress(points)
     val full = "$description: от ${Js.fmt(points.first().value)} до ${Js.fmt(points.last().value)} $unit" +
         (goal?.let { ", цель ${Js.fmt(it)}" } ?: "")
     Canvas(
@@ -130,15 +147,17 @@ fun LineChart(
                 addPath(line)
                 lineTo(xs(n - 1), ys(lo.toDouble())); lineTo(xs(0), ys(lo.toDouble())); close()
             }
-            drawPath(area, color.copy(alpha = 0.12f))
-            drawPath(line, color, style = Stroke(2.5.dp.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round))
+            clipRect(right = left + (w - left) * reveal + 8.dp.toPx()) {
+                drawPath(area, color.copy(alpha = 0.12f))
+                drawPath(line, color, style = Stroke(2.5.dp.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round))
+            }
         }
         points.forEachIndexed { i, p ->
             val last = i == n - 1
-            drawCircle(color, if (last) 5.dp.toPx() else 3.dp.toPx(), Offset(xs(i), ys(p.value)))
+            if (n == 1 || xs(i) <= left + (w - left) * reveal) drawCircle(color, if (last) 5.dp.toPx() else 3.dp.toPx(), Offset(xs(i), ys(p.value)))
         }
         val lastX = xs(n - 1).coerceIn(left + 14.dp.toPx(), w - right)
-        text(measurer, Js.fmt(vals.last()), lastX, ys(vals.last()) - 12.dp.toPx(), valueStyle, if (n == 1) Anchor.Center else Anchor.End)
+        if (reveal > 0.95f) text(measurer, Js.fmt(vals.last()), lastX, ys(vals.last()) - 12.dp.toPx(), valueStyle, if (n == 1) Anchor.Center else Anchor.End)
         if (n == 1) text(measurer, points[0].label, xs(0), h - 8.dp.toPx(), labelStyle, Anchor.Center)
         else {
             text(measurer, points.first().label, left, h - 8.dp.toPx(), labelStyle, Anchor.Start)
@@ -164,6 +183,7 @@ fun StackedBarChart(
     val grid = MaterialTheme.colorScheme.outline
     val muted = MaterialTheme.colorScheme.onSurfaceVariant
     val labelStyle = TextStyle(color = muted, fontSize = 11.sp)
+    val grow = revealProgress(columns)
     Canvas(
         modifier
             .fillMaxWidth()
@@ -192,7 +212,8 @@ fun StackedBarChart(
             for (p in c.parts) {
                 if (p.value <= 0) continue
                 val y1 = ys(base + p.value); val y0 = ys(base)
-                drawRect(p.color, Offset(x, y1), Size(bw, max(0f, y0 - y1 - 1.dp.toPx())))
+                val hh = max(0f, y0 - y1 - 1.dp.toPx()) * grow
+                drawRect(p.color, Offset(x, y0 - 1.dp.toPx() - hh), Size(bw, hh))
                 base += p.value
             }
             text(measurer, c.label, x + bw / 2, h - 10.dp.toPx(), labelStyle, Anchor.Center)
@@ -231,6 +252,7 @@ fun RingIndicator(
     size: Dp = 76.dp,
 ) {
     val track = MaterialTheme.colorScheme.surfaceVariant
+    val sweep by animateFloatAsState(fraction.coerceIn(0f, 1f), tween(900, easing = FastOutSlowInEasing), label = "ring")
     val measurer = rememberTextMeasurer()
     val ink = MaterialTheme.colorScheme.onSurface
     val muted = MaterialTheme.colorScheme.onSurfaceVariant
@@ -241,7 +263,7 @@ fun RingIndicator(
         val d = this.size.minDimension - stroke
         val tl = Offset(stroke / 2, stroke / 2)
         drawArc(track, 0f, 360f, false, tl, Size(d, d), style = Stroke(stroke))
-        drawArc(color, -90f, 360f * fraction.coerceIn(0f, 1f), false, tl, Size(d, d), style = Stroke(stroke, cap = StrokeCap.Round))
+        drawArc(color, -90f, 360f * sweep, false, tl, Size(d, d), style = Stroke(stroke, cap = StrokeCap.Round))
         text(measurer, centerText, this.size.width / 2, this.size.height / 2 - 5.dp.toPx(), big, Anchor.Center)
         text(measurer, subText, this.size.width / 2, this.size.height / 2 + 12.dp.toPx(), small, Anchor.Center)
     }
@@ -258,11 +280,12 @@ fun MeterBar(
     height: Dp = 10.dp,
 ) {
     val track = MaterialTheme.colorScheme.surfaceVariant
+    val shown by animateFloatAsState(fraction.coerceIn(0f, 1f), tween(700, easing = FastOutSlowInEasing), label = "meter")
     val markColor = MaterialTheme.colorScheme.onSurface
     Canvas(modifier.fillMaxWidth().height(height + 6.dp).clearAndSetSemantics { contentDescription = description; role = Role.Image }) {
         val h = height.toPx(); val y = (size.height - h) / 2
         drawRoundRect(track, Offset(0f, y), Size(size.width, h), androidx.compose.ui.geometry.CornerRadius(h / 2))
-        val fw = size.width * fraction.coerceIn(0f, 1f)
+        val fw = size.width * shown
         if (fw > 0) drawRoundRect(color, Offset(0f, y), Size(max(fw, h), h), androidx.compose.ui.geometry.CornerRadius(h / 2))
         if (mark != null) drawLine(markColor, Offset(size.width * mark, y - 3.dp.toPx()), Offset(size.width * mark, y + h + 3.dp.toPx()), 2.dp.toPx())
     }
@@ -297,6 +320,49 @@ fun DotRow(done: Int, total: Int, modifier: Modifier = Modifier, color: Color = 
     ) {
         repeat(min(total, 14)) { i ->
             Box(Modifier.size(10.dp).background(if (i < done) color else off, CircleShape))
+        }
+    }
+}
+
+/** Пара столбцов за период: например «съедено» и «потрачено». */
+data class GroupColumn(val label: String, val a: Double, val b: Double)
+
+/** Сгруппированная столбчатая диаграмма из двух рядов с подписанными осями. */
+@Composable
+fun GroupedBarChart(
+    columns: List<GroupColumn>,
+    colorA: Color,
+    colorB: Color,
+    description: String,
+    modifier: Modifier = Modifier,
+    height: Dp = 180.dp,
+) {
+    val measurer = rememberTextMeasurer()
+    val grid = MaterialTheme.colorScheme.outline
+    val labelStyle = TextStyle(color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 11.sp)
+    val grow = revealProgress(columns)
+    Canvas(modifier.fillMaxWidth().height(height).clearAndSetSemantics { contentDescription = description; role = Role.Image }) {
+        val left = 44.dp.toPx(); val right = 10.dp.toPx(); val top = 16.dp.toPx(); val bottom = 28.dp.toPx()
+        val w = size.width; val h = size.height
+        var mx = max(1.0, columns.maxOfOrNull { max(it.a, it.b) } ?: 0.0)
+        val step = niceStepUp(mx / 3)
+        mx = ceil(mx / step) * step
+        fun ys(v: Double) = (top + (h - top - bottom) * (1 - v / mx)).toFloat()
+        var t = 0.0
+        while (t <= mx + 1e-9) {
+            drawLine(grid, Offset(left, ys(t)), Offset(w - right, ys(t)), strokeWidth = 1.dp.toPx())
+            text(measurer, Js.fmt(t), left - 6.dp.toPx(), ys(t), labelStyle, Anchor.End)
+            t += step
+        }
+        val slot = (w - left - right) / columns.size
+        val bw = slot * 0.36f
+        columns.forEachIndexed { i, c ->
+            val x0 = left + slot * i + slot * 0.08f
+            for ((k, pair) in listOf(c.a to colorA, c.b to colorB).withIndex()) {
+                val hh = (ys(0.0) - ys(pair.first)) * grow
+                if (hh > 0) drawRect(pair.second, Offset(x0 + k * (bw + 2.dp.toPx()), ys(0.0) - hh), Size(bw, hh))
+            }
+            text(measurer, c.label, left + slot * i + slot / 2, h - 10.dp.toPx(), labelStyle, Anchor.Center)
         }
     }
 }

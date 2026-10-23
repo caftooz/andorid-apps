@@ -10,7 +10,15 @@ import androidx.compose.material3.TextButton
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
+import ru.diary.core.ui.Reveal
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -126,7 +134,7 @@ fun WorkoutScreen(vm: TrainingViewModel, data: TrainingData, active: ActiveWorko
                         ExerciseCard(vm, ex, i, open = openEx == ex.id, onToggle = { openEx = if (openEx == ex.id) null else ex.id }, onRestStarted = onRestStarted) { next -> openEx = next }
                     }
                     QuietButton("+ Добавить упражнение", { pickerOpen = !pickerOpen })
-                    if (pickerOpen) {
+                    Reveal(pickerOpen) {
                         ExercisePicker(vm, data, active.ex.map { it.id }, onPick = { d -> vm.addExerciseToWorkout(d); openEx = d.id; pickerOpen = false }, onClose = { pickerOpen = false })
                     }
                     if (discardAsk) {
@@ -173,10 +181,12 @@ private fun WarmCard(vm: TrainingViewModel, a: ActiveWorkout, open: Boolean, onT
     val done = a.warmList.indices.count { a.warm[it] == true }
     DiaryCard {
         CardHeader("Разминка", "$done/${a.warmList.size}", open, onToggle)
-        if (open) a.warmList.forEachIndexed { k, text ->
-            Row(Modifier.fillMaxWidth().heightIn(min = MinTouch), verticalAlignment = Alignment.CenterVertically) {
-                Checkbox(a.warm[k] == true, { vm.toggleWarm(k) })
-                Text(text, style = MaterialTheme.typography.bodyMedium)
+        Reveal(open) {
+            a.warmList.forEachIndexed { k, text ->
+                Row(Modifier.fillMaxWidth().heightIn(min = MinTouch), verticalAlignment = Alignment.CenterVertically) {
+                    Checkbox(a.warm[k] == true, { vm.toggleWarm(k) })
+                    Text(text, style = MaterialTheme.typography.bodyMedium)
+                }
             }
         }
     }
@@ -204,7 +214,7 @@ private fun ExerciseCard(vm: TrainingViewModel, ex: ActiveEx, i: Int, open: Bool
     val per = ex.d.per.takeIf { it.isNotEmpty() }?.let { BuiltinData.perLabel[it] }
     DiaryCard {
         CardHeader(ex.d.name, "$done/${ex.sets.size}", open, onToggle, subtitle = per)
-        if (open) {
+        Reveal(open) {
             if (ex.d.tip.isNotEmpty()) Muted(ex.d.tip)
             if (ex.hint.isNotEmpty()) Text(ex.hint, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
             ex.sets.forEachIndexed { j, s -> SetRow(vm, ex, i, j, s, onRestStarted, onOpenNext) }
@@ -217,16 +227,24 @@ private fun ExerciseCard(vm: TrainingViewModel, ex: ActiveEx, i: Int, open: Bool
 private fun SetRow(vm: TrainingViewModel, ex: ActiveEx, i: Int, j: Int, s: ActiveSet, onRestStarted: () -> Unit, onOpenNext: (String?) -> Unit) {
     val weighted = ex.d.kind == "w"
     val repsLabel = if (ex.d.kind == "time") "Секунды" else "Повторы"
+    val rowColor by animateColorAsState(
+        if (s.done) MaterialTheme.colorScheme.primary.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f), tween(300), label = "set",
+    )
+    val haptic = LocalHapticFeedback.current
+    val checkScale by animateFloatAsState(if (s.done) 1.08f else 1f, spring(dampingRatio = 0.45f, stiffness = 400f), label = "check")
     Surface(
-        shape = RoundedCornerShape(12.dp), color = if (s.done) MaterialTheme.colorScheme.primary.copy(alpha = 0.10f) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+        shape = RoundedCornerShape(12.dp), color = rowColor,
         modifier = Modifier.fillMaxWidth(),
     ) {
         Column(Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Text("Подход ${j + 1}", style = MaterialTheme.typography.titleSmall)
                 OutlinedButton(
-                    onClick = { if (!s.done) onRestStarted(); vm.toggleDone(i, j)?.let(onOpenNext) },
-                    modifier = Modifier.size(MinTouch).semantics {
+                    onClick = {
+                        if (!s.done) { onRestStarted(); haptic.performHapticFeedback(HapticFeedbackType.LongPress) }
+                        vm.toggleDone(i, j)?.let(onOpenNext)
+                    },
+                    modifier = Modifier.size(MinTouch).scale(checkScale).semantics {
                         role = Role.Checkbox
                         contentDescription = (if (s.done) "Отменить подход " else "Подход выполнен: ") + (j + 1)
                         selected = s.done
@@ -242,7 +260,7 @@ private fun SetRow(vm: TrainingViewModel, ex: ActiveEx, i: Int, j: Int, s: Activ
                 NumberStepper(repsLabel, s.r.toDouble(), s.done, decimal = false, modifier = Modifier.weight(1f),
                     onStep = { vm.stepSet(i, j, 'r', it) }, onType = { vm.inputSet(i, j, 'r', it) })
             }
-            if (s.done && weighted) {
+            Reveal(s.done && weighted) {
                 Muted("Как далось:")
                 ChoiceChips(Texts.FB.map { it.key to it.value }, s.fb, { vm.feedback(i, j, it) })
             }
@@ -292,8 +310,8 @@ private fun WorkoutBar(vm: TrainingViewModel, a: ActiveWorkout, onFinish: () -> 
     val resting = a.restEnd > 0 && left > 0
     val over = a.restEnd > 0 && left <= 0
     LaunchedEffect(over, a.restEnd) { if (over && now - a.restEnd > 90_000) vm.stopRest() }
-    val bg = if (over) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface
-    val fg = if (over) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
+    val bg by animateColorAsState(if (over) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface, tween(350), label = "barBg")
+    val fg by animateColorAsState(if (over) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface, tween(350), label = "barFg")
     Surface(color = bg, contentColor = fg, tonalElevation = 3.dp, border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)) {
         Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
             Column(Modifier.weight(1f).semantics(mergeDescendants = true) { stateDescription = if (resting) "Отдых" else "Тренировка" }) {

@@ -3,16 +3,32 @@ package ru.diary.nutrition
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.Text
+import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ru.diary.core.theme.DiaryTheme
+import ru.diary.core.theme.Palette
+import ru.diary.nutrition.ui.NutritionRoot
+import ru.diary.nutrition.ui.NutritionViewModel
 
 class MainActivity : ComponentActivity() {
+    private val vm: NutritionViewModel by viewModels {
+        NutritionViewModel.Factory(container.repository, container.settings, container.client)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContent {
-            DiaryTheme {
-                Text("Рацион")
-            }
+            val settings by vm.settings.collectAsStateWithLifecycle()
+            DiaryTheme(settings.theme, Palette.Nutrition, settings.dynamicColor) { NutritionRoot(vm) }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        vm.refreshToday()
+        vm.refreshLink()
     }
 }

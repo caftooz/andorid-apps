@@ -14,6 +14,13 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import ru.diary.core.contract.DiaryClient
+import ru.diary.core.contract.DiaryContract
+import ru.diary.core.contract.LinkResult
+import ru.diary.core.contract.NutritionDay
+import ru.diary.core.contract.NutritionMeta
 import ru.diary.core.date.Dates
 import ru.diary.core.theme.ThemeMode
 import ru.diary.core.util.Js
@@ -55,10 +62,17 @@ object NoRestController : RestController {
     override fun cancel() = Unit
 }
 
+/** Состояние связи с «Рационом». */
+sealed interface NutritionLink {
+    data object None : NutritionLink
+    data class Ready(val meta: NutritionMeta, val days: Map<String, NutritionDay>) : NutritionLink
+}
+
 class TrainingViewModel(
     private val repo: TrainingRepository,
     private val settingsStore: SettingsStore,
     private val rest: RestController,
+    private val client: DiaryClient,
     private val clock: () -> Long = System::currentTimeMillis,
 ) : ViewModel() {
 
@@ -81,6 +95,28 @@ class TrainingViewModel(
     /** Последнее значение активной тренировки пишется в БД одним потребителем, чтобы порядок сохранялся. */
     private val persist = Channel<ActiveWorkout?>(Channel.CONFLATED)
 
+    private val _nutrition = MutableStateFlow<NutritionLink>(NutritionLink.None)
+    /** Связь с «Рационом»: пока он не установлен или недоступен, блоки интеграции скрыты. */
+    val nutrition: StateFlow<NutritionLink> = _nutrition.asStateFlow()
+
+    private val _finished = MutableStateFlow<Session?>(null)
+    /** Только что сохранённая тренировка для короткого итога. */
+    val finished: StateFlow<Session?> = _finished.asStateFlow()
+    fun dismissFinished() { _finished.value = null }
+
+    fun refreshNutrition() {
+        viewModelScope.launch {
+            val r = withContext(Dispatchers.IO) {
+                val meta = client.nutritionMeta()
+                if (meta !is LinkResult.Ok) return@withContext null
+                val to = Dates.today()
+                val days = client.nutritionDays(Dates.addDays(to, -90), to)
+                if (days !is LinkResult.Ok) null else NutritionLink.Ready(meta.value, days.value.associateBy { it.date })
+            }
+            _nutrition.value = r ?: NutritionLink.None
+        }
+    }
+
     init {
         viewModelScope.launch {
             repo.ensureSeeded()
@@ -88,6 +124,8 @@ class TrainingViewModel(
             _ready.value = true
             for (a in persist) if (a == null) repo.clearActive() else repo.saveActive(a)
         }
+        // Данные «Рациона» перечитываются при изменении, установке и удалении приложения.
+        viewModelScope.launch { client.watch(DiaryContract.Nutrition.PACKAGE, DiaryContract.Nutrition.DAYS_URI).collect { refreshNutrition() } }
         viewModelScope.launch {
             while (true) {
                 delay(30_000)
@@ -200,6 +238,7 @@ class TrainingViewModel(
         rest.cancel()
         mutate { it.copy(sessions = it.sessions + s) }
         setActive(null)
+        _finished.value = s
         say("Тренировка сохранена")
     }
 
@@ -370,10 +409,10 @@ class TrainingViewModel(
     fun message(text: String) = say(text)
 
     class Factory(
-        private val repo: TrainingRepository, private val settings: SettingsStore, private val rest: RestController,
+        private val repo: TrainingRepository, private val settings: SettingsStore, private val rest: RestController, private val client: DiaryClient,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T = TrainingViewModel(repo, settings, rest) as T
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = TrainingViewModel(repo, settings, rest, client) as T
     }
 }
 

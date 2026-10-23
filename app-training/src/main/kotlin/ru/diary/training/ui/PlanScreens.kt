@@ -53,6 +53,7 @@ import ru.diary.core.ui.MinTouch
 import ru.diary.core.ui.Muted
 import ru.diary.core.ui.PrimaryButton
 import ru.diary.core.ui.QuietButton
+import ru.diary.core.ui.Reveal
 import ru.diary.core.ui.ScreenTitle
 import ru.diary.core.ui.SecondaryButton
 import ru.diary.core.ui.SectionTitle
@@ -165,7 +166,7 @@ fun Accordion(title: String, content: @Composable () -> Unit) {
             Text(title, style = MaterialTheme.typography.titleSmall)
             Text(if (open) "⌃" else "⌄")
         }
-        if (open) content()
+        Reveal(open) { content() }
     }
 }
 

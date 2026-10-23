@@ -1,5 +1,12 @@
 package ru.diary.core.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -72,7 +79,17 @@ fun DiaryCard(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     Surface(
         modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), color = MaterialTheme.colorScheme.surface,
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.6f)),
-    ) { Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) { content() } }
+    ) { Column(Modifier.padding(16.dp).animateContentSize(tween(220)), verticalArrangement = Arrangement.spacedBy(8.dp)) { content() } }
+}
+
+/** Плавное раскрытие блока: форма, тело карточки, пояснение. */
+@Composable
+fun Reveal(visible: Boolean, modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+    AnimatedVisibility(
+        visible, modifier,
+        enter = expandVertically(tween(240)) + fadeIn(tween(240)),
+        exit = shrinkVertically(tween(180)) + fadeOut(tween(120)),
+    ) { Column(verticalArrangement = Arrangement.spacedBy(8.dp)) { content() } }
 }
 
 /** Блок-вердикт: подтверждение, предупреждение, пояснение. */
