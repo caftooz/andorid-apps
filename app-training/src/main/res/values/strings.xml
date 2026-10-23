@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Тренировки</string>
+    <string name="widget_description">Сегодня по плану: тип дня, программа и неделя плана</string>
 </resources>
