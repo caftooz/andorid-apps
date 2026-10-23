@@ -107,7 +107,7 @@ fun DishesScreen(vm: NutritionViewModel, data: NutritionData, today: String, dat
             QuietButton(if (byAge) "По алфавиту" else "Давно не ел сверху", { byAge = !byAge })
         }
         val list = NutritionLogic.ordered(data, today, byAge).filter { cat == "all" || it.cat == cat }
-        list.forEachIndexed { i, d -> Appear(i) { DishRow(vm, data, d, today, date, portion, open == d.id, { open = if (open == d.id) null else d.id }, askDelete == d.id, { askDelete = it }) } }
+        list.forEachIndexed { i, d -> Appear(index = i) { DishRow(vm, data, d, today, date, portion, open == d.id, { open = if (open == d.id) null else d.id }, askDelete == d.id, { askDelete = it }) } }
         if (list.isEmpty()) Muted("В этой категории пока нет блюд.")
 
         QuietButton(if (addOpen) "Скрыть форму" else "Добавить своё блюдо", { addOpen = !addOpen })

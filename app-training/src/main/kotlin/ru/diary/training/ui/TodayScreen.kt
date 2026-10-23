@@ -78,17 +78,17 @@ fun TodayScreen(
     var quickQ by rememberSaveable { mutableStateOf<String?>(null) }
 
     TabColumn {
-        Appear(0) {
+        Appear(index = 0) {
             Column {
                 ScreenTitle("Сегодня")
                 Muted(Dates.weekdayDate(today))
             }
         }
-        Appear(1) { TodayPlanCard(data, today, onGoto) }
+        Appear(index = 1) { TodayPlanCard(data, today, onGoto) }
         val sel = chosen?.takeIf { id -> data.programs.any { it.id == id } }
         val progId = sel ?: Logic.todayProg(plan, data.programs, data.sessions, today)
         val prog = progId?.let { id -> data.programs.firstOrNull { it.id == id } }
-        Appear(2) { if (prog != null) {
+        Appear(index = 2) { if (prog != null) {
             val label = when {
                 sel != null -> "Выбрано"
                 Logic.planDayProg(plan, data.programs, today) != null -> "Сегодня по плану"
@@ -110,8 +110,8 @@ fun TodayScreen(
             }
         } }
 
-        Appear(3) { TodayTiles(data, today) }
-        Appear(4) { Column { extraTiles() } }
+        Appear(index = 3) { TodayTiles(data, today) }
+        Appear(index = 4) { Column { extraTiles() } }
 
         SectionTitle("Записать")
         QuickButtons(quickQ) { quickQ = if (quickQ == it) null else it }

@@ -34,7 +34,7 @@ fun Modifier.pressScale(source: InteractionSource, pressedScale: Float = 0.96f):
  * поэтому карточки выстраиваются каскадом, а не выскакивают разом.
  */
 @Composable
-fun Appear(index: Int = 0, modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+fun Appear(modifier: Modifier = Modifier, index: Int = 0, content: @Composable () -> Unit) {
     var shown by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) { delay(minOf(index, 8) * 45L); shown = true }
     val a by animateFloatAsState(if (shown) 1f else 0f, tween(380, easing = FastOutSlowInEasing), label = "appear")
