@@ -41,7 +41,9 @@ import ru.diary.core.contract.DiaryContract
 import ru.diary.core.date.Dates
 import ru.diary.core.theme.DiaryTheme
 import ru.diary.core.theme.ThemeMode
+import ru.diary.core.ui.Appear
 import ru.diary.core.ui.Callout
+import ru.diary.core.ui.ChoiceChipsRow
 import ru.diary.core.update.UpdateSection
 import ru.diary.nutrition.container
 import ru.diary.core.ui.ChoiceChips
@@ -72,8 +74,8 @@ import ru.diary.nutrition.domain.portionLabel
 @Composable
 fun TabColumn(content: @Composable ColumnScope.() -> Unit) {
     Column(
-        Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp), content = content,
+        Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp), content = content,
     )
 }
 
@@ -98,13 +100,13 @@ fun DishesScreen(vm: NutritionViewModel, data: NutritionData, today: String, dat
         )
         Muted("Порция")
         ChoiceChips(PORTIONS.map { it.first to it.second }, portion, { portion = it })
-        ChoiceChips(CATS, cat, { cat = it })
+        ChoiceChipsRow(CATS, cat, { cat = it })
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
             Muted("Порядок: " + if (byAge) "давно не ел сверху" else "по алфавиту")
             QuietButton(if (byAge) "По алфавиту" else "Давно не ел сверху", { byAge = !byAge })
         }
         val list = NutritionLogic.ordered(data, today, byAge).filter { cat == "all" || it.cat == cat }
-        list.forEach { d -> DishRow(vm, data, d, today, date, portion, open == d.id, { open = if (open == d.id) null else d.id }, askDelete == d.id, { askDelete = it }) }
+        list.forEachIndexed { i, d -> Appear(i) { DishRow(vm, data, d, today, date, portion, open == d.id, { open = if (open == d.id) null else d.id }, askDelete == d.id, { askDelete = it }) } }
         if (list.isEmpty()) Muted("В этой категории пока нет блюд.")
 
         QuietButton(if (addOpen) "Скрыть форму" else "Добавить своё блюдо", { addOpen = !addOpen })
@@ -356,7 +358,7 @@ fun WeekScreen(data: NutritionData, today: String, link: TrainingLink) {
 private fun Stat(value: String, label: String, modifier: Modifier = Modifier) {
     androidx.compose.material3.Surface(
         modifier.semantics(mergeDescendants = true) { contentDescription = "$value $label" },
-        shape = androidx.compose.foundation.shape.RoundedCornerShape(14.dp), color = MaterialTheme.colorScheme.surface,
+        shape = androidx.compose.foundation.shape.RoundedCornerShape(14.dp), color = MaterialTheme.colorScheme.surfaceContainerLow,
         border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.6f)),
     ) {
         Column(Modifier.padding(12.dp)) {

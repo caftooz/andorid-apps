@@ -1,6 +1,11 @@
 package ru.diary.nutrition.ui
 
-import androidx.compose.animation.Crossfade
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -60,7 +65,14 @@ fun NutritionRoot(vm: NutritionViewModel) {
     ) { pad ->
         if (d == null) {
             Box(Modifier.fillMaxSize().padding(pad), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
-        } else Crossfade(tab, Modifier.padding(pad), animationSpec = tween(220), label = "tab") { t ->
+        } else AnimatedContent(
+            tab, Modifier.padding(pad), label = "tab",
+            transitionSpec = {
+                val dir = if (TABS.indexOfFirst { it.first == targetState } > TABS.indexOfFirst { it.first == initialState }) 1 else -1
+                (slideInHorizontally(tween(300)) { dir * it / 8 } + fadeIn(tween(240, delayMillis = 60))) togetherWith
+                    (slideOutHorizontally(tween(220)) { -dir * it / 10 } + fadeOut(tween(120)))
+            },
+        ) { t ->
             when (t) {
                 "diary" -> DiaryScreen(vm, d, today, date, { date = it }, link)
                 "week" -> WeekScreen(d, today, link)

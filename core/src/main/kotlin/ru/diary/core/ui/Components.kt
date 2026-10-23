@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -24,6 +25,10 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -57,15 +62,15 @@ val MinTouch = 48.dp
 fun SectionTitle(text: String, modifier: Modifier = Modifier) {
     Text(
         text, style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onBackground,
-        modifier = modifier.padding(top = 20.dp, bottom = 8.dp).semantics { heading() },
+        modifier = modifier.padding(top = 18.dp, bottom = 2.dp).semantics { heading() },
     )
 }
 
 @Composable
 fun ScreenTitle(text: String, modifier: Modifier = Modifier) {
     Text(
-        text, style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onBackground,
-        modifier = modifier.padding(bottom = 8.dp).semantics { heading() },
+        text, style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.onBackground,
+        modifier = modifier.padding(top = 8.dp, bottom = 4.dp).semantics { heading() },
     )
 }
 
@@ -77,9 +82,9 @@ fun Muted(text: String, modifier: Modifier = Modifier, textAlign: TextAlign? = n
 @Composable
 fun DiaryCard(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     Surface(
-        modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), color = MaterialTheme.colorScheme.surface,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.6f)),
-    ) { Column(Modifier.padding(16.dp).animateContentSize(tween(220)), verticalArrangement = Arrangement.spacedBy(8.dp)) { content() } }
+        modifier.fillMaxWidth(), shape = RoundedCornerShape(24.dp), color = MaterialTheme.colorScheme.surfaceContainerLow,
+        tonalElevation = 1.dp,
+    ) { Column(Modifier.padding(horizontal = 18.dp, vertical = 16.dp).animateContentSize(tween(240)), verticalArrangement = Arrangement.spacedBy(10.dp)) { content() } }
 }
 
 /** Плавное раскрытие блока: форма, тело карточки, пояснение. */
@@ -96,32 +101,44 @@ fun Reveal(visible: Boolean, modifier: Modifier = Modifier, content: @Composable
 @Composable
 fun Callout(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     Surface(
-        modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.surfaceVariant,
-    ) { Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) { content() } }
+        modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), color = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.7f),
+    ) { Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) { content() } }
 }
 
 @Composable
 fun PrimaryButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier, enabled: Boolean = true) {
-    Button(onClick, modifier.heightIn(min = MinTouch), enabled = enabled, shape = RoundedCornerShape(12.dp)) { Text(text) }
+    val src = remember { MutableInteractionSource() }
+    Button(
+        onClick, modifier.heightIn(min = MinTouch).pressScale(src), enabled = enabled, shape = CircleShape, interactionSource = src,
+        contentPadding = PaddingValues(horizontal = 22.dp, vertical = 10.dp),
+    ) { Text(text, style = MaterialTheme.typography.labelLarge) }
 }
 
 @Composable
 fun SecondaryButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier, enabled: Boolean = true) {
-    OutlinedButton(onClick, modifier.heightIn(min = MinTouch), enabled = enabled, shape = RoundedCornerShape(12.dp)) { Text(text) }
+    val src = remember { MutableInteractionSource() }
+    FilledTonalButton(
+        onClick, modifier.heightIn(min = MinTouch).pressScale(src), enabled = enabled, shape = CircleShape, interactionSource = src,
+        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 10.dp),
+    ) { Text(text, style = MaterialTheme.typography.labelLarge) }
 }
 
 @Composable
 fun DangerButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier, enabled: Boolean = true) {
+    val src = remember { MutableInteractionSource() }
     OutlinedButton(
-        onClick, modifier.heightIn(min = MinTouch), enabled = enabled, shape = RoundedCornerShape(12.dp),
+        onClick, modifier.heightIn(min = MinTouch).pressScale(src), enabled = enabled, shape = CircleShape, interactionSource = src,
         colors = ButtonDefaults.outlinedButtonColors(contentColor = DiaryTheme.extras.danger),
         border = BorderStroke(1.dp, DiaryTheme.extras.danger),
-    ) { Text(text) }
+    ) { Text(text, style = MaterialTheme.typography.labelLarge) }
 }
 
 @Composable
 fun QuietButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier, enabled: Boolean = true) {
-    TextButton(onClick, modifier.heightIn(min = MinTouch), enabled = enabled) { Text(text) }
+    val src = remember { MutableInteractionSource() }
+    TextButton(onClick, modifier.heightIn(min = MinTouch).pressScale(src), enabled = enabled, interactionSource = src, shape = CircleShape) {
+        Text(text, style = MaterialTheme.typography.labelLarge)
+    }
 }
 
 /** Ряд переключателей: ровно один выбранный вариант. */
@@ -133,11 +150,18 @@ fun <T> ChoiceChips(
     onSelect: (T) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    FlowRow(modifier, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+    FlowRow(modifier, horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
         options.forEach { (value, label) ->
+            val src = remember { MutableInteractionSource() }
             FilterChip(
-                selected = value == selected, onClick = { onSelect(value) }, label = { Text(label) },
-                modifier = Modifier.heightIn(min = MinTouch),
+                selected = value == selected, onClick = { onSelect(value) }, label = { Text(label, style = MaterialTheme.typography.labelLarge) },
+                shape = CircleShape, interactionSource = src, modifier = Modifier.pressScale(src, 0.94f),
+                border = null,
+                colors = FilterChipDefaults.filterChipColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                    selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                ),
             )
         }
     }
@@ -282,3 +306,33 @@ fun <T> DropdownSelect(
         }
     }
 }
+
+/** Те же переключатели, но в одну строку с прокруткой: для длинных списков категорий и программ. */
+@Composable
+fun <T> ChoiceChipsRow(
+    options: List<Pair<T, String>>,
+    selected: T?,
+    onSelect: (T) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    androidx.compose.foundation.layout.Row(
+        modifier.fillMaxWidth().androidxHorizontalScroll(), horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        options.forEach { (value, label) ->
+            val src = remember { MutableInteractionSource() }
+            FilterChip(
+                selected = value == selected, onClick = { onSelect(value) }, label = { Text(label, style = MaterialTheme.typography.labelLarge) },
+                shape = CircleShape, interactionSource = src, modifier = Modifier.pressScale(src, 0.94f), border = null,
+                colors = FilterChipDefaults.filterChipColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                    selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                ),
+            )
+        }
+    }
+}
+
+@Composable
+private fun Modifier.androidxHorizontalScroll(): Modifier =
+    this.then(Modifier.horizontalScroll(androidx.compose.foundation.rememberScrollState()))

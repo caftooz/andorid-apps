@@ -31,6 +31,9 @@ object DiaryIcons {
         "dish" to "M7 3v8M5 3v5a2 2 0 0 0 4 0V3M7 11v10M17 3c-2 2-3 5-3 8h3v10",
         "book" to "M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM8 7h7M8 11h7",
         "chart" to "M4 20V10M10 20V4M16 20v-8M22 20H2",
+        "calendar" to "M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM4 11h16M8 3v4M16 3v4",
+        "trend" to "M3 17l6-6 4 4 8-8M15 7h6v6",
+        "sun" to circle(12f, 12f, 4f) + "M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19",
         "gear" to circle(12f, 12f, 3f) + "M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2",
     )
 

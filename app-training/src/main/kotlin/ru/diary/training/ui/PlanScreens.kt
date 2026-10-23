@@ -131,8 +131,7 @@ private fun PlanOverview(vm: TrainingViewModel, data: TrainingData, today: Strin
             Triple("plan/metrics", "Замеры", "target"), Triple("plan/tracks", "Занятия дома", "star"), Triple("plan/setup", "Старт и шаблоны", "check"),
         ).forEach { (route, label, ic) ->
             Surface(
-                onClick = { go(route) }, shape = RoundedCornerShape(14.dp), color = MaterialTheme.colorScheme.surface,
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.6f)), modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp),
+                onClick = { go(route) }, shape = RoundedCornerShape(14.dp), color = MaterialTheme.colorScheme.surfaceContainerLow, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp),
             ) {
                 Row(Modifier.padding(horizontal = 16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -413,8 +412,7 @@ private fun SetupScreen(vm: TrainingViewModel, data: TrainingData, today: String
         } else {
             BuiltinData.builtinTemplates.forEach { b ->
                 Surface(
-                    onClick = { ask = "tpl:" + b.id }, shape = RoundedCornerShape(14.dp), color = MaterialTheme.colorScheme.surface,
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.6f)), modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp),
+                    onClick = { ask = "tpl:" + b.id }, shape = RoundedCornerShape(14.dp), color = MaterialTheme.colorScheme.surfaceContainerLow, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp),
                 ) {
                     Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
                         Column(Modifier.weight(1f)) { Text(b.name, style = MaterialTheme.typography.titleSmall); Muted(b.sub) }

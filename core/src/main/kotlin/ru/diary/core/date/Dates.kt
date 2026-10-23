@@ -47,6 +47,11 @@ object Dates {
     /** «18 мар», как `shortDate` прототипа. */
     fun shortDate(s: String): String = parse(s).let { "${it.dayOfMonth} ${MONTHS[it.monthValue - 1]}" }
 
+    private val WD_FULL = listOf("Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье")
+
+    /** «Пятница, 23 окт». */
+    fun weekdayDate(s: String): String = parse(s).let { "${WD_FULL[it.dayOfWeek.value - 1]}, ${it.dayOfMonth} ${MONTHS[it.monthValue - 1]}" }
+
     /** «Сегодня», «Вчера» или «18 мар, ср». */
     fun label(s: String, today: String = today()): String {
         if (s == today) return "Сегодня"

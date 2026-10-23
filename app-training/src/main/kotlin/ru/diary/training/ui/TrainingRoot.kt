@@ -1,6 +1,9 @@
 package ru.diary.training.ui
 
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.scaleIn
+import androidx.navigation.NavBackStackEntry
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
@@ -40,10 +43,10 @@ import ru.diary.training.container
 private data class Tab(val route: String, val label: String, val icon: String)
 
 private val TABS = listOf(
-    Tab("today", "Сегодня", "check"),
-    Tab("plan", "План", "target"),
-    Tab("progress/train", "Прогресс", "cardio"),
-    Tab("settings", "Настройки", "flame"),
+    Tab("today", "Сегодня", "sun"),
+    Tab("plan", "План", "calendar"),
+    Tab("progress/train", "Прогресс", "trend"),
+    Tab("settings", "Настройки", "gear"),
 )
 
 /** Корень интерфейса: идущая тренировка вытесняет вкладки, как в веб-версии. */
@@ -98,10 +101,21 @@ fun TrainingRoot(vm: TrainingViewModel, integration: LiveIntegration) {
     ) { pad ->
         NavHost(
             nav, startDestination = "today", modifier = Modifier.padding(pad),
-            enterTransition = { fadeIn(tween(240)) + slideInHorizontally(tween(280)) { it / 14 } },
-            exitTransition = { fadeOut(tween(120)) },
-            popEnterTransition = { fadeIn(tween(240)) + slideInHorizontally(tween(280)) { -it / 14 } },
-            popExitTransition = { fadeOut(tween(120)) + slideOutHorizontally(tween(200)) { it / 14 } },
+            // Между вкладками: «сквозное затухание» с лёгким масштабом. Вглубь экрана: сдвиг вбок.
+            enterTransition = {
+                if (isTabSwitch()) fadeIn(tween(260, delayMillis = 70)) + scaleIn(tween(260, delayMillis = 70), initialScale = 0.94f)
+                else fadeIn(tween(260)) + slideInHorizontally(tween(320)) { it / 10 }
+            },
+            exitTransition = {
+                if (isTabSwitch()) fadeOut(tween(90)) else fadeOut(tween(140)) + slideOutHorizontally(tween(320)) { -it / 14 }
+            },
+            popEnterTransition = {
+                if (isTabSwitch()) fadeIn(tween(260, delayMillis = 70)) + scaleIn(tween(260, delayMillis = 70), initialScale = 0.94f)
+                else fadeIn(tween(260)) + slideInHorizontally(tween(320)) { -it / 14 }
+            },
+            popExitTransition = {
+                if (isTabSwitch()) fadeOut(tween(90)) else fadeOut(tween(140)) + slideOutHorizontally(tween(320)) { it / 10 }
+            },
         ) {
             composable("today") {
                 TodayScreen(vm, d, today, onOpenTrack = { nav.navigate("today/track/$it") }, onGoto = { goto(nav, it) }, extraTiles = { integration.TodayTile() })
@@ -116,6 +130,12 @@ fun TrainingRoot(vm: TrainingViewModel, integration: LiveIntegration) {
             composable("settings") { SettingsScreen(vm, d) }
         }
     }
+}
+
+/** Переход между корнями вкладок, а не вглубь одной вкладки. */
+private fun AnimatedContentTransitionScope<NavBackStackEntry>.isTabSwitch(): Boolean {
+    fun root(e: NavBackStackEntry) = e.destination.route?.substringBefore('/')?.substringBefore('?')
+    return root(initialState) != root(targetState)
 }
 
 private fun navigateTab(nav: NavHostController, route: String) {

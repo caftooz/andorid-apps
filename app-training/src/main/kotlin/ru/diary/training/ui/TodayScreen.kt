@@ -39,7 +39,10 @@ import ru.diary.core.charts.RingIndicator
 import ru.diary.core.date.Dates
 import ru.diary.core.theme.DiaryTheme
 import ru.diary.core.ui.Callout
+import ru.diary.core.ui.Appear
 import ru.diary.core.ui.ChoiceChips
+import ru.diary.core.ui.ChoiceChipsRow
+import ru.diary.core.ui.ScreenTitle
 import ru.diary.core.ui.DiaryCard
 import ru.diary.core.ui.DiaryIcons
 import ru.diary.core.ui.LabeledField
@@ -75,12 +78,17 @@ fun TodayScreen(
     var quickQ by rememberSaveable { mutableStateOf<String?>(null) }
 
     TabColumn {
-        TodayPlanCard(data, today, onGoto)
-        Spacer8()
+        Appear(0) {
+            Column {
+                ScreenTitle("Сегодня")
+                Muted(Dates.weekdayDate(today))
+            }
+        }
+        Appear(1) { TodayPlanCard(data, today, onGoto) }
         val sel = chosen?.takeIf { id -> data.programs.any { it.id == id } }
         val progId = sel ?: Logic.todayProg(plan, data.programs, data.sessions, today)
         val prog = progId?.let { id -> data.programs.firstOrNull { it.id == id } }
-        if (prog != null) {
+        Appear(2) { if (prog != null) {
             val label = when {
                 sel != null -> "Выбрано"
                 Logic.planDayProg(plan, data.programs, today) != null -> "Сегодня по плану"
@@ -91,7 +99,7 @@ fun TodayScreen(
                 Text(prog.title, style = MaterialTheme.typography.titleLarge)
                 Muted(if (prog.items.isNotEmpty()) Logic.progBrief(prog) else "В программе пока нет упражнений. Их можно добавить в разделе «План → Программы».")
                 PrimaryButton("Провести тренировку", { vm.startWorkout(prog.id) }, Modifier.fillMaxWidth().heightIn(min = 60.dp))
-                ChoiceChips(data.programs.map { it.id to it.title }, prog.id, { chosen = it })
+                ChoiceChipsRow(data.programs.map { it.id to it.title }, prog.id, { chosen = it })
                 QuietButton("Своя тренировка", { vm.startWorkout(null) })
             }
         } else {
@@ -100,11 +108,10 @@ fun TodayScreen(
                 Muted("Создайте программу в разделе «План → Программы» или начните тренировку без неё.")
                 PrimaryButton("Своя тренировка", { vm.startWorkout(null) }, Modifier.fillMaxWidth())
             }
-        }
+        } }
 
-        Spacer8()
-        TodayTiles(data, today)
-        extraTiles()
+        Appear(3) { TodayTiles(data, today) }
+        Appear(4) { Column { extraTiles() } }
 
         SectionTitle("Записать")
         QuickButtons(quickQ) { quickQ = if (quickQ == it) null else it }
@@ -115,7 +122,6 @@ fun TodayScreen(
         val counts = Logic.weekCounts(data.sessions, ws)
         plan.tracks.forEach { tr ->
             val key = "t:" + tr.id
-            Spacer8()
             DiaryCard {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     Icon(DiaryIcons.get(tr.ic), null, tint = DiaryTheme.extras.home, modifier = Modifier.size(24.dp))
@@ -268,7 +274,7 @@ private fun TodayTiles(data: TrainingData, today: String) {
 fun Tile(icon: String, value: String, label: String, color: Color, modifier: Modifier = Modifier) {
     Surface(
         modifier.semantics(mergeDescendants = true) { contentDescription = "$value $label" }, shape = RoundedCornerShape(14.dp),
-        color = MaterialTheme.colorScheme.surface, border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.6f)),
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
     ) {
         Column(Modifier.padding(10.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Icon(DiaryIcons.get(icon), null, tint = color, modifier = Modifier.size(20.dp))
