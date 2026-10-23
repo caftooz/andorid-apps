@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -68,7 +69,7 @@ fun ExercisePicker(
     var formOpen by rememberSaveable { mutableStateOf(false) }
     var name by rememberSaveable { mutableStateOf("") }
     var kind by rememberSaveable { mutableStateOf("w") }
-    var step by rememberSaveable { mutableStateOf(1.0) }
+    var step by rememberSaveable { mutableDoubleStateOf(1.0) }
     var tip by rememberSaveable { mutableStateOf("") }
 
     DiaryCard {

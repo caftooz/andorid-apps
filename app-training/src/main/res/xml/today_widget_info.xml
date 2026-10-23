@@ -5,7 +5,5 @@
     android:minWidth="180dp"
     android:minHeight="90dp"
     android:resizeMode="horizontal|vertical"
-    android:targetCellWidth="3"
-    android:targetCellHeight="2"
     android:updatePeriodMillis="3600000"
     android:widgetCategory="home_screen" />

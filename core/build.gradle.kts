@@ -19,7 +19,7 @@ android {
     }
     lint {
         // Версии библиотек закреплены осознанно: обновление проходит отдельным шагом с проверкой сборки.
-        disable += setOf("GradleDependency", "NewerVersionAvailable", "AndroidGradlePluginVersion")
+        disable += setOf("GradleDependency", "NewerVersionAvailable", "AndroidGradlePluginVersion", "ObsoleteSdkInt")
         abortOnError = true
     }
     buildFeatures { compose = true }

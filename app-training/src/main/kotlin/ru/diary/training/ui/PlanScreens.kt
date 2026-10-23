@@ -23,6 +23,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -87,7 +88,7 @@ fun NavGraphBuilder.planGraph(nav: NavHostController, vm: TrainingViewModel, dat
 private fun PlanOverview(vm: TrainingViewModel, data: TrainingData, today: String, go: (String) -> Unit) {
     val plan = data.plan
     val di = Dates.dayIndex(today)
-    var sel by rememberSaveable { mutableStateOf(di) }
+    var sel by rememberSaveable { mutableIntStateOf(di) }
     TabColumn {
         ScreenTitle(plan.name)
         PlanStatusCard(vm, data, today)

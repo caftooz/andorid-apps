@@ -22,6 +22,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -206,11 +207,11 @@ fun QuickLogForm(q: String, data: TrainingData, onSave: (Logic.QuickForm) -> Uni
     val today = Dates.today()
     val yesterday = Dates.addDays(today, -1)
     var day by rememberSaveable(q) { mutableStateOf(today) }
-    var dur by rememberSaveable(q) { mutableStateOf(Texts.quickDefault(q, plan)) }
+    var dur by rememberSaveable(q) { mutableIntStateOf(Texts.quickDefault(q, plan)) }
     var durCustom by rememberSaveable(q) { mutableStateOf(false) }
     var durText by rememberSaveable(q) { mutableStateOf(dur.toString()) }
     var kcal by rememberSaveable(q) { mutableStateOf("") }
-    var int by rememberSaveable(q) { mutableStateOf(3) }
+    var int by rememberSaveable(q) { mutableIntStateOf(3) }
     var note by rememberSaveable(q) { mutableStateOf("") }
     var name by rememberSaveable(q) { mutableStateOf(if (q == "other") Texts.ACT_PRESETS[0] else "") }
     var nameCustom by rememberSaveable(q) { mutableStateOf(false) }

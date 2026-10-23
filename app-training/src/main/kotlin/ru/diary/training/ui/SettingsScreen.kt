@@ -22,6 +22,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ru.diary.core.date.Dates
 import ru.diary.core.theme.ThemeMode
 import ru.diary.core.ui.Callout
+import ru.diary.core.update.UpdateSection
+import ru.diary.training.container
 import ru.diary.core.ui.ChoiceChips
 import ru.diary.core.ui.ConfirmBox
 import ru.diary.core.ui.DangerButton
@@ -88,6 +90,9 @@ fun SettingsScreen(vm: TrainingViewModel, data: TrainingData) {
 
         SectionTitle("Где хранятся данные")
         Muted("Данные хранятся только на этом телефоне и никуда не отправляются. Делайте экспорт, чтобы не потерять историю.")
+
+        SectionTitle("Обновления")
+        UpdateSection(ctx.container.updater)
 
         SectionTitle("Экспорт")
         Muted("Файл JSON с историей занятий, вашими программами, планом и упражнениями. Его можно перенести в веб-версию или обратно сюда.")

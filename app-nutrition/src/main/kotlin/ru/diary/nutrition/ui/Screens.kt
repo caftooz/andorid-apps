@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -41,6 +42,8 @@ import ru.diary.core.date.Dates
 import ru.diary.core.theme.DiaryTheme
 import ru.diary.core.theme.ThemeMode
 import ru.diary.core.ui.Callout
+import ru.diary.core.update.UpdateSection
+import ru.diary.nutrition.container
 import ru.diary.core.ui.ChoiceChips
 import ru.diary.core.ui.ConfirmBox
 import ru.diary.core.ui.DangerButton
@@ -78,7 +81,7 @@ fun TabColumn(content: @Composable ColumnScope.() -> Unit) {
 
 @Composable
 fun DishesScreen(vm: NutritionViewModel, data: NutritionData, today: String, date: String, onDate: (String) -> Unit) {
-    var portion by rememberSaveable { mutableStateOf(1.0) }
+    var portion by rememberSaveable { mutableDoubleStateOf(1.0) }
     var cat by rememberSaveable { mutableStateOf("all") }
     var byAge by rememberSaveable { mutableStateOf(true) }
     var open by rememberSaveable { mutableStateOf<String?>(null) }
@@ -414,6 +417,8 @@ fun SettingsScreen(vm: NutritionViewModel, link: TrainingLink) {
         }
         SectionTitle("Где хранятся данные")
         Muted("Данные хранятся только на этом телефоне и никуда не отправляются. Делайте экспорт, чтобы не потерять историю.")
+        SectionTitle("Обновления")
+        UpdateSection(ctx.container.updater)
         SectionTitle("Связь с «Тренировками»")
         Muted(
             if (link is TrainingLink.Ready) "Приложение «Тренировки» найдено: в дневнике показывается баланс дня и график «съедено и потрачено»."

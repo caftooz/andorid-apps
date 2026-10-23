@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import ru.diary.core.contract.DiaryClient
+import ru.diary.core.update.Updater
 import ru.diary.core.contract.DiaryContract
 import ru.diary.training.data.SettingsStore
 import ru.diary.training.data.TrainingDatabase
@@ -29,6 +30,7 @@ class AppContainer(context: Context) {
     }
     val settings = SettingsStore(context)
     val client = DiaryClient(context)
+    val updater = Updater(context, "caftooz", "andorid-apps", "app-training-release.apk")
 }
 
 class TrainingApp : Application() {

@@ -41,6 +41,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.remember
@@ -339,7 +340,7 @@ private fun WorkoutBar(vm: TrainingViewModel, a: ActiveWorkout, onFinish: () -> 
 
 @Composable
 private fun FinishForm(vm: TrainingViewModel, a: ActiveWorkout, onBack: () -> Unit) {
-    var rpe by rememberSaveable { mutableStateOf(3) }
+    var rpe by rememberSaveable { mutableIntStateOf(3) }
     var pain by rememberSaveable { mutableStateOf(listOf<String>()) }
     var kcal by rememberSaveable { mutableStateOf("") }
     var note by rememberSaveable { mutableStateOf("") }

@@ -26,6 +26,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ru.diary.core.ui.DiaryIcons
+import ru.diary.core.update.UpdatePrompt
+import ru.diary.nutrition.container
 
 private val TABS = listOf("dishes" to ("Блюда" to "dish"), "diary" to ("Дневник" to "book"), "week" to ("Неделя" to "chart"), "data" to ("Настройки" to "gear"))
 
@@ -44,6 +46,7 @@ fun NutritionRoot(vm: NutritionViewModel) {
             if (snackbar.showSnackbar(m.text, m.actionLabel, duration = SnackbarDuration.Short) == SnackbarResult.ActionPerformed) m.onAction?.invoke()
         }
     }
+    UpdatePrompt(androidx.compose.ui.platform.LocalContext.current.container.updater)
     val d = data
     Scaffold(
         snackbarHost = { SnackbarHost(snackbar) },

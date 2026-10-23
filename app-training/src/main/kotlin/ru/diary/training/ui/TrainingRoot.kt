@@ -34,6 +34,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import ru.diary.core.ui.DiaryIcons
+import ru.diary.core.update.UpdatePrompt
+import ru.diary.training.container
 
 private data class Tab(val route: String, val label: String, val icon: String)
 
@@ -65,6 +67,8 @@ fun TrainingRoot(vm: TrainingViewModel, integration: LiveIntegration) {
         return
     }
     integration.Overlay()
+    // Диалог обновления откладывается, пока идёт тренировка.
+    UpdatePrompt(androidx.compose.ui.platform.LocalContext.current.container.updater, enabled = active == null)
     val a = active
     if (a != null) {
         Scaffold(snackbarHost = { SnackbarHost(snackbar) }) { pad ->

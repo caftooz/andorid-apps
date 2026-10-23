@@ -3,6 +3,7 @@ package ru.diary.nutrition
 import android.app.Application
 import android.content.Context
 import ru.diary.core.contract.DiaryClient
+import ru.diary.core.update.Updater
 import ru.diary.core.contract.DiaryContract
 import ru.diary.nutrition.data.NutritionDatabase
 import ru.diary.nutrition.data.NutritionRepository
@@ -20,6 +21,7 @@ class AppContainer(private val context: Context) {
     }
     val settings = SettingsStore(context)
     val client = DiaryClient(context)
+    val updater = Updater(context, "caftooz", "andorid-apps", "app-nutrition-release.apk")
 }
 
 class NutritionApp : Application() {

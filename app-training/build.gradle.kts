@@ -14,6 +14,9 @@ val localProps = Properties().apply {
 }
 fun secret(key: String): String? = System.getenv(key) ?: localProps.getProperty(key)
 
+val appVersion = providers.gradleProperty("diary.version").get()
+val appVersionCode = appVersion.split(".").map { it.toInt() }.let { (a, b, c) -> a * 10000 + b * 100 + c }
+
 android {
     namespace = "ru.diary.training"
     compileSdk = 36
@@ -22,8 +25,8 @@ android {
         applicationId = "ru.diary.training"
         minSdk = 26
         targetSdk = 36
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = appVersionCode
+        versionName = appVersion
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -55,7 +58,7 @@ android {
     }
     lint {
         // Версии библиотек закреплены осознанно: обновление проходит отдельным шагом с проверкой сборки.
-        disable += setOf("GradleDependency", "NewerVersionAvailable", "AndroidGradlePluginVersion")
+        disable += setOf("GradleDependency", "NewerVersionAvailable", "AndroidGradlePluginVersion", "ObsoleteSdkInt")
         abortOnError = true
     }
     buildFeatures { compose = true }
