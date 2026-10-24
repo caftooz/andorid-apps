@@ -1,5 +1,7 @@
 package ru.diary.nutrition.data
 
+import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.room.migration.Migration
 import android.content.Context
 import androidx.room.Dao
 import androidx.room.Database
@@ -26,6 +28,23 @@ data class EntryEntity(
     val kcal: Int,
     val protein: Int,
     val plan: Boolean,
+    val fat: Int? = null,
+    val carbs: Int? = null,
+)
+
+/** Продукт по штрих-коду, КБЖУ на 100 г. */
+@Entity(tableName = "products")
+data class ProductEntity(
+    @PrimaryKey val code: String,
+    val name: String,
+    val brand: String,
+    val kcal: Double,
+    val p: Double,
+    val f: Double,
+    val c: Double,
+    val packG: Int?,
+    val source: String,
+    val updated: Long,
 )
 
 /** Своё блюдо пользователя. */
@@ -51,18 +70,36 @@ interface NutritionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE) suspend fun upsertCustom(c: List<CustomDishEntity>)
     @Query("DELETE FROM custom_dishes") suspend fun clearCustom()
 
+    @Query("SELECT * FROM products ORDER BY updated DESC") fun products(): Flow<List<ProductEntity>>
+    @Insert(onConflict = OnConflictStrategy.REPLACE) suspend fun upsertProducts(p: List<ProductEntity>)
+    @Query("DELETE FROM products WHERE code = :code") suspend fun deleteProduct(code: String)
+    @Query("DELETE FROM products") suspend fun clearProducts()
+
     @Transaction
-    suspend fun replaceAll(e: List<EntryEntity>, c: List<CustomDishEntity>) {
-        clearEntries(); clearCustom(); upsertEntries(e); upsertCustom(c)
+    suspend fun replaceAll(e: List<EntryEntity>, c: List<CustomDishEntity>, p: List<ProductEntity>) {
+        clearEntries(); clearCustom(); clearProducts(); upsertEntries(e); upsertCustom(c); upsertProducts(p)
     }
 }
 
-@Database(entities = [EntryEntity::class, CustomDishEntity::class], version = 1, exportSchema = true)
+/** Версия 2: жиры и углеводы у записей и таблица продуктов по штрих-коду. Старые записи не меняются. */
+val MIGRATION_1_2 = object : Migration(1, 2) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE entries ADD COLUMN fat INTEGER")
+        db.execSQL("ALTER TABLE entries ADD COLUMN carbs INTEGER")
+        db.execSQL(
+            "CREATE TABLE IF NOT EXISTS products (code TEXT NOT NULL, name TEXT NOT NULL, brand TEXT NOT NULL, kcal REAL NOT NULL, " +
+                "p REAL NOT NULL, f REAL NOT NULL, c REAL NOT NULL, packG INTEGER, source TEXT NOT NULL, updated INTEGER NOT NULL, PRIMARY KEY(code))",
+        )
+    }
+}
+
+@Database(entities = [EntryEntity::class, CustomDishEntity::class, ProductEntity::class], version = 2, exportSchema = true)
 abstract class NutritionDatabase : RoomDatabase() {
     abstract fun dao(): NutritionDao
 
     companion object {
         const val NAME = "nutrition.db"
-        fun create(context: Context): NutritionDatabase = Room.databaseBuilder(context.applicationContext, NutritionDatabase::class.java, NAME).build()
+        fun create(context: Context): NutritionDatabase = Room.databaseBuilder(context.applicationContext, NutritionDatabase::class.java, NAME)
+            .addMigrations(MIGRATION_1_2).build()
     }
 }

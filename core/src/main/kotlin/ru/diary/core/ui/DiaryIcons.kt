@@ -35,6 +35,7 @@ object DiaryIcons {
         "trend" to "M3 17l6-6 4 4 8-8M15 7h6v6",
         "sun" to circle(12f, 12f, 4f) + "M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19",
         "sliders" to "M4 7h9M17 7h3M4 12h3M11 12h9M4 17h11M19 17h1" + circle(15f, 7f, 2f) + circle(9f, 12f, 2f) + circle(17f, 17f, 2f),
+        "barcode" to "M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 8v8M10.5 8v8M14 8v8M17 8v8",
         "gear" to circle(12f, 12f, 3f) + "M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2",
     )
 

@@ -73,6 +73,10 @@ ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
 }
 
+// Схемы Room нужны тесту миграции базы. Robolectric читает ресурсы приложения, поэтому схемы добавлены
+// только в debug-сборку (несколько КБ); в release их нет.
+android.sourceSets.getByName("debug").assets.srcDir("$projectDir/schemas")
+
 dependencies {
     implementation(project(":core"))
     implementation(platform(libs.androidx.compose.bom))
@@ -85,6 +89,8 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.kotlinx.serialization.json)
+    // Сканер штрих-кодов: открытая библиотека ZXing, работает без сервисов Google и без сети.
+    implementation(libs.zxing.android.embedded)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 

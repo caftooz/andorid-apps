@@ -48,7 +48,11 @@ data class Dish(
 
 data class CustomDish(val id: String, val name: String, val cat: String, val kcal: Int, val p: Int, val notes: String)
 
-/** Запись приёма пищи. `plan = false` — приём вне плана. */
+/**
+ * Запись приёма пищи. `plan = false` — приём вне плана.
+ * Для продукта по штрих-коду `dish` = «bc:<код>», а `portion` — съеденные граммы.
+ * `fat` и `carbs` известны только для продуктов; для блюд они считаются по каталогу.
+ */
 data class Entry(
     val id: String,
     val date: String,
@@ -59,9 +63,70 @@ data class Entry(
     val kcal: Int,
     val protein: Int,
     val plan: Boolean,
+    val fat: Int? = null,
+    val carbs: Int? = null,
+) {
+    val isProduct: Boolean get() = dish?.startsWith(PRODUCT_PREFIX) == true
+}
+
+const val PRODUCT_PREFIX = "bc:"
+
+/**
+ * Продукт со штрих-кодом, КБЖУ на 100 г. `source`: «off» — найден в Open Food Facts, «user» — введён вручную.
+ * `packG` — вес упаковки в граммах, если известен.
+ */
+data class Product(
+    val code: String,
+    val name: String,
+    val brand: String,
+    val kcal: Double,
+    val p: Double,
+    val f: Double,
+    val c: Double,
+    val packG: Int?,
+    val source: String,
+    val updated: Long,
 )
 
-data class NutritionData(val log: List<Entry> = emptyList(), val custom: List<CustomDish> = emptyList())
+data class NutritionData(
+    val log: List<Entry> = emptyList(),
+    val custom: List<CustomDish> = emptyList(),
+    val products: List<Product> = emptyList(),
+)
+
+/** Работа с продуктами: проверка штрих-кода, пересчёт на граммы, ручной ввод. */
+object Products {
+    /** EAN-8, UPC-A, EAN-13 и ITF-14: только цифры нужной длины. */
+    fun normalize(raw: String): String? = raw.filter { !it.isWhitespace() }.takeIf { s -> s.length in setOf(8, 12, 13, 14) && s.all { it.isDigit() } }
+
+    private fun dec(v: String): Double? = v.trim().replace(',', '.').toDoubleOrNull()?.takeIf { it >= 0 && it.isFinite() }
+
+    /** Продукт из полей формы; `null`, если нет названия или калорийности. */
+    fun manual(code: String, name: String, brand: String, kcal: String, p: String, f: String, c: String, pack: String, now: Long): Product? {
+        val n = name.trim().take(120)
+        val k = dec(kcal) ?: return null
+        if (n.isEmpty() || k > 1000) return null
+        return Product(
+            code, n, brand.trim().take(80), k, (dec(p) ?: 0.0).coerceAtMost(100.0), (dec(f) ?: 0.0).coerceAtMost(100.0),
+            (dec(c) ?: 0.0).coerceAtMost(100.0), pack.trim().toIntOrNull()?.takeIf { it in 1..20000 }, "user", now,
+        )
+    }
+
+    /** Запись в дневник: КБЖУ пересчитываются с 100 г на съеденные граммы. */
+    fun eat(prod: Product, grams: Int, date: String, time: String, now: Long): Entry {
+        val k = grams / 100.0
+        return Entry(
+            Ids.uid(now), date, time, PRODUCT_PREFIX + prod.code, prod.name, grams.toDouble(),
+            Js.round(prod.kcal * k).toInt(), Js.round(prod.p * k).toInt(), true,
+            fat = Js.round(prod.f * k).toInt(), carbs = Js.round(prod.c * k).toInt(),
+        )
+    }
+
+    fun title(prod: Product): String = if (prod.brand.isEmpty()) prod.name else "${prod.name} · ${prod.brand}"
+}
+
+/** Подпись количества: для продукта — граммы, для блюда — размер порции. */
+fun amountLabel(e: Entry): String = if (e.isProduct) "${e.portion.toInt()} г" else portionLabel(e.portion)
 
 fun portionLabel(p: Double): String = PORTIONS.firstOrNull { it.first == p }?.second?.lowercase() ?: "×" + Js.numToString(p)
 
@@ -163,13 +228,14 @@ object NutritionLogic {
         }.map { it.first }
     }
 
-    /** Жиры и углеводы приёма считаются по каталогу блюда; для записей вне плана и своих блюд они неизвестны (0). */
+    /** Жиры и углеводы: у продуктов — из записи, у блюд — по каталогу; для записей вне плана и своих блюд они неизвестны (0). */
     fun totals(data: NutritionData, date: String): DayTotals {
         val all = Catalog.all(data.custom).associateBy { it.id }
         var k = 0; var p = 0; var f = 0.0; var c = 0.0
         val es = entriesOn(data, date)
         for (e in es) {
             k += e.kcal; p += e.protein
+            if (e.fat != null || e.carbs != null) { f += e.fat ?: 0; c += e.carbs ?: 0; continue }
             val d = e.dish?.let { all[it] }
             if (d != null) { f += (d.f ?: 0) * e.portion; c += (d.c ?: 0) * e.portion }
         }
@@ -215,7 +281,8 @@ object NutritionLogic {
 object NutritionTransfer {
     const val APP = "dnevnik-raciona"
     const val VERSION = 1
-    private const val NOTE = "log: записи о приёмах пищи (date, time, dish, name, portion, kcal, protein, plan). customDishes: ваши блюда. " +
+    private const val NOTE = "log: записи о приёмах пищи (date, time, dish, name, portion, kcal, protein, plan; у продуктов ещё fat, carbs, а portion — граммы). " +
+        "customDishes: ваши блюда. products: продукты по штрих-коду, КБЖУ на 100 г. " +
         "catalog: все блюда с рецептами, КБЖУ на порцию приблизительное."
 
     @OptIn(kotlinx.serialization.ExperimentalSerializationApi::class)
@@ -228,6 +295,15 @@ object NutritionTransfer {
     fun entryJson(e: Entry): JsonObject = buildJsonObject {
         put("id", e.id); put("date", e.date); put("time", e.time); put("dish", str(e.dish)); put("name", e.name)
         put("portion", portion(e.portion)); put("kcal", JsonPrimitive(e.kcal)); put("protein", JsonPrimitive(e.protein)); put("plan", e.plan)
+        // Новые поля пишутся только когда есть: записи блюд остаются в точности как в веб-версии.
+        e.fat?.let { put("fat", JsonPrimitive(it)) }
+        e.carbs?.let { put("carbs", JsonPrimitive(it)) }
+    }
+
+    fun productJson(p: Product): JsonObject = buildJsonObject {
+        put("code", p.code); put("name", p.name); put("brand", p.brand)
+        put("kcal100", JsonPrimitive(p.kcal)); put("protein100", JsonPrimitive(p.p)); put("fat100", JsonPrimitive(p.f)); put("carbs100", JsonPrimitive(p.c))
+        put("packGrams", int(p.packG)); put("source", p.source); put("updated", JsonPrimitive(p.updated))
     }
 
     fun customJson(c: CustomDish): JsonObject = buildJsonObject {
@@ -242,6 +318,7 @@ object NutritionTransfer {
         put("note", NOTE)
         put("log", JsonArray(d.log.sortedBy { it.date + it.time }.map(::entryJson)))
         put("customDishes", JsonArray(d.custom.map(::customJson)))
+        if (d.products.isNotEmpty()) put("products", JsonArray(d.products.map(::productJson)))
         put("catalog", buildJsonArray {
             Catalog.all(d.custom).forEach { x ->
                 add(buildJsonObject {
@@ -270,6 +347,22 @@ object NutritionTransfer {
             name = if (Js.truthy(e["name"])) Js.str(e["name"], 120) else "Без названия", portion = portion,
             kcal = NutritionLogic.num(e["kcal"]), protein = NutritionLogic.num(e["protein"]),
             plan = (e["plan"] as? JsonPrimitive)?.let { it.content != "false" } ?: true,
+            fat = e["fat"]?.takeIf { it !is JsonNull }?.let { NutritionLogic.num(it) },
+            carbs = e["carbs"]?.takeIf { it !is JsonNull }?.let { NutritionLogic.num(it) },
+        )
+    }
+
+    private fun dbl(e: JsonElement?): Double = Js.toNumber(e).takeIf { it.isFinite() && it >= 0 } ?: 0.0
+
+    fun cleanProduct(raw: JsonElement?): Product? {
+        val o = obj(raw) ?: return null
+        val code = Products.normalize(Js.str(o["code"])) ?: return null
+        if (!Js.truthy(o["name"])) return null
+        return Product(
+            code, Js.str(o["name"], 120), if (Js.truthy(o["brand"])) Js.str(o["brand"], 80) else "",
+            dbl(o["kcal100"]).coerceAtMost(1000.0), dbl(o["protein100"]).coerceAtMost(100.0), dbl(o["fat100"]).coerceAtMost(100.0), dbl(o["carbs100"]).coerceAtMost(100.0),
+            Js.toNumber(o["packGrams"]).takeIf { it.isFinite() && it >= 1 && it <= 20000 }?.toInt(),
+            if (Js.str(o["source"]) == "off") "off" else "user", Js.toNumber(o["updated"]).takeIf { it.isFinite() && it > 0 }?.toLong() ?: 0L,
         )
     }
 
@@ -283,7 +376,7 @@ object NutritionTransfer {
         )
     }
 
-    data class Draft(val log: List<Entry>, val custom: List<CustomDish>, val skipped: Int)
+    data class Draft(val log: List<Entry>, val custom: List<CustomDish>, val skipped: Int, val products: List<Product> = emptyList())
 
     enum class Mode { Replace, Merge }
 
@@ -293,13 +386,15 @@ object NutritionTransfer {
         val raw = (if (o is JsonArray) o else obj(o)?.get("log") as? JsonArray) ?: return null
         val log = raw.mapNotNull { cleanEntry(it) }
         val custom = ((obj(o)?.get("customDishes") as? JsonArray) ?: JsonArray(emptyList())).mapNotNull { cleanDish(it) }
-        return Draft(log, custom, raw.size - log.size)
+        val products = ((obj(o)?.get("products") as? JsonArray) ?: JsonArray(emptyList())).mapNotNull { cleanProduct(it) }
+        return Draft(log, custom, raw.size - log.size, products)
     }
 
     fun applyImport(cur: NutritionData, d: Draft, mode: Mode): NutritionData {
-        if (mode == Mode.Replace) return NutritionData(d.log, d.custom)
+        if (mode == Mode.Replace) return NutritionData(d.log, d.custom, d.products)
         val have = cur.log.mapTo(HashSet()) { it.id }
         val hc = cur.custom.mapTo(HashSet()) { it.id }
-        return NutritionData(cur.log + d.log.filter { it.id !in have }, cur.custom + d.custom.filter { it.id !in hc })
+        val hp = cur.products.mapTo(HashSet()) { it.code }
+        return NutritionData(cur.log + d.log.filter { it.id !in have }, cur.custom + d.custom.filter { it.id !in hc }, cur.products + d.products.filter { it.code !in hp })
     }
 }

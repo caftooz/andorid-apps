@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Читать данные «Рациона» могут только приложения, подписанные тем же ключом. -->
     <permission
@@ -8,6 +9,9 @@
 
     <!-- Разрешение на чтение данных «Тренировок»: выдаётся системой, только если подпись совпадает. -->
     <uses-permission android:name="ru.diary.training.permission.READ_DATA" />
+
+    <!-- Камера нужна только для сканирования штрих-кодов; разрешение спрашивается в момент первого сканирования. -->
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <!-- Видимость соседнего приложения на Android 11+. -->
     <queries>
@@ -33,6 +37,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Экран сканера из библиотеки ZXing: по умолчанию он только альбомный, разрешаем любой поворот. -->
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="fullSensor"
+            tools:replace="screenOrientation" />
 
         <provider
             android:name=".NutritionProvider"
