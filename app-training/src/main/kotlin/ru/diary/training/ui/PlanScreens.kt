@@ -1,5 +1,8 @@
 package ru.diary.training.ui
 
+import ru.diary.core.ui.NumberBadge
+import ru.diary.core.ui.SheetRow
+import ru.diary.core.ui.DiarySheet
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.foundation.background
@@ -511,12 +514,10 @@ private fun ProgramsScreen(vm: TrainingViewModel, data: TrainingData, onBack: ()
                 }
             }
         }
-        QuietButton(if (newOpen) "Скрыть форму" else "+ Новая программа", { newOpen = !newOpen })
-        if (newOpen) {
-            DiaryCard {
-                LabeledField("Название", title, { title = it }, maxLength = 60, placeholder = "Например, дома без инвентаря")
-                PrimaryButton("Создать", { vm.createProgram(title)?.let { id -> title = ""; newOpen = false; onEdit(id) } })
-            }
+        SecondaryButton("+ Новая программа", { newOpen = true })
+        if (newOpen) DiarySheet({ newOpen = false }, title = "Новая программа", icon = "gym") { close ->
+            LabeledField("Название", title, { title = it }, maxLength = 60, placeholder = "Например, дома без инвентаря")
+            PrimaryButton("Создать", { vm.createProgram(title)?.let { id -> title = ""; close(); onEdit(id) } }, Modifier.fillMaxWidth())
         }
         Callout("Тренировка без программы. Кнопка «Своя тренировка» на вкладке «Сегодня» открывает пустую тренировку: упражнения добавляете по ходу, и всё записывается в историю.")
     }
@@ -542,6 +543,7 @@ private fun ProgramEditor(vm: TrainingViewModel, data: TrainingData, id: String,
     val catalog = ExerciseCatalog(data.customEx)
     var pick by rememberSaveable { mutableStateOf(false) }
     var ask by rememberSaveable { mutableStateOf<String?>(null) }
+    var editIdx by rememberSaveable { mutableStateOf<Int?>(null) }
     TabColumn {
         BackLink("Все программы", back)
         val (letter, name) = ProgramLetters.split(p.title)
@@ -557,17 +559,23 @@ private fun ProgramEditor(vm: TrainingViewModel, data: TrainingData, id: String,
         }
         SectionTitle("Упражнения")
         if (p.items.isEmpty()) Muted("Пока пусто. Добавьте первое упражнение.")
+        // Краткий список: название и схема подходов; настройка упражнения — во всплывающей панели.
         p.items.forEachIndexed { i, it0 ->
+            val d = catalog.defOf(it0.id)
+            val sfx = if (d?.kind == "time") " с" else ""
+            SheetRow(
+                d?.name ?: it0.id, { editIdx = i }, subtitle = "${it0.sets} × " + (if (it0.lo == it0.hi) "${it0.lo}" else "${it0.lo}–${it0.hi}") + sfx,
+                leading = { NumberBadge(i + 1) },
+            )
+        }
+        val ei = editIdx
+        if (ei != null && ei in p.items.indices) {
+            val it0 = p.items[ei]
+            val i = ei
             val d = catalog.defOf(it0.id)
             val unit = if (d?.kind == "time") "Секунды" else "Повторы"
             val st = if (d?.kind == "time") 5 else 1
-            DiaryCard {
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                    Text(d?.name ?: it0.id, Modifier.weight(1f), style = MaterialTheme.typography.titleSmall)
-                    QuietButton("↑", { vm.updateProgram(id) { q -> q.copy(items = swap(q.items, i, i - 1)) } }, enabled = i > 0, modifier = Modifier.semantics { contentDescription = "Выше" })
-                    QuietButton("↓", { vm.updateProgram(id) { q -> q.copy(items = swap(q.items, i, i + 1)) } }, enabled = i < p.items.size - 1, modifier = Modifier.semantics { contentDescription = "Ниже" })
-                    QuietButton("✕", { vm.updateProgram(id) { q -> q.copy(items = q.items.filterIndexed { k, _ -> k != i }) } }, modifier = Modifier.semantics { contentDescription = "Убрать из программы" })
-                }
+            DiarySheet({ editIdx = null }, title = d?.name ?: it0.id, subtitle = "Упражнение ${i + 1} из ${p.items.size}", icon = "gym") { close ->
                 Stepper("Подходы", it0.sets.toString(),
                     { vm.updateProgram(id) { q -> q.copy(items = q.items.mapIndexed { k, x -> if (k == i) x.copy(sets = Js.clamp(x.sets - 1, 1, 10)) else x }) } },
                     { vm.updateProgram(id) { q -> q.copy(items = q.items.mapIndexed { k, x -> if (k == i) x.copy(sets = Js.clamp(x.sets + 1, 1, 10)) else x }) } })
@@ -577,14 +585,22 @@ private fun ProgramEditor(vm: TrainingViewModel, data: TrainingData, id: String,
                 Stepper("до", it0.hi.toString(),
                     { vm.updateProgram(id) { q -> q.copy(items = q.items.mapIndexed { k, x -> if (k == i) Js.clamp(x.hi - st, 1, 999).let { hi -> x.copy(hi = hi, lo = minOf(x.lo, hi)) } else x }) } },
                     { vm.updateProgram(id) { q -> q.copy(items = q.items.mapIndexed { k, x -> if (k == i) Js.clamp(x.hi + st, 1, 999).let { hi -> x.copy(hi = hi, lo = minOf(x.lo, hi)) } else x }) } })
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    SecondaryButton("↑ Выше", { vm.updateProgram(id) { q -> q.copy(items = swap(q.items, i, i - 1)) }; editIdx = i - 1 }, enabled = i > 0)
+                    SecondaryButton("↓ Ниже", { vm.updateProgram(id) { q -> q.copy(items = swap(q.items, i, i + 1)) }; editIdx = i + 1 }, enabled = i < p.items.size - 1)
+                }
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    PrimaryButton("Готово", close)
+                    DangerButton("Убрать", { close(); vm.updateProgram(id) { q -> q.copy(items = q.items.filterIndexed { k, _ -> k != i }) } })
+                }
             }
         }
-        QuietButton("+ Добавить упражнение", { pick = !pick })
+        SecondaryButton("+ Добавить упражнение", { pick = true })
         if (pick) {
-            ExercisePicker(vm, data, p.items.map { it.id }, onPick = { d ->
+            ExercisePickerSheet(vm, data, p.items.map { it.id }, onDismiss = { pick = false }) { d ->
                 vm.updateProgram(id) { q -> q.copy(items = q.items + ru.diary.training.domain.ProgramItem(d.id, d.sets, d.lo, d.hi)) }
                 vm.message("Добавлено: ${d.name}")
-            }, onClose = { pick = false })
+            }
         }
         SectionTitle("Разминка")
         DebouncedField("По одному пункту в строке", p.warm.joinToString("\n"), { t ->

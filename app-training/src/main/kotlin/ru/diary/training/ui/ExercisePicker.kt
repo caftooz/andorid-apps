@@ -1,5 +1,7 @@
 package ru.diary.training.ui
 
+import ru.diary.core.ui.Reveal
+import ru.diary.core.ui.DiarySheet
 import ru.diary.core.ui.SegmentedControl
 import ru.diary.core.ui.TileOption
 import ru.diary.core.ui.IconTiles
@@ -54,6 +56,14 @@ fun kindMeta(d: ExDef): String {
     return Texts.KIND_NAME.getValue(d.kind) + " · ${d.sets} × $reps" + (if (d.kind == "time") " с" else "") + (if (d.custom) " · своё" else "")
 }
 
+/** Всплывающая панель выбора упражнения. */
+@Composable
+fun ExercisePickerSheet(vm: TrainingViewModel, data: TrainingData, excludeIds: List<String>, onDismiss: () -> Unit, onPick: (ExDef) -> Unit) {
+    DiarySheet(onDismiss, title = "Добавить упражнение", subtitle = "Каталог и ваши упражнения", icon = "plus") {
+        ExercisePicker(vm, data, excludeIds, onPick)
+    }
+}
+
 /**
  * Выбор упражнения для программы или текущей тренировки: каталог без уже добавленных,
  * удаление своих упражнений и форма создания нового.
@@ -64,7 +74,6 @@ fun ExercisePicker(
     data: TrainingData,
     excludeIds: List<String>,
     onPick: (ExDef) -> Unit,
-    onClose: () -> Unit,
 ) {
     val catalog = ExerciseCatalog(data.customEx)
     val list = catalog.all.filter { it.id !in excludeIds }
@@ -75,11 +84,7 @@ fun ExercisePicker(
     var step by rememberSaveable { mutableDoubleStateOf(1.0) }
     var tip by rememberSaveable { mutableStateOf("") }
 
-    DiaryCard {
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-            Text("Добавить упражнение", style = MaterialTheme.typography.titleMedium)
-            QuietButton("Закрыть", onClose)
-        }
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         if (list.isEmpty()) Muted("Все упражнения из списка уже добавлены. Создайте своё ниже.")
         list.forEach { d ->
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
@@ -98,7 +103,7 @@ fun ExercisePicker(
             )
         }
         QuietButton(if (formOpen) "Скрыть форму" else "+ Создать своё упражнение", { formOpen = !formOpen })
-        if (formOpen) {
+        Reveal(formOpen) {
             Callout {
                 LabeledField("Название", name, { name = it }, maxLength = 80, placeholder = "Например, отжимания на брусьях дома")
                 Muted("Тип")

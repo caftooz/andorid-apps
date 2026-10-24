@@ -1,5 +1,6 @@
 package ru.diary.nutrition.ui
 
+import ru.diary.core.ui.DiarySheet
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -57,38 +58,45 @@ fun ScanButtons(vm: NutritionViewModel) {
                     .addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN),
             )
         }, Modifier.weight(1f))
-        SecondaryButton(if (typing) "Скрыть" else "Ввести код", { typing = !typing })
+        SecondaryButton("Ввести код", { typing = true })
     }
-    Reveal(typing) {
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            LabeledField("Цифры под штрих-кодом", code, { code = it.filter(Char::isDigit) }, Modifier.weight(1f), numeric = true, maxLength = 14)
-            SecondaryButton("Найти", { vm.onBarcode(code); code = ""; typing = false }, enabled = code.length >= 8)
-        }
+    if (typing) DiarySheet({ typing = false }, title = "Ввести штрих-код", subtitle = "8–14 цифр под полосками", icon = "barcode") { close ->
+        LabeledField("Цифры под штрих-кодом", code, { code = it.filter(Char::isDigit) }, numeric = true, maxLength = 14)
+        PrimaryButton("Найти", { val c = code; code = ""; close(); vm.onBarcode(c) }, Modifier.fillMaxWidth(), enabled = code.length >= 8)
     }
 }
 
-/** Карточка текущего сканирования: поиск, выбор граммов или ручной ввод КБЖУ. */
+/**
+ * Всплывающая панель сканирования: поиск, выбор граммов или ручной ввод КБЖУ.
+ * Панель одна на все шаги, поэтому при переходе «не найден → ввод → граммы» она не закрывается.
+ */
 @Composable
 fun ScanPanel(vm: NutritionViewModel, scan: ScanState, date: String, today: String) {
+    if (scan == ScanState.Idle) return
+    DiarySheet(vm::cancelScan) { close -> ScanContent(vm, scan, date, today, close) }
+}
+
+@Composable
+private fun ScanContent(vm: NutritionViewModel, scan: ScanState, date: String, today: String, close: () -> Unit) {
     when (scan) {
         ScanState.Idle -> Unit
-        is ScanState.Looking -> DiaryCard {
+        is ScanState.Looking -> Column {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                 CircularProgressIndicator(Modifier.size(28.dp), strokeWidth = 3.dp)
                 Column(Modifier.weight(1f)) {
                     Text("Ищу продукт", style = MaterialTheme.typography.titleMedium)
                     Muted("Штрих-код ${scan.code} · Open Food Facts")
                 }
-                QuietButton("Отмена", vm::cancelScan)
+                QuietButton("Отмена", close)
             }
         }
-        is ScanState.Ready -> ReadyCard(vm, scan.product, scan.saved, date, today)
-        is ScanState.Manual -> ManualCard(vm, scan)
+        is ScanState.Ready -> ReadyCard(vm, scan.product, scan.saved, date, today, close)
+        is ScanState.Manual -> ManualCard(vm, scan, close)
     }
 }
 
 @Composable
-private fun ReadyCard(vm: NutritionViewModel, p: Product, saved: Boolean, date: String, today: String) {
+private fun ReadyCard(vm: NutritionViewModel, p: Product, saved: Boolean, date: String, today: String, close: () -> Unit) {
     // Граммы: 100 г, вся упаковка (если вес известен) или своё значение.
     var choice by rememberSaveable(p.code) { mutableStateOf(if (p.packG != null) "pack" else "100") }
     var own by rememberSaveable(p.code) { mutableStateOf("") }
@@ -99,7 +107,7 @@ private fun ReadyCard(vm: NutritionViewModel, p: Product, saved: Boolean, date: 
         else -> 100
     }
     val k = grams / 100.0
-    DiaryCard {
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             IconBadge("barcode", MaterialTheme.colorScheme.primary)
             Column(Modifier.weight(1f)) {
@@ -128,12 +136,12 @@ private fun ReadyCard(vm: NutritionViewModel, p: Product, saved: Boolean, date: 
             )
         }
         PrimaryButton(
-            "Съел · " + ru.diary.core.date.Dates.label(date, today).lowercase(), { vm.eatProduct(p, grams, date) },
+            "Съел · " + ru.diary.core.date.Dates.label(date, today).lowercase(), { vm.eatProduct(p, grams, date, closePanel = false); close() },
             Modifier.fillMaxWidth(), enabled = grams in 1..5000,
         )
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             SecondaryButton("Изменить", { vm.editProduct(p) })
-            QuietButton("Отмена", vm::cancelScan)
+            QuietButton("Отмена", close)
         }
         if (saved) {
             if (askDelete) ru.diary.core.ui.ConfirmBox("Удалить «${p.name}» из моих продуктов? Записи в дневнике останутся.", "Да, удалить", { vm.deleteProduct(p.code) }, { askDelete = false }, cancelLabel = "Нет")
@@ -143,7 +151,7 @@ private fun ReadyCard(vm: NutritionViewModel, p: Product, saved: Boolean, date: 
 }
 
 @Composable
-private fun ManualCard(vm: NutritionViewModel, s: ScanState.Manual) {
+private fun ManualCard(vm: NutritionViewModel, s: ScanState.Manual, close: () -> Unit) {
     val d = s.draft
     fun num(v: Double?) = if (v == null || v == 0.0) "" else Js.fmt(v)
     var name by rememberSaveable(s.code) { mutableStateOf(d?.name.orEmpty()) }
@@ -153,7 +161,7 @@ private fun ManualCard(vm: NutritionViewModel, s: ScanState.Manual) {
     var fat by rememberSaveable(s.code) { mutableStateOf(num(d?.f)) }
     var carb by rememberSaveable(s.code) { mutableStateOf(num(d?.c)) }
     var pack by rememberSaveable(s.code) { mutableStateOf(d?.packG?.toString().orEmpty()) }
-    DiaryCard {
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             IconBadge("barcode", DiaryTheme.extras.accent)
             Column(Modifier.weight(1f)) {
@@ -176,7 +184,7 @@ private fun ManualCard(vm: NutritionViewModel, s: ScanState.Manual) {
         LabeledField("Вес упаковки, г, по желанию", pack, { pack = it.filter(Char::isDigit) }, numeric = true, maxLength = 5)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             PrimaryButton("Сохранить", { vm.saveManualProduct(s.code, name, brand, kcal, prot, fat, carb, pack) })
-            QuietButton("Отмена", vm::cancelScan)
+            QuietButton("Отмена", close)
         }
     }
 }
