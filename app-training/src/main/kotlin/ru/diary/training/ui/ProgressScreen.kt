@@ -1,5 +1,6 @@
 package ru.diary.training.ui
 
+import ru.diary.core.ui.HeroHeader
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -50,6 +51,7 @@ import ru.diary.training.domain.WEEKLY_GOAL
 fun ProgressScreen(vm: TrainingViewModel, data: TrainingData, today: String, startTab: String, onGoto: (String) -> Unit, integration: TrainingIntegration) {
     var tab by rememberSaveable(startTab) { mutableStateOf(startTab.takeIf { it in setOf("train", "ex", "max", "log") } ?: "train") }
     TabColumn {
+        HeroHeader("Прогресс", subtitle = "Активность, рекорды и замеры", icon = "trend")
         ChoiceChips(listOf("train" to "Активность", "ex" to "Упражнения", "max" to "Замеры", "log" to "Журнал"), tab, { tab = it })
         when (tab) {
             "ex" -> ExercisesTab(data, today)

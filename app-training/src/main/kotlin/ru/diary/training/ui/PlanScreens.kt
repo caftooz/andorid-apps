@@ -1,5 +1,6 @@
 package ru.diary.training.ui
 
+import ru.diary.core.ui.HeroHeader
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -89,7 +90,7 @@ internal fun PlanOverview(vm: TrainingViewModel, data: TrainingData, today: Stri
     val di = Dates.dayIndex(today)
     var sel by rememberSaveable { mutableIntStateOf(di) }
     TabColumn {
-        ScreenTitle(plan.name)
+        HeroHeader(plan.name, subtitle = "План тренировок", icon = "calendar")
         PlanStatusCard(vm, data, today)
         SectionTitle("Неделя")
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {

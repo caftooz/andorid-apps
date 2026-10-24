@@ -42,6 +42,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.diary.core.util.Js
+import ru.diary.core.theme.DiaryTheme
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.drawscope.rotate
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.log10
@@ -103,9 +106,11 @@ fun LineChart(
 ) {
     if (points.isEmpty()) return
     val measurer = rememberTextMeasurer()
-    val grid = MaterialTheme.colorScheme.outline
+    val grid = MaterialTheme.colorScheme.outline.copy(alpha = 0.6f)
     val muted = MaterialTheme.colorScheme.onSurfaceVariant
     val ink = MaterialTheme.colorScheme.onSurface
+    val accent = DiaryTheme.extras.accent
+    val surface = MaterialTheme.colorScheme.surface
     val labelStyle = TextStyle(color = muted, fontSize = 11.sp)
     val valueStyle = TextStyle(color = ink, fontSize = 12.sp, fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
     val reveal = revealProgress(points)
@@ -129,7 +134,7 @@ fun LineChart(
         fun xs(i: Int) = if (n == 1) left + (w - left - right) / 2 else left + (w - left - right) * i / (n - 1)
         fun ys(v: Double) = (top + (h - top - bottom) * (1 - (v - lo) / (hi - lo))).toFloat()
         for (t in listOf(lo, (lo + hi) / 2, hi)) {
-            drawLine(grid, Offset(left, ys(t)), Offset(w - right, ys(t)), strokeWidth = 1.dp.toPx())
+            drawLine(grid, Offset(left, ys(t)), Offset(w - right, ys(t)), strokeWidth = 1.dp.toPx(), pathEffect = PathEffect.dashPathEffect(floatArrayOf(2.dp.toPx(), 4.dp.toPx())))
             text(measurer, Js.fmt(t), left - 6.dp.toPx(), ys(t), labelStyle, Anchor.End)
         }
         if (goal != null) {
@@ -147,14 +152,26 @@ fun LineChart(
                 addPath(line)
                 lineTo(xs(n - 1), ys(lo.toDouble())); lineTo(xs(0), ys(lo.toDouble())); close()
             }
+            val stroke = Brush.horizontalGradient(listOf(color, accent), left, w - right)
             clipRect(right = left + (w - left) * reveal + 8.dp.toPx()) {
-                drawPath(area, color.copy(alpha = 0.12f))
-                drawPath(line, color, style = Stroke(2.5.dp.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round))
+                drawPath(area, Brush.verticalGradient(listOf(color.copy(alpha = 0.32f), accent.copy(alpha = 0.10f), Color.Transparent), top, h - bottom))
+                drawPath(line, color.copy(alpha = 0.18f), style = Stroke(9.dp.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round))
+                drawPath(line, stroke, style = Stroke(3.dp.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round))
             }
         }
         points.forEachIndexed { i, p ->
             val last = i == n - 1
-            if (n == 1 || xs(i) <= left + (w - left) * reveal) drawCircle(color, if (last) 5.dp.toPx() else 3.dp.toPx(), Offset(xs(i), ys(p.value)))
+            val c = Offset(xs(i), ys(p.value))
+            if (n == 1 || xs(i) <= left + (w - left) * reveal) {
+                if (last) {
+                    drawCircle(accent.copy(alpha = 0.22f), 11.dp.toPx(), c)
+                    drawCircle(accent, 6.dp.toPx(), c)
+                    drawCircle(surface, 2.5.dp.toPx(), c)
+                } else {
+                    drawCircle(surface, 4.dp.toPx(), c)
+                    drawCircle(color, 2.5.dp.toPx(), c)
+                }
+            }
         }
         val lastX = xs(n - 1).coerceIn(left + 14.dp.toPx(), w - right)
         if (reveal > 0.95f) text(measurer, Js.fmt(vals.last()), lastX, ys(vals.last()) - 12.dp.toPx(), valueStyle, if (n == 1) Anchor.Center else Anchor.End)
@@ -180,8 +197,9 @@ fun StackedBarChart(
     height: Dp = 180.dp,
 ) {
     val measurer = rememberTextMeasurer()
-    val grid = MaterialTheme.colorScheme.outline
+    val grid = MaterialTheme.colorScheme.outline.copy(alpha = 0.6f)
     val muted = MaterialTheme.colorScheme.onSurfaceVariant
+    val track = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f)
     val labelStyle = TextStyle(color = muted, fontSize = 11.sp)
     val grow = revealProgress(columns)
     Canvas(
@@ -205,15 +223,18 @@ fun StackedBarChart(
         }
         val n = columns.size
         val slot = (w - left - right) / n
-        val bw = slot * 0.6f
+        val bw = min(slot * 0.62f, 28.dp.toPx())
+        val rad = androidx.compose.ui.geometry.CornerRadius(min(bw / 2, 6.dp.toPx()))
         columns.forEachIndexed { i, c ->
             val x = left + slot * i + (slot - bw) / 2
+            drawRoundRect(track, Offset(x, top), Size(bw, ys(0.0) - top), rad)
             var base = 0.0
             for (p in c.parts) {
                 if (p.value <= 0) continue
                 val y1 = ys(base + p.value); val y0 = ys(base)
-                val hh = max(0f, y0 - y1 - 1.dp.toPx()) * grow
-                drawRect(p.color, Offset(x, y0 - 1.dp.toPx() - hh), Size(bw, hh))
+                val hh = max(0f, y0 - y1 - 2.dp.toPx()) * grow
+                val tl = Offset(x, y0 - 1.dp.toPx() - hh)
+                drawRoundRect(Brush.verticalGradient(listOf(p.color, p.color.copy(alpha = 0.7f)), tl.y, tl.y + hh), tl, Size(bw, hh), rad)
                 base += p.value
             }
             text(measurer, c.label, x + bw / 2, h - 10.dp.toPx(), labelStyle, Anchor.Center)
@@ -251,7 +272,8 @@ fun RingIndicator(
     color: Color = MaterialTheme.colorScheme.primary,
     size: Dp = 76.dp,
 ) {
-    val track = MaterialTheme.colorScheme.surfaceVariant
+    val track = color.copy(alpha = 0.14f)
+    val accent = DiaryTheme.extras.accent
     val sweep by animateFloatAsState(fraction.coerceIn(0f, 1f), tween(900, easing = FastOutSlowInEasing), label = "ring")
     val measurer = rememberTextMeasurer()
     val ink = MaterialTheme.colorScheme.onSurface
@@ -259,11 +281,18 @@ fun RingIndicator(
     val big = TextStyle(color = ink, fontSize = 17.sp, fontWeight = androidx.compose.ui.text.font.FontWeight.Bold, fontFamily = ru.diary.core.theme.UnboundedFamily)
     val small = TextStyle(color = muted, fontSize = 11.sp)
     Canvas(modifier.size(size).clearAndSetSemantics { contentDescription = "$centerText $subText"; role = Role.Image }) {
-        val stroke = 7.dp.toPx()
+        val stroke = 8.dp.toPx()
         val d = this.size.minDimension - stroke
         val tl = Offset(stroke / 2, stroke / 2)
         drawArc(track, 0f, 360f, false, tl, Size(d, d), style = Stroke(stroke))
-        drawArc(color, -90f, 360f * sweep, false, tl, Size(d, d), style = Stroke(stroke, cap = StrokeCap.Round))
+        if (sweep > 0f) {
+            val c = Offset(this.size.width / 2, this.size.height / 2)
+            val grad = Brush.sweepGradient(0f to color, sweep.coerceAtLeast(0.01f) to accent, 1f to color, center = c)
+            rotate(-90f, c) {
+                drawArc(color.copy(alpha = 0.18f), 0f, 360f * sweep, false, tl, Size(d, d), style = Stroke(stroke * 2f, cap = StrokeCap.Round))
+                drawArc(grad, 0f, 360f * sweep, false, tl, Size(d, d), style = Stroke(stroke, cap = StrokeCap.Round))
+            }
+        }
         text(measurer, centerText, this.size.width / 2, this.size.height / 2 - 5.dp.toPx(), big, Anchor.Center)
         text(measurer, subText, this.size.width / 2, this.size.height / 2 + 12.dp.toPx(), small, Anchor.Center)
     }
@@ -279,14 +308,18 @@ fun MeterBar(
     mark: Float? = null,
     height: Dp = 10.dp,
 ) {
-    val track = MaterialTheme.colorScheme.surfaceVariant
+    val track = color.copy(alpha = 0.14f)
     val shown by animateFloatAsState(fraction.coerceIn(0f, 1f), tween(700, easing = FastOutSlowInEasing), label = "meter")
     val markColor = MaterialTheme.colorScheme.onSurface
     Canvas(modifier.fillMaxWidth().height(height + 6.dp).clearAndSetSemantics { contentDescription = description; role = Role.Image }) {
         val h = height.toPx(); val y = (size.height - h) / 2
         drawRoundRect(track, Offset(0f, y), Size(size.width, h), androidx.compose.ui.geometry.CornerRadius(h / 2))
         val fw = size.width * shown
-        if (fw > 0) drawRoundRect(color, Offset(0f, y), Size(max(fw, h), h), androidx.compose.ui.geometry.CornerRadius(h / 2))
+        if (fw > 0) {
+            val fill = Brush.horizontalGradient(listOf(color.copy(alpha = 0.65f), color), 0f, max(fw, h))
+            drawRoundRect(fill, Offset(0f, y), Size(max(fw, h), h), androidx.compose.ui.geometry.CornerRadius(h / 2))
+            drawCircle(Color.White.copy(alpha = 0.55f), h * 0.22f, Offset(max(fw, h) - h / 2, y + h / 2))
+        }
         if (mark != null) drawLine(markColor, Offset(size.width * mark, y - 3.dp.toPx()), Offset(size.width * mark, y + h + 3.dp.toPx()), 2.dp.toPx())
     }
 }
@@ -306,20 +339,26 @@ fun Sparkline(values: List<Double>, modifier: Modifier = Modifier, goal: Double?
             val x = 4.dp.toPx() + i * (size.width - 8.dp.toPx()) / (values.size - 1)
             if (i == 0) path.moveTo(x, y(v)) else path.lineTo(x, y(v))
         }
+        val x0 = 4.dp.toPx(); val x1 = size.width - 4.dp.toPx()
+        val area = Path().apply { addPath(path); lineTo(x1, size.height); lineTo(x0, size.height); close() }
+        drawPath(area, Brush.verticalGradient(listOf(color.copy(alpha = 0.28f), Color.Transparent)))
         drawPath(path, color, style = Stroke(2.5.dp.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round))
+        drawCircle(color, 3.5.dp.toPx(), Offset(x1, y(values.last())))
     }
 }
 
 /** Ряд точек «сделано / цель» (до 14). */
 @Composable
 fun DotRow(done: Int, total: Int, modifier: Modifier = Modifier, color: Color = MaterialTheme.colorScheme.primary) {
-    val off = MaterialTheme.colorScheme.outline
+    val off = color.copy(alpha = 0.16f)
+    val accent = DiaryTheme.extras.accent
     Row(
         modifier.clearAndSetSemantics { contentDescription = "$done из $total" },
         horizontalArrangement = Arrangement.spacedBy(5.dp),
     ) {
         repeat(min(total, 14)) { i ->
-            Box(Modifier.size(10.dp).background(if (i < done) color else off, CircleShape))
+            if (i < done) Box(Modifier.size(12.dp).background(Brush.linearGradient(listOf(color, accent)), CircleShape))
+            else Box(Modifier.size(12.dp).background(off, CircleShape))
         }
     }
 }
@@ -338,7 +377,7 @@ fun GroupedBarChart(
     height: Dp = 180.dp,
 ) {
     val measurer = rememberTextMeasurer()
-    val grid = MaterialTheme.colorScheme.outline
+    val grid = MaterialTheme.colorScheme.outline.copy(alpha = 0.6f)
     val labelStyle = TextStyle(color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 11.sp)
     val grow = revealProgress(columns)
     Canvas(modifier.fillMaxWidth().height(height).clearAndSetSemantics { contentDescription = description; role = Role.Image }) {
@@ -360,7 +399,13 @@ fun GroupedBarChart(
             val x0 = left + slot * i + slot * 0.08f
             for ((k, pair) in listOf(c.a to colorA, c.b to colorB).withIndex()) {
                 val hh = (ys(0.0) - ys(pair.first)) * grow
-                if (hh > 0) drawRect(pair.second, Offset(x0 + k * (bw + 2.dp.toPx()), ys(0.0) - hh), Size(bw, hh))
+                if (hh > 0) {
+                    val tl = Offset(x0 + k * (bw + 2.dp.toPx()), ys(0.0) - hh)
+                    drawRoundRect(
+                        Brush.verticalGradient(listOf(pair.second, pair.second.copy(alpha = 0.6f)), tl.y, tl.y + hh), tl, Size(bw, hh),
+                        androidx.compose.ui.geometry.CornerRadius(min(bw / 2, 5.dp.toPx())),
+                    )
+                }
             }
             text(measurer, c.label, left + slot * i + slot / 2, h - 10.dp.toPx(), labelStyle, Anchor.Center)
         }

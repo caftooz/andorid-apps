@@ -8,7 +8,7 @@
 
 | Путь | Что внутри |
 | --- | --- |
-| `core/` | Общий модуль: тема (Material You + статичная палитра), шрифты Onest и Unbounded, графики на Canvas, общие компоненты, утилиты дат и JS-совместимых чисел, **контракт обмена данными** и клиент (`ru.diary.core.contract`) |
+| `core/` | Общий модуль: собственная дизайн-система (фирменные палитры «Пульс» и «Свежесть», градиентные шапки, стеклянные карточки, фон со световыми пятнами; Material You — по желанию), шрифты Onest и Unbounded, графики на Canvas с градиентами, общие компоненты, утилиты дат и JS-совместимых чисел, **контракт обмена данными** и клиент (`ru.diary.core.contract`) |
 | `app-training/` | «Тренировки», пакет `ru.diary.training`: `domain` (правила, импорт/экспорт), `data` (Room, DataStore), `ui` (Compose), `rest` (таймер отдыха) |
 | `app-nutrition/` | «Рацион», пакет `ru.diary.nutrition`, та же схема слоёв |
 | `tools/golden/` | Node-скрипты, которые берут данные и эталонные результаты прямо из HTML-прототипов |
@@ -113,7 +113,7 @@ Debug-сборки обоих приложений подписаны общим
 
 Нужные секреты репозитория (Settings → Secrets and variables → Actions): `DIARY_KEYSTORE_BASE64` (файл `.jks` в base64),
 `DIARY_KEYSTORE_PASSWORD`, `DIARY_KEY_ALIAS`, `DIARY_KEY_PASSWORD`.
-Выпуск версии: поднять `diary.version`, закоммитить и запушить, затем `git tag v0.2.3 && git push origin v0.2.3`.
+Выпуск версии: поднять `diary.version`, закоммитить и запушить, затем `git tag v0.2.3 && git push origin v0.2.3` или запустить Actions → Release → Run workflow (тег создастся сам).
 
 ## Совместимость с веб-версией
 

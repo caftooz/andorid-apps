@@ -1,5 +1,14 @@
 package ru.diary.nutrition.ui
 
+import androidx.compose.foundation.background
+import ru.diary.core.charts.BarPart
+import ru.diary.core.charts.BarColumn
+import ru.diary.core.charts.StackedBarChart
+import ru.diary.core.charts.RingIndicator
+import ru.diary.core.ui.EmptyState
+import ru.diary.core.ui.IconBubble
+import ru.diary.core.ui.HeroStat
+import ru.diary.core.ui.HeroHeader
 import android.net.Uri
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -82,6 +91,17 @@ fun TabColumn(content: @Composable ColumnScope.() -> Unit) {
 
 // ---------- Блюда ----------
 
+/** Значок и цвет категории блюда. */
+private fun catIcon(cat: String) = when (cat) { "breakfast" -> "sun"; "side" -> "star"; "snack" -> "flame"; else -> "dish" }
+
+@Composable
+private fun catColor(cat: String) = when (cat) {
+    "breakfast" -> DiaryTheme.extras.protein
+    "side" -> DiaryTheme.extras.cardio
+    "snack" -> DiaryTheme.extras.volley
+    else -> MaterialTheme.colorScheme.primary
+}
+
 @Composable
 fun DishesScreen(vm: NutritionViewModel, data: NutritionData, today: String, date: String, onDate: (String) -> Unit) {
     var portion by rememberSaveable { mutableDoubleStateOf(1.0) }
@@ -93,7 +113,13 @@ fun DishesScreen(vm: NutritionViewModel, data: NutritionData, today: String, dat
     val y = Dates.addDays(today, -1)
 
     TabColumn {
-        ScreenTitle("Блюда")
+        HeroHeader("Блюда", subtitle = "Записываю на: " + Dates.label(date, today).lowercase(), icon = "dish") {
+            val t = NutritionLogic.totals(data, date)
+            Row(Modifier.fillMaxWidth().padding(top = 6.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                HeroStat("${t.protein} г", "белка", Modifier.weight(1f))
+                HeroStat("${t.kcal}", "ккал", Modifier.weight(1f))
+            }
+        }
         Muted("Записываю на")
         ChoiceChips(
             buildList { add(today to "Сегодня"); add(y to "Вчера"); if (date != today && date != y) add(date to Dates.label(date, today)) },
@@ -108,7 +134,7 @@ fun DishesScreen(vm: NutritionViewModel, data: NutritionData, today: String, dat
         }
         val list = NutritionLogic.ordered(data, today, byAge).filter { cat == "all" || it.cat == cat }
         list.forEachIndexed { i, d -> Appear(index = i) { DishRow(vm, data, d, today, date, portion, open == d.id, { open = if (open == d.id) null else d.id }, askDelete == d.id, { askDelete = it }) } }
-        if (list.isEmpty()) Muted("В этой категории пока нет блюд.")
+        if (list.isEmpty()) EmptyState("dish", "В этой категории пока нет блюд.")
 
         QuietButton(if (addOpen) "Скрыть форму" else "Добавить своё блюдо", { addOpen = !addOpen })
         Reveal(addOpen) { AddDishForm(vm) { addOpen = false } }
@@ -128,7 +154,8 @@ private fun DishRow(
     }
     val stale = ago == null || ago >= 7
     DiaryCard(onClick = onToggle) {
-        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            IconBubble(catIcon(d.cat), catColor(d.cat), size = 44.dp)
             Column(
                 Modifier.weight(1f).heightIn(min = MinTouch).semantics { stateDescription = if (open) "развёрнуто" else "свёрнуто" },
             ) {
@@ -205,25 +232,37 @@ fun DiaryScreen(vm: NutritionViewModel, data: NutritionData, today: String, date
     var oopProtein by rememberSaveable { mutableStateOf("") }
 
     TabColumn {
+        HeroHeader(Dates.label(date, today), subtitle = "Дневник питания", icon = "book") {
+            Row(Modifier.fillMaxWidth().padding(top = 6.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                HeroStat("${es.size}", Js.plural(es.size, "приём", "приёма", "приёмов"), Modifier.weight(1f))
+                HeroStat("${t.kcal}", "ккал", Modifier.weight(1f))
+            }
+        }
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-            SecondaryButton("‹", { onDate(Dates.addDays(date, -1)) }, Modifier.semantics { contentDescription = "Предыдущий день" })
-            Text(Dates.label(date, today), style = MaterialTheme.typography.titleLarge)
-            SecondaryButton("›", { onDate(Dates.addDays(date, 1)) }, enabled = date < today, modifier = Modifier.semantics { contentDescription = "Следующий день" })
+            SecondaryButton("‹ Раньше", { onDate(Dates.addDays(date, -1)) }, Modifier.semantics { contentDescription = "Предыдущий день" })
+            SecondaryButton("Позже ›", { onDate(Dates.addDays(date, 1)) }, enabled = date < today, modifier = Modifier.semantics { contentDescription = "Следующий день" })
         }
         DiaryCard {
-            Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("${t.protein}", style = MaterialTheme.typography.headlineMedium, color = DiaryTheme.extras.protein)
-                Muted("г белка · цель ${Goals.proteinMin}–${Goals.proteinMax} г")
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                RingIndicator(
+                    t.protein.toFloat() / Goals.proteinMin, "${t.protein}", "из ${Goals.proteinMin} г",
+                    color = if (t.protein >= Goals.proteinMin) MaterialTheme.colorScheme.primary else DiaryTheme.extras.protein, size = 96.dp,
+                )
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Text("Белок за день", style = MaterialTheme.typography.titleMedium)
+                    Muted("Цель ${Goals.proteinMin}–${Goals.proteinMax} г")
+                    MeterBar(
+                        (t.kcal.toFloat() / Goals.kcal).coerceAtMost(1f), "Калории за день: ${t.kcal} из примерно ${Goals.kcal}",
+                        color = DiaryTheme.extras.accent,
+                    )
+                    Muted("${t.kcal} из ~${Goals.kcal} ккал")
+                }
             }
-            MeterBar(
-                (t.protein.toFloat() / Goals.proteinMin).coerceAtMost(1f), "Белок за день: ${t.protein} из ${Goals.proteinMin} граммов",
-                color = if (t.protein >= Goals.proteinMin) MaterialTheme.colorScheme.primary else DiaryTheme.extras.protein,
-            )
-            Muted("${t.kcal} ккал · ориентир около ${Goals.kcal} ккал. Значения приблизительные.")
+            Muted("Значения приблизительные.")
         }
         if (link is TrainingLink.Ready) DayBalance(link, date, t.kcal, t.protein)
 
-        if (es.isEmpty()) Muted("За этот день записей нет. Отметьте блюдо кнопкой «Съел» на вкладке «Блюда».")
+        if (es.isEmpty()) EmptyState("book", "За этот день записей нет. Отметьте блюдо кнопкой «Съел» на вкладке «Блюда».")
         else DiaryCard { es.forEach { EntryRow(it) { vm.removeEntry(it) } } }
 
         QuietButton(if (oopOpen) "Скрыть форму" else "Приём вне плана (кафе, гости)", { oopOpen = !oopOpen })
@@ -301,7 +340,22 @@ fun dayHint(type: String): String? = when (type) {
 fun WeekScreen(data: NutritionData, today: String, link: TrainingLink) {
     val w = NutritionLogic.week(data, today)
     TabColumn {
-        ScreenTitle("Белок за 7 дней")
+        HeroHeader("Неделя", subtitle = "Белок за 7 дней", icon = "chart") {
+            Row(Modifier.fillMaxWidth().padding(top = 6.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                HeroStat(if (w.loggedDays > 0) "${w.avgProtein} г" else "–", "белка в среднем", Modifier.weight(1f))
+                HeroStat("${w.loggedDays} из 7", "дней с записями", Modifier.weight(1f))
+            }
+        }
+        DiaryCard {
+            val primary = MaterialTheme.colorScheme.primary
+            val low = DiaryTheme.extras.protein
+            StackedBarChart(
+                w.days.map { (d, p) -> BarColumn(Dates.ddmm(d), listOf(BarPart(p.toDouble(), if (p >= Goals.proteinMin) primary else low))) },
+                "Белок по дням за неделю: " + w.days.joinToString("; ") { (d, p) -> "${Dates.ddmm(d)} — $p г" },
+                goal = Goals.proteinMin.toDouble(), minMax = Goals.proteinMin.toDouble(),
+            )
+            Legend(listOf(LegendItem("Норма белка", primary), LegendItem("Меньше ${Goals.proteinMin} г", low)))
+        }
         w.days.forEach { (d, p) ->
             val dt = Dates.parse(d)
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -358,11 +412,14 @@ fun WeekScreen(data: NutritionData, today: String, link: TrainingLink) {
 private fun Stat(value: String, label: String, modifier: Modifier = Modifier) {
     androidx.compose.material3.Surface(
         modifier.semantics(mergeDescendants = true) { contentDescription = "$value $label" },
-        shape = androidx.compose.foundation.shape.RoundedCornerShape(14.dp), color = MaterialTheme.colorScheme.surfaceContainerLow,
-        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.6f)),
+        shape = androidx.compose.foundation.shape.RoundedCornerShape(20.dp), color = DiaryTheme.extras.glass,
+        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.22f)),
     ) {
-        Column(Modifier.padding(12.dp)) {
-            Text(value, style = MaterialTheme.typography.titleLarge)
+        Column(
+            Modifier.background(androidx.compose.ui.graphics.Brush.linearGradient(listOf(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f), androidx.compose.ui.graphics.Color.Transparent)))
+                .padding(14.dp),
+        ) {
+            Text(value, style = MaterialTheme.typography.titleLarge.copy(brush = androidx.compose.ui.graphics.Brush.linearGradient(listOf(MaterialTheme.colorScheme.primary, DiaryTheme.extras.accent))))
             Muted(label)
         }
     }
@@ -407,14 +464,14 @@ fun SettingsScreen(vm: NutritionViewModel, link: TrainingLink) {
     }
 
     TabColumn {
-        ScreenTitle("Настройки")
+        HeroHeader("Настройки", subtitle = "Тема, данные и обновления", icon = "sliders")
         SectionTitle("Тема")
         ChoiceChips(listOf(ThemeMode.Light to "Светлая", ThemeMode.Dark to "Тёмная", ThemeMode.System to "По умолчанию"), s.theme, { vm.setTheme(it) })
         Muted("«По умолчанию» следует настройке телефона.")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             Row(Modifier.fillMaxWidth().heightIn(min = MinTouch).clickable(role = Role.Checkbox) { vm.setDynamicColor(!s.dynamicColor) }, verticalAlignment = Alignment.CenterVertically) {
                 androidx.compose.material3.Checkbox(s.dynamicColor, null)
-                Text("Динамические цвета (Material You)", Modifier.padding(start = 8.dp))
+                Text("Цвета обоев (Material You) вместо фирменных", Modifier.padding(start = 8.dp))
             }
         }
         SectionTitle("Где хранятся данные")

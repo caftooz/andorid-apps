@@ -1,5 +1,6 @@
 package ru.diary.training.ui
 
+import ru.diary.core.ui.HeroHeader
 import android.net.Uri
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -76,12 +77,12 @@ fun SettingsScreen(vm: TrainingViewModel, data: TrainingData) {
     }
 
     TabColumn {
-        ScreenTitle("Настройки")
+        HeroHeader("Настройки", subtitle = "Тема, отдых, данные и обновления", icon = "sliders")
         SectionTitle("Тема")
         ChoiceChips(listOf(ThemeMode.Light to "Светлая", ThemeMode.Dark to "Тёмная", ThemeMode.System to "По умолчанию"), s.theme, { vm.setTheme(it) })
         Muted("«По умолчанию» следует настройке телефона.")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            CheckRow("Динамические цвета (Material You)", s.dynamicColor) { vm.setDynamicColor(it) }
+            CheckRow("Цвета обоев (Material You) вместо фирменных", s.dynamicColor) { vm.setDynamicColor(it) }
         }
 
         SectionTitle("Отдых между подходами")
