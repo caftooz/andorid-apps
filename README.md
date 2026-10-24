@@ -113,7 +113,7 @@ Debug-сборки обоих приложений подписаны общим
 
 Нужные секреты репозитория (Settings → Secrets and variables → Actions): `DIARY_KEYSTORE_BASE64` (файл `.jks` в base64),
 `DIARY_KEYSTORE_PASSWORD`, `DIARY_KEY_ALIAS`, `DIARY_KEY_PASSWORD`.
-Выпуск версии: поднять `diary.version`, закоммитить и запушить, затем `git tag v0.2.3 && git push origin v0.2.3`.
+Выпуск версии: поднять `diary.version`, закоммитить и запушить, затем `git tag v0.2.3 && git push origin v0.2.3` или запустить Actions → Release → Run workflow (тег создастся сам).
 
 ## Совместимость с веб-версией
 

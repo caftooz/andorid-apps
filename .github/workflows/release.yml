@@ -1,11 +1,13 @@
 name: Release
 
-# Выпуск новой версии: достаточно запушить тег вида v0.2.3.
+# Выпуск новой версии: достаточно запушить тег вида v0.2.3 или запустить сценарий вручную (Actions → Release → Run workflow):
+# тогда тег v<diary.version> создаётся сам на текущем коммите.
 # Сценарий соберёт подписанные APK обоих приложений и опубликует их в GitHub Releases
 # с теми именами файлов, которые ищет автообновление в приложениях.
 on:
   push:
     tags: ["v*"]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -19,12 +21,15 @@ jobs:
 
       - name: Версия в теге должна совпасть с diary.version
         run: |
-          TAG="${GITHUB_REF_NAME#v}"
           VER="$(grep '^diary.version=' gradle.properties | cut -d= -f2)"
-          if [ "$TAG" != "$VER" ]; then
-            echo "Тег v$TAG не совпадает с diary.version=$VER в gradle.properties"
-            exit 1
+          if [ "$GITHUB_REF_TYPE" = "tag" ]; then
+            TAG="${GITHUB_REF_NAME#v}"
+            if [ "$TAG" != "$VER" ]; then
+              echo "Тег v$TAG не совпадает с diary.version=$VER в gradle.properties"
+              exit 1
+            fi
           fi
+          echo "RELEASE_TAG=v$VER" >> "$GITHUB_ENV"
 
       - uses: actions/setup-java@v4
         with:
@@ -68,7 +73,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "$GITHUB_REF_NAME" \
+          gh release create "$RELEASE_TAG" --target "$GITHUB_SHA" \
             app-training/build/outputs/apk/release/app-training-release.apk \
             app-nutrition/build/outputs/apk/release/app-nutrition-release.apk \
-            --title "${GITHUB_REF_NAME#v}" --generate-notes
+            --title "${RELEASE_TAG#v}" --generate-notes
