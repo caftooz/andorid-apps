@@ -1,5 +1,6 @@
 package ru.diary.training.ui
 
+import ru.diary.core.ui.DiarySheet
 import ru.diary.core.ui.SegmentedControl
 import ru.diary.core.ui.TileOption
 import ru.diary.core.ui.IconTiles
@@ -210,18 +211,20 @@ private fun MaxTab(vm: TrainingViewModel, data: TrainingData, today: String, onG
         DiaryCard {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Text(m.name, Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
-                SecondaryButton(if (open == m.id) "Скрыть" else "+ Замер", { open = if (open == m.id) null else m.id; value = ""; day = null })
+                SecondaryButton("+ Замер", { open = m.id; value = ""; day = null })
             }
             MetricSummary(m, data)
-            if (open == m.id) {
-                if (m.how.isNotEmpty()) Muted(m.how)
-                LabeledField("Результат, ${m.unit}", value, { value = it }, decimal = true)
-                val y = Dates.addDays(today, -1)
-                SegmentedControl(listOf(today to "Сегодня", y to "Вчера"), day ?: today, { day = it })
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    PrimaryButton("Записать", { vm.saveMax(m.id, value, day); if (value.isNotBlank()) open = null })
-                    QuietButton("Отмена", { open = null })
-                }
+        }
+    }
+    metrics.firstOrNull { it.id == open }?.let { m ->
+        DiarySheet({ open = null }, title = m.name, subtitle = "Новый замер", icon = "target") { close ->
+            if (m.how.isNotEmpty()) Muted(m.how)
+            LabeledField("Результат, ${m.unit}", value, { value = it }, decimal = true)
+            val y = Dates.addDays(today, -1)
+            SegmentedControl(listOf(today to "Сегодня", y to "Вчера"), day ?: today, { day = it })
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                PrimaryButton("Записать", { vm.saveMax(m.id, value, day); if (value.isNotBlank()) close() })
+                QuietButton("Отмена", close)
             }
         }
     }

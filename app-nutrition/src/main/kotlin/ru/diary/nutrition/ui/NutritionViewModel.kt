@@ -180,12 +180,13 @@ class NutritionViewModel(
     }
 
     /** «Съел»: запись в дневник; продукт из базы при этом запоминается в «Моих продуктах». */
-    fun eatProduct(p: Product, grams: Int, date: String) {
+    /** `closePanel = false`, когда панель закрывается сама с анимацией. */
+    fun eatProduct(p: Product, grams: Int, date: String, closePanel: Boolean = true) {
         if (grams !in 1..5000) { say("Укажите вес от 1 до 5000 г"); return }
         val e = Products.eat(p, grams, date, nowTime(), clock())
         val stamped = p.copy(updated = clock())
         mutate { d -> d.copy(log = d.log + e, products = listOf(stamped) + d.products.filter { it.code != p.code }) }
-        _scan.value = ScanState.Idle
+        if (closePanel) _scan.value = ScanState.Idle
         say("Записано: ${p.name}, $grams г · ${Dates.label(date, today.value).lowercase()}", "Отменить") { removeQuiet(e.id) }
     }
 

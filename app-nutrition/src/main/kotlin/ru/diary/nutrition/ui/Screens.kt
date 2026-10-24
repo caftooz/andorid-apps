@@ -1,5 +1,7 @@
 package ru.diary.nutrition.ui
 
+import ru.diary.nutrition.domain.Catalog
+import ru.diary.core.ui.DiarySheet
 import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.layout.height
@@ -171,20 +173,23 @@ fun DishesScreen(vm: NutritionViewModel, data: NutritionData, today: String, dat
                 QuietButton(if (byAge) "По алфавиту" else "Давно не ел сверху", { byAge = !byAge })
             }
             val list = NutritionLogic.ordered(data, today, byAge).filter { cat == "all" || it.cat == cat }
-            list.forEachIndexed { i, d -> Appear(index = i) { DishRow(vm, data, d, today, date, portion, open == d.id, { open = if (open == d.id) null else d.id }, askDelete == d.id, { askDelete = it }) } }
+            list.forEachIndexed { i, d -> Appear(index = i) { DishRow(vm, data, d, today, date, portion) { open = d.id } } }
             if (list.isEmpty()) EmptyState("dish", "В этой категории пока нет блюд.")
         }
 
-        QuietButton(if (addOpen) "Скрыть форму" else "Добавить своё блюдо", { addOpen = !addOpen })
-        Reveal(addOpen) { AddDishForm(vm) { addOpen = false } }
+        SecondaryButton("+ Добавить своё блюдо", { addOpen = true })
+    }
+    // Подробности блюда, новое блюдо — во всплывающих панелях поверх списка.
+    Catalog.all(data.custom).firstOrNull { it.id == open }?.let { d ->
+        DishSheet(vm, d, date, today, portion, { portion = it }, askDelete == d.id, { askDelete = it }) { open = null; askDelete = null }
+    }
+    if (addOpen) DiarySheet({ addOpen = false }, title = "Своё блюдо", subtitle = "Ккал и белок на порцию", icon = "plus") { close ->
+        AddDishForm(vm, close)
     }
 }
 
 @Composable
-private fun DishRow(
-    vm: NutritionViewModel, data: NutritionData, d: Dish, today: String, date: String, portion: Double, open: Boolean, onToggle: () -> Unit,
-    askDelete: Boolean, setAsk: (String?) -> Unit,
-) {
+private fun DishRow(vm: NutritionViewModel, data: NutritionData, d: Dish, today: String, date: String, portion: Double, onOpen: () -> Unit) {
     val last = NutritionLogic.lastEaten(data, d.id)
     val ago = last?.let { Dates.daysBetween(it, today) }
     val txt = when {
@@ -192,14 +197,12 @@ private fun DishRow(
         else -> "ел $ago ${Js.plural(ago, "день", "дня", "дней")} назад"
     }
     val stale = ago == null || ago >= 7
-    DiaryCard(onClick = onToggle) {
+    DiaryCard(onClick = onOpen) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             if (!d.custom && d.id in DishPhotos.credits(LocalContext.current)) {
                 DishPhoto(d.id, Modifier.size(64.dp).clip(RoundedCornerShape(18.dp)), sample = 4)
             } else IconBubble(catIcon(d.cat), catColor(d.cat), size = 44.dp)
-            Column(
-                Modifier.weight(1f).heightIn(min = MinTouch).semantics { stateDescription = if (open) "развёрнуто" else "свёрнуто" },
-            ) {
+            Column(Modifier.weight(1f).heightIn(min = MinTouch)) {
                 Text(d.name, style = MaterialTheme.typography.titleSmall)
                 Text(
                     "$txt · ${d.kcal} ккал · Б ${d.p} г", style = MaterialTheme.typography.bodySmall,
@@ -208,30 +211,42 @@ private fun DishRow(
             }
             PrimaryButton("Съел", { vm.eat(d, date, portion) }, Modifier.semantics { contentDescription = "Съел: ${d.name}" })
         }
-        Reveal(open) { DishDetail(vm, d, askDelete, setAsk) }
+    }
+}
+
+/** Блюдо во всплывающей панели: фото, КБЖУ, выбор порции, «Съел», рецепт. */
+@Composable
+private fun DishSheet(
+    vm: NutritionViewModel, d: Dish, date: String, today: String, portion: Double, onPortion: (Double) -> Unit,
+    askDelete: Boolean, setAsk: (String?) -> Unit, onDismiss: () -> Unit,
+) {
+    val credit = if (d.custom) null else DishPhotos.credits(LocalContext.current)[d.id]
+    DiarySheet(onDismiss) { close ->
+        if (credit != null) DishPhoto(d.id, Modifier.fillMaxWidth().height(220.dp).clip(RoundedCornerShape(24.dp)))
+        Column {
+            Text(d.name, style = MaterialTheme.typography.titleLarge)
+            Muted((CAT_NAME[d.cat] ?: "") + (d.time?.let { " · $it" } ?: ""))
+        }
+        Muted("На одну порцию")
+        MacroRow(d.kcal.toDouble(), d.p.toDouble(), (d.f ?: 0).toDouble(), (d.c ?: 0).toDouble())
+        SegmentedControl(PORTIONS.map { it.first to it.second }, portion, onPortion)
+        PrimaryButton(
+            "Съел · ${portionLabel(portion)} · ${Dates.label(date, today).lowercase()}", { vm.eat(d, date, portion); close() }, Modifier.fillMaxWidth(),
+        )
+        DishDetail(vm, d, askDelete, setAsk, close)
+        if (credit != null) Muted("Фото: ${credit.author} · ${credit.license}")
     }
 }
 
 @Composable
-private fun DishDetail(vm: NutritionViewModel, d: Dish, askDelete: Boolean, setAsk: (String?) -> Unit) {
-    val credit = if (d.custom) null else DishPhotos.credits(LocalContext.current)[d.id]
-    if (credit != null) {
-        DishPhoto(d.id, Modifier.fillMaxWidth().height(200.dp).clip(RoundedCornerShape(20.dp)))
-        Muted("Фото: ${credit.author} · ${credit.license}")
-    }
-    Row(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-        Text("${d.kcal} ккал", style = MaterialTheme.typography.titleSmall)
-        Text("Б ${d.p} г", style = MaterialTheme.typography.titleSmall, color = DiaryTheme.extras.protein)
-        if (d.f != null) Text("Ж ${d.f} г", style = MaterialTheme.typography.titleSmall)
-        if (d.c != null) Text("У ${d.c} г", style = MaterialTheme.typography.titleSmall)
-    }
+private fun DishDetail(vm: NutritionViewModel, d: Dish, askDelete: Boolean, setAsk: (String?) -> Unit, close: () -> Unit) {
     if (d.custom) {
         if (d.notes.isNotEmpty()) { Text("Рецепт и заметки", style = MaterialTheme.typography.titleSmall); Text(d.notes, style = MaterialTheme.typography.bodyMedium) }
         else Muted("Рецепт не добавлен.")
-        if (askDelete) ConfirmBox("Удалить блюдо «${d.name}»? Записи в дневнике останутся.", "Да, удалить", { vm.deleteDish(d.id); setAsk(null) }, { setAsk(null) }, cancelLabel = "Нет")
+        if (askDelete) ConfirmBox("Удалить блюдо «${d.name}»? Записи в дневнике останутся.", "Да, удалить", { close(); vm.deleteDish(d.id); setAsk(null) }, { setAsk(null) }, cancelLabel = "Нет")
         else DangerButton("Удалить блюдо", { setAsk(d.id) })
     } else {
-        Muted("На одну порцию, значения приблизительные. Время: ${d.time}.")
+        Muted("Значения приблизительные.")
         d.batch?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary) }
         if (d.ing.isNotEmpty()) {
             Text("Ингредиенты", style = MaterialTheme.typography.titleSmall)
@@ -251,7 +266,7 @@ private fun AddDishForm(vm: NutritionViewModel, onSaved: () -> Unit) {
     var kcal by rememberSaveable { mutableStateOf("") }
     var protein by rememberSaveable { mutableStateOf("") }
     var notes by rememberSaveable { mutableStateOf("") }
-    Callout {
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         LabeledField("Название", name, { name = it }, maxLength = 120)
         Muted("Тип")
         IconTiles(CAT_NAME.map { (k, name) -> TileOption(k, catIcon(k), name, catColor(k)) }, cat, { cat = it })
@@ -312,18 +327,18 @@ fun DiaryScreen(vm: NutritionViewModel, data: NutritionData, today: String, date
         if (es.isEmpty()) EmptyState("book", "За этот день записей нет. Отметьте блюдо кнопкой «Съел» на вкладке «Блюда».")
         else DiaryCard { es.forEach { EntryRow(it) { vm.removeEntry(it) } } }
 
-        QuietButton(if (oopOpen) "Скрыть форму" else "Приём вне плана (кафе, гости)", { oopOpen = !oopOpen })
-        Reveal(oopOpen) {
-            Callout {
+        SecondaryButton("+ Приём вне плана (кафе, гости)", { oopOpen = true })
+    }
+    if (oopOpen) DiarySheet({ oopOpen = false }, title = "Приём вне плана", subtitle = "Кафе, гости, перекус", icon = "flame", iconColor = DiaryTheme.extras.volley) { close ->
+            run {
                 Muted("Калории и белок можно не указывать. Запись просто отметится как приём вне плана.")
                 LabeledField("Что съели", oopName, { oopName = it }, maxLength = 120, placeholder = "Например, шаурма в кафе")
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     LabeledField("Ккал, примерно", oopKcal, { oopKcal = it }, Modifier.weight(1f), numeric = true)
                     LabeledField("Белок, г", oopProtein, { oopProtein = it }, Modifier.weight(1f), numeric = true)
                 }
-                PrimaryButton("Записать", { vm.saveOutOfPlan(oopName, oopKcal, oopProtein, date); oopName = ""; oopKcal = ""; oopProtein = ""; oopOpen = false })
+                PrimaryButton("Записать", { vm.saveOutOfPlan(oopName, oopKcal, oopProtein, date); oopName = ""; oopKcal = ""; oopProtein = ""; close() }, Modifier.fillMaxWidth())
             }
-        }
     }
 }
 

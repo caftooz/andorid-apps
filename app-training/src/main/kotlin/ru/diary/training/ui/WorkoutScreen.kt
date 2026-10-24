@@ -1,5 +1,8 @@
 package ru.diary.training.ui
 
+import ru.diary.core.ui.IconBubble
+import ru.diary.core.ui.SheetRow
+import ru.diary.core.ui.DiarySheet
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import ru.diary.core.ui.pressScale
 import ru.diary.core.ui.ToggleChips
@@ -131,9 +134,7 @@ fun WorkoutScreen(vm: TrainingViewModel, data: TrainingData, active: ActiveWorko
 
     Column(Modifier.fillMaxWidth()) {
         Box(Modifier.weight(1f)) {
-            if (finishing) {
-                FinishForm(vm, active, onBack = { finishing = false })
-            } else {
+            run {
                 TabColumn {
                     if (Logic.deloadNow(data.plan, today)) Callout { Text("Неделя разгрузки: подходов вдвое меньше, веса те же.") }
                     Logic.volleyNote(data.plan, data.sessions, today).takeIf { it.isNotEmpty() }?.let { Callout { Text(it) } }
@@ -154,9 +155,9 @@ fun WorkoutScreen(vm: TrainingViewModel, data: TrainingData, active: ActiveWorko
                     active.ex.forEachIndexed { i, ex ->
                         ExerciseCard(vm, ex, i, open = openEx == ex.id, onToggle = { openEx = if (openEx == ex.id) null else ex.id }, onRestStarted = onRestStarted) { next -> openEx = next }
                     }
-                    QuietButton("+ Добавить упражнение", { pickerOpen = !pickerOpen })
-                    Reveal(pickerOpen) {
-                        ExercisePicker(vm, data, active.ex.map { it.id }, onPick = { d -> vm.addExerciseToWorkout(d); openEx = d.id; pickerOpen = false }, onClose = { pickerOpen = false })
+                    QuietButton("+ Добавить упражнение", { pickerOpen = true })
+                    if (pickerOpen) {
+                        ExercisePickerSheet(vm, data, active.ex.map { it.id }, onDismiss = { pickerOpen = false }) { d -> vm.addExerciseToWorkout(d); openEx = d.id; pickerOpen = false }
                     }
                     if (discardAsk) {
                         ConfirmBox("Удалить эту тренировку без сохранения?", "Да, удалить", { vm.discardWorkout() }, { discardAsk = false }, cancelLabel = "Нет")
@@ -164,17 +165,37 @@ fun WorkoutScreen(vm: TrainingViewModel, data: TrainingData, active: ActiveWorko
                 }
             }
         }
-        if (!finishing) WorkoutBar(vm, active) { finishing = true }
+        WorkoutBar(vm, active) { finishing = true }
+    }
+    // Завершение тренировки — во всплывающей панели поверх упражнений: можно закрыть её и вернуться.
+    if (finishing) {
+        DiarySheet({ finishing = false }, title = "Тренировка закончена", subtitle = active.title, icon = "check") { close ->
+            FinishForm(vm, active, onBack = close)
+        }
+    }
+}
+
+/** Строка «Отдых между подходами» с текущим значением; настройка открывается во всплывающей панели. */
+@Composable
+private fun RestSettings(vm: TrainingViewModel) {
+    val s by vm.settings.collectAsStateWithLifecycle()
+    var open by rememberSaveable { mutableStateOf(false) }
+    SheetRow(
+        "Отдых между подходами", { open = true }, subtitle = if (s.restAuto) "Время берётся из упражнения" else "Одинаковый для всех упражнений",
+        leading = { IconBubble("rest", MaterialTheme.colorScheme.primary) }, trailing = if (s.restAuto) "Авто" else "${s.restLen} с",
+    )
+    if (open) DiarySheet({ open = false }, title = "Отдых между подходами", icon = "rest") { close ->
+        RestSettingsBody(vm)
+        PrimaryButton("Готово", close, Modifier.fillMaxWidth())
     }
 }
 
 @Composable
-private fun RestSettings(vm: TrainingViewModel) {
+private fun RestSettingsBody(vm: TrainingViewModel) {
     val s by vm.settings.collectAsStateWithLifecycle()
     var custom by rememberSaveable { mutableStateOf(s.restLen !in listOf(60, 90, 120)) }
     var text by rememberSaveable { mutableStateOf(s.restLen.toString()) }
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Muted("Отдых между подходами")
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         val options = listOf("auto" to "Авто", "60" to "60 с", "90" to "90 с", "120" to "120 с", "own" to "Своё")
         val sel = when {
             s.restAuto -> "auto"
@@ -390,8 +411,7 @@ private fun FinishForm(vm: TrainingViewModel, a: ActiveWorkout, onBack: () -> Un
     val sets = a.ex.sumOf { Logic.doneCount(it) }
     val exs = a.ex.count { Logic.doneCount(it) > 0 }
     val min = maxOf(1.0, Js.round((System.currentTimeMillis() - a.start) / 60000.0)).toInt()
-    TabColumn {
-        Text("Тренировка закончена", style = MaterialTheme.typography.titleLarge)
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Callout {
             Text(
                 "$sets ${Js.plural(sets, "подход", "подхода", "подходов")} в $exs ${Js.plural(exs, "упражнении", "упражнениях", "упражнениях")} · $min мин",
@@ -411,6 +431,5 @@ private fun FinishForm(vm: TrainingViewModel, a: ActiveWorkout, onBack: () -> Un
         }
         if (discardAsk) ConfirmBox("Удалить без сохранения?", "Да, удалить", { vm.discardWorkout() }, { discardAsk = false }, cancelLabel = "Нет")
         else QuietButton("Не сохранять", { discardAsk = true })
-        Spacer(Modifier.height(8.dp))
     }
 }

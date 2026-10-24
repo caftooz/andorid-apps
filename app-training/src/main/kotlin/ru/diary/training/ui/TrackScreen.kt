@@ -102,8 +102,8 @@ fun TrackScreen(vm: TrainingViewModel, data: TrainingData, today: String, id: St
                     }
                 }
             }
-            PrimaryButton("Записать занятие", { logOpen = !logOpen })
-            if (logOpen) QuickLogForm("t:" + tr.id, data, onSave = { form -> vm.logQuick("t:" + tr.id, form) { Texts.typeName(it, data.plan).lowercase() }; logOpen = false }, onCancel = { logOpen = false })
+            PrimaryButton("Записать занятие", { logOpen = true })
+            if (logOpen) QuickLogSheet("t:" + tr.id, vm, data) { logOpen = false }
         } else {
             val (lo, hi) = Logic.setReps(tr.base, tr.pctLo, tr.pctHi)
             val sl = Logic.setsToday(data.sessions, tr.id, today)

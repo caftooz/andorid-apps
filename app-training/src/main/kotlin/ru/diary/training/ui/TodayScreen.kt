@@ -1,5 +1,6 @@
 package ru.diary.training.ui
 
+import ru.diary.core.ui.DiarySheet
 import androidx.compose.runtime.remember
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import ru.diary.core.ui.pressScale
@@ -134,10 +135,8 @@ fun TodayScreen(
 
         SectionTitle("Записать")
         QuickButtons(quickQ) { quickQ = if (quickQ == it) null else it }
-        val q = quickQ
-        Reveal(q != null && q in setOf("volley", "friends", "other")) {
-            if (q != null) QuickLogForm(q, data, onSave = { form -> vm.logQuick(q, form) { Texts.typeName(it, plan).lowercase() }; quickQ = null }, onCancel = { quickQ = null })
-        }
+        // Быстрая запись открывается во всплывающей панели поверх экрана.
+        quickQ?.let { q -> QuickLogSheet(q, vm, data) { quickQ = null } }
         val counts = Logic.weekCounts(data.sessions, ws)
         plan.tracks.forEach { tr ->
             val key = "t:" + tr.id
@@ -165,9 +164,6 @@ fun TodayScreen(
                     } else {
                         SecondaryButton("Записать", { quickQ = key })
                     }
-                }
-                Reveal(quickQ == key) {
-                    QuickLogForm(key, data, onSave = { form -> vm.logQuick(key, form) { Texts.typeName(it, plan).lowercase() }; quickQ = null }, onCancel = { quickQ = null })
                 }
             }
         }
@@ -227,6 +223,20 @@ private fun QuickButtons(selected: String?, onClick: (String) -> Unit) {
     }
 }
 
+/** Панель быстрой записи занятия: волейбол, с друзьями, кардио или домашнее занятие («t:<id>»). */
+@Composable
+fun QuickLogSheet(q: String, vm: TrainingViewModel, data: TrainingData, onDismiss: () -> Unit) {
+    val plan = data.plan
+    val icon = when {
+        q == "volley" -> "vb"; q == "friends" -> "friends"; q == "other" -> "cardio"
+        else -> plan.tracks.firstOrNull { "t:" + it.id == q }?.ic ?: "home"
+    }
+    val color = if (q.startsWith("t:")) DiaryTheme.extras.home else Texts.catColor(if (q == "other") "cardio" else q)
+    DiarySheet(onDismiss, title = Texts.quickName(q, plan), subtitle = "Запись занятия", icon = icon, iconColor = color) { close ->
+        QuickLogForm(q, data, onSave = { form -> vm.logQuick(q, form) { Texts.typeName(it, plan).lowercase() }; close() }, onCancel = close)
+    }
+}
+
 /** Форма быстрой записи: день, минуты, ккал, нагрузка, заметка; для «другого» ещё и вид активности. */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -244,8 +254,7 @@ fun QuickLogForm(q: String, data: TrainingData, onSave: (Logic.QuickForm) -> Uni
     var name by rememberSaveable(q) { mutableStateOf(if (q == "other") Texts.ACT_PRESETS[0] else "") }
     var nameCustom by rememberSaveable(q) { mutableStateOf(false) }
 
-    Callout {
-        Text(Texts.quickName(q, plan), style = MaterialTheme.typography.titleMedium)
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         if (q == "other") {
             val recent = data.sessions.sortedByDescending { it.date }.filter { it.type == "other" && it.title.isNotEmpty() && it.title !in Texts.ACT_PRESETS }
                 .map { it.title }.distinct().take(3)
