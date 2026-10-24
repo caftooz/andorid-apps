@@ -72,7 +72,7 @@ class LiveIntegration(
                     }
                 }
             },
-            confirmButton = { TextButton(onDismiss) { Text("Закрыть") } },
+            confirmButton = { ru.diary.core.ui.QuietButton("Закрыть", onDismiss) },
         )
     }
 

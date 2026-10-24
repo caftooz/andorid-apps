@@ -1,5 +1,9 @@
 package ru.diary.training.ui
 
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
+import ru.diary.core.ui.pressClickable
+import ru.diary.core.ui.CheckItem
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -69,7 +73,7 @@ fun TrackScreen(vm: TrainingViewModel, data: TrainingData, today: String, id: St
                     val cur = i + 1 == tr.cur
                     val past = i + 1 < tr.cur
                     Row(
-                        Modifier.fillMaxWidth().heightIn(min = MinTouch).clickable(role = Role.Button) {
+                        Modifier.fillMaxWidth().heightIn(min = MinTouch).clip(RoundedCornerShape(14.dp)).pressClickable(scale = 0.98f) {
                             vm.updatePlan { p -> p.copy(tracks = p.tracks.map { if (it.id == tr.id) it.copy(cur = i + 1) else it }) }
                         }.semantics { contentDescription = "Шаг ${i + 1}: ${s.n}" + if (cur) ", текущий" else ", сделать текущим" },
                         verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -91,13 +95,10 @@ fun TrackScreen(vm: TrainingViewModel, data: TrainingData, today: String, id: St
             if (tr.items.isNotEmpty()) DiaryCard {
                 tr.items.forEachIndexed { i, it0 ->
                     val key = "${tr.id}:$i"
-                    Row(Modifier.fillMaxWidth().heightIn(min = MinTouch).clickable(role = Role.Checkbox) { done = if (key in done) done - key else done + key }, verticalAlignment = Alignment.CenterVertically) {
-                        Checkbox(key in done, null)
-                        Column(Modifier.padding(start = 8.dp)) {
-                            Text(it0.n, style = MaterialTheme.typography.titleSmall)
-                            val sub = listOf(it0.d, it0.t).filter { s -> s.isNotEmpty() }.joinToString(" · ")
-                            if (sub.isNotEmpty()) Muted(sub)
-                        }
+                    val sub = listOf(it0.d, it0.t).filter { s -> s.isNotEmpty() }.joinToString(" · ")
+                    Column {
+                        CheckItem(it0.n, key in done, { done = if (key in done) done - key else done + key })
+                        if (sub.isNotEmpty()) Muted(sub, Modifier.padding(start = 44.dp))
                     }
                 }
             }

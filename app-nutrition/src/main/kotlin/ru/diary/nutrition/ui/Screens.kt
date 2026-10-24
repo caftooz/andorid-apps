@@ -1,5 +1,9 @@
 package ru.diary.nutrition.ui
 
+import ru.diary.core.ui.ToggleRow
+import ru.diary.core.ui.TileOption
+import ru.diary.core.ui.IconTiles
+import ru.diary.core.ui.SegmentedControl
 import androidx.compose.foundation.background
 import ru.diary.core.charts.BarPart
 import ru.diary.core.charts.BarColumn
@@ -121,12 +125,12 @@ fun DishesScreen(vm: NutritionViewModel, data: NutritionData, today: String, dat
             }
         }
         Muted("Записываю на")
-        ChoiceChips(
+        SegmentedControl(
             buildList { add(today to "Сегодня"); add(y to "Вчера"); if (date != today && date != y) add(date to Dates.label(date, today)) },
             date, onDate,
         )
         Muted("Порция")
-        ChoiceChips(PORTIONS.map { it.first to it.second }, portion, { portion = it })
+        SegmentedControl(PORTIONS.map { it.first to it.second }, portion, { portion = it })
         ChoiceChipsRow(CATS, cat, { cat = it })
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
             Muted("Порядок: " + if (byAge) "давно не ел сверху" else "по алфавиту")
@@ -208,7 +212,7 @@ private fun AddDishForm(vm: NutritionViewModel, onSaved: () -> Unit) {
     Callout {
         LabeledField("Название", name, { name = it }, maxLength = 120)
         Muted("Тип")
-        ChoiceChips(CAT_NAME.map { it.key to it.value }, cat, { cat = it })
+        IconTiles(CAT_NAME.map { (k, name) -> TileOption(k, catIcon(k), name, catColor(k)) }, cat, { cat = it })
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             LabeledField("Ккал на порцию", kcal, { kcal = it }, Modifier.weight(1f), numeric = true)
             LabeledField("Белок, г", protein, { protein = it }, Modifier.weight(1f), numeric = true)
@@ -466,23 +470,22 @@ fun SettingsScreen(vm: NutritionViewModel, link: TrainingLink) {
     TabColumn {
         HeroHeader("Настройки", subtitle = "Тема, данные и обновления", icon = "sliders")
         SectionTitle("Тема")
-        ChoiceChips(listOf(ThemeMode.Light to "Светлая", ThemeMode.Dark to "Тёмная", ThemeMode.System to "По умолчанию"), s.theme, { vm.setTheme(it) })
-        Muted("«По умолчанию» следует настройке телефона.")
+        SegmentedControl(listOf(ThemeMode.Light to "Светлая", ThemeMode.Dark to "Тёмная", ThemeMode.System to "Системная"), s.theme, { vm.setTheme(it) })
+        Muted("«Системная» следует настройке телефона.")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            Row(Modifier.fillMaxWidth().heightIn(min = MinTouch).clickable(role = Role.Checkbox) { vm.setDynamicColor(!s.dynamicColor) }, verticalAlignment = Alignment.CenterVertically) {
-                androidx.compose.material3.Checkbox(s.dynamicColor, null)
-                Text("Цвета обоев (Material You) вместо фирменных", Modifier.padding(start = 8.dp))
-            }
+            ToggleRow("Цвета обоев (Material You) вместо фирменных", s.dynamicColor, { vm.setDynamicColor(it) })
         }
         SectionTitle("Где хранятся данные")
         Muted("Данные хранятся только на этом телефоне и никуда не отправляются. Делайте экспорт, чтобы не потерять историю.")
         SectionTitle("Обновления")
         UpdateSection(ctx.container.updater)
-        SectionTitle("Связь с «Тренировками»")
-        Muted(
-            if (link is TrainingLink.Ready) "Приложение «Тренировки» найдено: в дневнике показывается баланс дня и график «съедено и потрачено»."
-            else "Если установить приложение «Тренировки», здесь появятся баланс дня и подсказки по дням занятий. Без него всё работает как обычно.",
-        )
+        if (DiaryContract.SHARING_ENABLED) {
+            SectionTitle("Связь с «Тренировками»")
+            Muted(
+                if (link is TrainingLink.Ready) "Приложение «Тренировки» найдено: в дневнике показывается баланс дня и график «съедено и потрачено»."
+                else "Если установить приложение «Тренировки», здесь появятся баланс дня и подсказки по дням занятий. Без него всё работает как обычно.",
+            )
+        }
         SectionTitle("Экспорт")
         Muted("Файл JSON с записями, своими блюдами и каталогом рецептов. Его можно перенести в веб-версию или обратно сюда.")
         PrimaryButton("Сохранить JSON в файл", { export.launch("dnevnik-raciona-${Dates.today()}.json") })

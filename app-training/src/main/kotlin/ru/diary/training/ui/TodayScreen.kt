@@ -1,5 +1,13 @@
 package ru.diary.training.ui
 
+import androidx.compose.runtime.remember
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import ru.diary.core.ui.pressScale
+import ru.diary.core.ui.pressClickable
+import ru.diary.core.ui.ScalePicker
+import ru.diary.core.ui.SegmentedControl
+import ru.diary.core.ui.LetterOption
+import ru.diary.core.ui.LetterPicker
 import androidx.compose.ui.graphics.Brush
 import ru.diary.core.ui.EmptyState
 import ru.diary.core.ui.IconBubble
@@ -108,8 +116,9 @@ fun TodayScreen(
                 Muted(label)
                 Text(prog.title, style = MaterialTheme.typography.titleLarge)
                 Muted(if (prog.items.isNotEmpty()) Logic.progBrief(prog) else "В программе пока нет упражнений. Их можно добавить в разделе «План → Программы».")
+                val letters = ProgramLetters.display(data.programs)
+                LetterPicker(data.programs.map { LetterOption(it.id, letters.getValue(it.id), it.title) }, prog.id, { chosen = it })
                 PrimaryButton("Провести тренировку", { vm.startWorkout(prog.id) }, Modifier.fillMaxWidth().heightIn(min = 60.dp))
-                ChoiceChipsRow(data.programs.map { it.id to it.title }, prog.id, { chosen = it })
                 QuietButton("Своя тренировка", { vm.startWorkout(null) })
             }
         } else {
@@ -138,7 +147,7 @@ fun TodayScreen(
                     Column(Modifier.weight(1f)) {
                         Text(
                             tr.name, style = MaterialTheme.typography.titleMedium,
-                            modifier = Modifier.heightIn(min = MinTouch).clickable(role = Role.Button) { onOpenTrack(tr.id) }.wrapCenter(),
+                            modifier = Modifier.heightIn(min = MinTouch).pressClickable { onOpenTrack(tr.id) }.wrapCenter(),
                         )
                         if (tr.kind == "sets") {
                             val sl = Logic.setsToday(data.sessions, tr.id, today)
@@ -201,9 +210,10 @@ private fun QuickButtons(selected: String?, onClick: (String) -> Unit) {
         items.forEach { (k, ic, label) ->
             val color = Texts.catColor(if (k == "other") "cardio" else k)
             val on = selected == k
+            val src = remember { MutableInteractionSource() }
             Surface(
-                onClick = { onClick(k) },
-                modifier = Modifier.weight(1f).heightIn(min = 72.dp).semantics { contentDescription = label + if (on) ", выбрано" else "" },
+                onClick = { onClick(k) }, interactionSource = src,
+                modifier = Modifier.weight(1f).heightIn(min = 72.dp).pressScale(src, 0.93f).semantics { contentDescription = label + if (on) ", выбрано" else "" },
                 shape = RoundedCornerShape(22.dp),
                 color = if (on) color.copy(alpha = 0.16f) else DiaryTheme.extras.glass,
                 border = BorderStroke(if (on) 2.dp else 1.dp, if (on) color else MaterialTheme.colorScheme.outline),
@@ -247,7 +257,7 @@ fun QuickLogForm(q: String, data: TrainingData, onSave: (Logic.QuickForm) -> Uni
             if (nameCustom) LabeledField("Название", name, { name = it }, maxLength = 60, placeholder = "Например, эллипс")
         }
         Muted("День")
-        ChoiceChips(listOf(today to "Сегодня", yesterday to "Вчера"), day, { day = it })
+        SegmentedControl(listOf(today to "Сегодня", yesterday to "Вчера"), day, { day = it })
         Muted("Минут")
         ChoiceChips(Texts.quickDurations(q).map { it to it.toString() } + (-1 to "✎ Своё"), if (durCustom) -1 else dur, {
             if (it == -1) durCustom = true else { durCustom = false; dur = it }
@@ -256,7 +266,7 @@ fun QuickLogForm(q: String, data: TrainingData, onSave: (Logic.QuickForm) -> Uni
         LabeledField("Калории, ккал, по желанию", kcal, { kcal = it }, numeric = true)
         if (!q.startsWith("t:")) {
             Muted("Нагрузка")
-            ChoiceChips((1..5).map { it to "$it ${Texts.INT_LABEL[it]}" }, int, { int = it })
+            ScalePicker(Texts.INT_LABEL.drop(1), int, { int = it })
         }
         LabeledField("Заметка, по желанию", note, { note = it }, maxLength = 300)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {

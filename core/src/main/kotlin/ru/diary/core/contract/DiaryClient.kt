@@ -1,5 +1,6 @@
 package ru.diary.core.contract
 
+import kotlinx.coroutines.flow.emptyFlow
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -129,9 +130,11 @@ class DiaryClient(private val context: Context) {
     }.conflate()
 
     /** Единый сигнал «пора перечитать данные соседа»: изменения данных плюс установка и удаление приложения. */
-    fun watch(pkg: String, authorityUri: Uri): Flow<Unit> = merge(changes(authorityUri), packageEvents(pkg)).conflate()
+    fun watch(pkg: String, authorityUri: Uri): Flow<Unit> =
+        if (!DiaryContract.SHARING_ENABLED) emptyFlow() else merge(changes(authorityUri), packageEvents(pkg)).conflate()
 
     private fun <T> read(pkg: String, uri: Uri, parse: (Cursor) -> T?): LinkResult<T> {
+        if (!DiaryContract.SHARING_ENABLED) return LinkResult.Unavailable("обмен данными выключен")
         if (!isInstalled(pkg)) return LinkResult.NotInstalled
         return try {
             val cursor = context.contentResolver.query(uri, null, null, null, null)

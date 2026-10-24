@@ -1,5 +1,11 @@
 package ru.diary.training.ui
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import ru.diary.core.ui.pressScale
+import ru.diary.core.ui.ToggleChips
+import ru.diary.core.ui.CheckItem
+import ru.diary.core.ui.ScalePicker
+import ru.diary.core.ui.SegmentedControl
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
@@ -114,12 +120,12 @@ fun WorkoutScreen(vm: TrainingViewModel, data: TrainingData, active: ActiveWorko
             title = { Text("Сигнал об окончании отдыха") },
             text = { Text("Разрешите уведомления, чтобы телефон сообщил об окончании отдыха, даже когда экран выключен.") },
             confirmButton = {
-                TextButton({
+                QuietButton("Разрешить", {
                     askNotif = false; vm.markNotificationsAsked()
                     if (Build.VERSION.SDK_INT >= 33) permission.launch(Manifest.permission.POST_NOTIFICATIONS)
-                }) { Text("Разрешить") }
+                })
             },
-            dismissButton = { TextButton({ askNotif = false; vm.markNotificationsAsked() }) { Text("Не сейчас") } },
+            dismissButton = { QuietButton("Не сейчас", { askNotif = false; vm.markNotificationsAsked() }) },
         )
     }
 
@@ -169,13 +175,13 @@ private fun RestSettings(vm: TrainingViewModel) {
     var text by rememberSaveable { mutableStateOf(s.restLen.toString()) }
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Muted("Отдых между подходами")
-        val options = listOf("auto" to "Авто", "60" to "60 с", "90" to "90 с", "120" to "120 с", "own" to "✎ Своё")
+        val options = listOf("auto" to "Авто", "60" to "60 с", "90" to "90 с", "120" to "120 с", "own" to "Своё")
         val sel = when {
             s.restAuto -> "auto"
             custom -> "own"
             else -> s.restLen.toString()
         }
-        ChoiceChips(options, sel, {
+        SegmentedControl(options, sel, {
             when (it) {
                 "auto" -> vm.setRestAuto(true)
                 "own" -> { custom = true; vm.setRestAuto(false) }
@@ -198,10 +204,7 @@ private fun WarmCard(vm: TrainingViewModel, a: ActiveWorkout, open: Boolean, onT
         CardHeader("Разминка", "$done/${a.warmList.size}", open, onToggle)
         Reveal(open) {
             a.warmList.forEachIndexed { k, text ->
-                Row(Modifier.fillMaxWidth().heightIn(min = MinTouch), verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(a.warm[k] == true, { vm.toggleWarm(k) })
-                    Text(text, style = MaterialTheme.typography.bodyMedium)
-                }
+                CheckItem(text, a.warm[k] == true, { vm.toggleWarm(k) })
             }
         }
     }
@@ -209,9 +212,10 @@ private fun WarmCard(vm: TrainingViewModel, a: ActiveWorkout, open: Boolean, onT
 
 @Composable
 private fun CardHeader(title: String, count: String, open: Boolean, onToggle: () -> Unit, subtitle: String? = null) {
+    val src = remember { MutableInteractionSource() }
     Surface(
-        onClick = onToggle, color = androidx.compose.ui.graphics.Color.Transparent,
-        modifier = Modifier.fillMaxWidth().heightIn(min = MinTouch).semantics { stateDescription = if (open) "развёрнуто" else "свёрнуто"; contentDescription = "$title, $count" },
+        onClick = onToggle, color = androidx.compose.ui.graphics.Color.Transparent, interactionSource = src, shape = RoundedCornerShape(16.dp),
+        modifier = Modifier.fillMaxWidth().pressScale(src, 0.98f).heightIn(min = MinTouch).semantics { stateDescription = if (open) "развёрнуто" else "свёрнуто"; contentDescription = "$title, $count" },
     ) {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
@@ -254,12 +258,14 @@ private fun SetRow(vm: TrainingViewModel, ex: ActiveEx, i: Int, j: Int, s: Activ
         Column(Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Text("Подход ${j + 1}", style = MaterialTheme.typography.titleSmall)
+                val checkSrc = remember { MutableInteractionSource() }
                 OutlinedButton(
                     onClick = {
                         if (!s.done) { onRestStarted(); haptic.performHapticFeedback(HapticFeedbackType.LongPress) }
                         vm.toggleDone(i, j)?.let(onOpenNext)
                     },
-                    modifier = Modifier.size(MinTouch).scale(checkScale).semantics {
+                    interactionSource = checkSrc,
+                    modifier = Modifier.size(MinTouch).scale(checkScale).pressScale(checkSrc, 0.85f).semantics {
                         role = Role.Checkbox
                         contentDescription = (if (s.done) "Отменить подход " else "Подход выполнен: ") + (j + 1)
                         selected = s.done
@@ -278,7 +284,7 @@ private fun SetRow(vm: TrainingViewModel, ex: ActiveEx, i: Int, j: Int, s: Activ
             }
             Reveal(s.done && weighted) {
                 Muted("Как далось:")
-                ChoiceChips(Texts.FB.map { it.key to it.value }, s.fb, { vm.feedback(i, j, it) })
+                SegmentedControl(Texts.FB.map { it.key to it.value }, s.fb, { vm.feedback(i, j, it) })
             }
         }
     }
@@ -295,10 +301,7 @@ private fun NumberStepper(
     Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Muted(label)
         Row(verticalAlignment = Alignment.CenterVertically) {
-            OutlinedButton(
-                { onStep(-1) }, Modifier.size(MinTouch), enabled = !locked, contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp),
-                shape = RoundedCornerShape(12.dp),
-            ) { Text("−", modifier = Modifier.semantics { contentDescription = "$label: меньше" }) }
+            StepCircle("−", "$label: меньше", !locked) { onStep(-1) }
             BasicTextField(
                 value = text, onValueChange = { text = it; onType(it) }, enabled = !locked, singleLine = true,
                 textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurface, textAlign = TextAlign.Center, fontSize = MaterialTheme.typography.titleMedium.fontSize),
@@ -309,10 +312,23 @@ private fun NumberStepper(
                     Box(Modifier.heightIn(min = MinTouch), contentAlignment = Alignment.Center) { inner() }
                 },
             )
-            OutlinedButton(
-                { onStep(1) }, Modifier.size(MinTouch), enabled = !locked, contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp),
-                shape = RoundedCornerShape(12.dp),
-            ) { Text("+", modifier = Modifier.semantics { contentDescription = "$label: больше" }) }
+            StepCircle("+", "$label: больше", !locked) { onStep(1) }
+        }
+    }
+}
+
+/** Круглая кнопка «−» или «+» с нажатием-пружинкой. */
+@Composable
+private fun StepCircle(sign: String, description: String, enabled: Boolean, onClick: () -> Unit) {
+    val src = remember { MutableInteractionSource() }
+    val cs = MaterialTheme.colorScheme
+    Surface(
+        onClick, Modifier.size(MinTouch).pressScale(src, 0.86f).semantics { contentDescription = description }, enabled = enabled,
+        shape = CircleShape, color = cs.primary.copy(alpha = if (enabled) 0.14f else 0.05f), interactionSource = src,
+        border = BorderStroke(1.dp, cs.primary.copy(alpha = if (enabled) 0.3f else 0.1f)),
+    ) {
+        Box(contentAlignment = Alignment.Center) {
+            Text(sign, style = MaterialTheme.typography.titleLarge, color = if (enabled) cs.primary else cs.onSurface.copy(alpha = 0.38f))
         }
     }
 }
@@ -384,16 +400,9 @@ private fun FinishForm(vm: TrainingViewModel, a: ActiveWorkout, onBack: () -> Un
             if (sets == 0) Muted("Ни один подход не отмечен. Сохранить такую запись не получится, но можно вернуться или удалить тренировку.")
         }
         Muted("Как далась тренировка")
-        ChoiceChips((1..5).map { it to "$it ${Texts.RPE_LABEL[it]}" }, rpe, { rpe = it })
+        ScalePicker(Texts.RPE_LABEL.drop(1), rpe, { rpe = it })
         Muted("Что-то болело или щёлкало")
-        androidx.compose.foundation.layout.FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Texts.PAIN.forEach { p ->
-                androidx.compose.material3.FilterChip(
-                    selected = p in pain, onClick = { pain = if (p in pain) pain - p else pain + p }, label = { Text(p) },
-                    modifier = Modifier.heightIn(min = MinTouch),
-                )
-            }
-        }
+        ToggleChips(Texts.PAIN.map { it to it }, pain.toSet(), { p -> pain = if (p in pain) pain - p else pain + p })
         LabeledField("Калории, ккал, по желанию", kcal, { kcal = it }, numeric = true)
         LabeledField("Заметка, по желанию", note, { note = it }, maxLength = 1000, singleLine = false, minLines = 2)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {

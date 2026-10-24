@@ -1,5 +1,18 @@
 package ru.diary.training.ui
 
+import androidx.compose.animation.core.tween
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.foundation.background
+import androidx.compose.runtime.remember
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import ru.diary.core.ui.pressScale
+import ru.diary.core.ui.IconBubble
+import ru.diary.core.ui.ToggleRow
+import ru.diary.core.ui.SegmentedControl
+import ru.diary.core.ui.LetterOption
+import ru.diary.core.ui.LetterPicker
+import ru.diary.core.ui.TileOption
+import ru.diary.core.ui.IconTiles
 import ru.diary.core.ui.HeroHeader
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -93,20 +106,23 @@ internal fun PlanOverview(vm: TrainingViewModel, data: TrainingData, today: Stri
         HeroHeader(plan.name, subtitle = "План тренировок", icon = "calendar")
         PlanStatusCard(vm, data, today)
         SectionTitle("Неделя")
+        val letters = ProgramLetters.display(data.programs)
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             plan.days.forEachIndexed { i, d ->
                 val pr = if (d.k == "gym" && d.prog.isNotEmpty()) data.programs.firstOrNull { it.id == d.prog } else null
+                val src = remember { MutableInteractionSource() }
                 Surface(
-                    onClick = { sel = i }, shape = RoundedCornerShape(12.dp), modifier = Modifier.weight(1f).heightIn(min = 64.dp).semantics {
+                    onClick = { sel = i }, interactionSource = src, shape = RoundedCornerShape(14.dp),
+                    modifier = Modifier.weight(1f).heightIn(min = 64.dp).pressScale(src, 0.92f).semantics {
                         contentDescription = "${Texts.DAY_NAMES[i]}: ${Texts.dayLabel(d, data.programs)}" + if (i == di) ", сегодня" else ""
                     },
-                    color = if (sel == i) MaterialTheme.colorScheme.primary.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surface,
+                    color = if (sel == i) MaterialTheme.colorScheme.primary.copy(alpha = 0.14f) else DiaryTheme.extras.glass,
                     border = BorderStroke(if (i == di) 2.dp else 1.dp, if (i == di) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline),
                 ) {
                     Column(Modifier.padding(vertical = 6.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(Texts.DAY_NAMES[i], style = MaterialTheme.typography.labelLarge)
                         Icon(DiaryIcons.get(Texts.dayIcon(d.k)), null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
-                        Text(pr?.title?.substringBefore(' ') ?: " ", style = MaterialTheme.typography.labelSmall)
+                        Text(pr?.let { letters[it.id] } ?: " ", style = MaterialTheme.typography.labelSmall)
                     }
                 }
             }
@@ -130,15 +146,18 @@ internal fun PlanOverview(vm: TrainingViewModel, data: TrainingData, today: Stri
             Triple("plan/days", "Дни недели", "home"), Triple("plan/progs", "Программы тренировок", "gym"), Triple("plan/blocks", "Блоки и разгрузка", "flame"),
             Triple("plan/metrics", "Замеры", "target"), Triple("plan/tracks", "Занятия дома", "star"), Triple("plan/setup", "Старт и шаблоны", "check"),
         ).forEach { (route, label, ic) ->
+            val src = remember { MutableInteractionSource() }
             Surface(
-                onClick = { go(route) }, shape = RoundedCornerShape(14.dp), color = MaterialTheme.colorScheme.surfaceContainerLow, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp),
+                onClick = { go(route) }, interactionSource = src, shape = RoundedCornerShape(18.dp), color = DiaryTheme.extras.glass,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.6f)),
+                modifier = Modifier.fillMaxWidth().heightIn(min = 60.dp).pressScale(src, 0.97f),
             ) {
-                Row(Modifier.padding(horizontal = 16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
+                Row(Modifier.padding(horizontal = 12.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Icon(DiaryIcons.get(ic), null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
+                        IconBubble(ic, MaterialTheme.colorScheme.primary)
                         Text(label, style = MaterialTheme.typography.titleSmall)
                     }
-                    Text("›")
+                    Text("›", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary)
                 }
             }
         }
@@ -164,7 +183,8 @@ fun Accordion(title: String, content: @Composable () -> Unit) {
             verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(title, style = MaterialTheme.typography.titleSmall)
-            Text(if (open) "⌃" else "⌄")
+            val turn by androidx.compose.animation.core.animateFloatAsState(if (open) 180f else 0f, tween(260), label = "accArrow")
+            Text("⌄", color = MaterialTheme.colorScheme.primary, modifier = Modifier.graphicsLayer { rotationZ = turn })
         }
         Reveal(open) { content() }
     }
@@ -225,13 +245,13 @@ private fun StartDateDialog(onDismiss: () -> Unit, onPick: (String) -> Unit) {
     DatePickerDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
-            TextButton({
+            QuietButton("Выбрать", {
                 state.selectedDateMillis?.let { ms ->
                     onPick(Dates.format(java.time.Instant.ofEpochMilli(ms).atZone(java.time.ZoneOffset.UTC).toLocalDate()))
                 } ?: onDismiss()
-            }) { Text("Выбрать") }
+            })
         },
-        dismissButton = { TextButton(onDismiss) { Text("Отмена") } },
+        dismissButton = { QuietButton("Отмена", onDismiss) },
         colors = androidx.compose.material3.DatePickerDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceContainerHighest),
     ) { DatePicker(state, colors = androidx.compose.material3.DatePickerDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceContainerHighest)) }
 }
@@ -244,12 +264,20 @@ private fun DaysEditor(vm: TrainingViewModel, data: TrainingData, back: () -> Un
     TabColumn {
         BackLink("План", back)
         ScreenTitle("Дни недели")
+        val letters = ProgramLetters.display(data.programs)
         plan.days.forEachIndexed { i, d ->
             DiaryCard {
                 Text(Texts.DAY_NAMES[i], style = MaterialTheme.typography.titleMedium)
-                ChoiceChips(Texts.DAY_KINDS.map { it.key to it.value }, d.k, { k -> vm.updatePlan { PlanEdit.setDayKind(it, i, k) } })
-                if (d.k == "gym") {
-                    ChoiceChips(listOf("" to "По очереди") + data.programs.map { it.id to it.title }, d.prog, { p -> vm.updatePlan { PlanEdit.setDayProg(it, i, p) } })
+                IconTiles(
+                    Texts.DAY_KINDS.map { (k, name) -> TileOption(k, Texts.dayIcon(k), name, dayColor(k)) },
+                    d.k, { k -> vm.updatePlan { PlanEdit.setDayKind(it, i, k) } },
+                )
+                Reveal(d.k == "gym") {
+                    Muted("Программа: " + (data.programs.firstOrNull { it.id == d.prog }?.title ?: "по очереди"))
+                    LetterPicker(
+                        listOf(LetterOption("", "↻", "По очереди")) + data.programs.map { LetterOption(it.id, letters.getValue(it.id), it.title) },
+                        d.prog, { p -> vm.updatePlan { PlanEdit.setDayProg(it, i, p) } }, tile = 52.dp,
+                    )
                 }
                 DebouncedField("Заметка к дню, по желанию", d.note, { n -> vm.updatePlan { PlanEdit.setDayNote(it, i, n) } }, maxLength = 120)
             }
@@ -261,12 +289,17 @@ private fun DaysEditor(vm: TrainingViewModel, data: TrainingData, back: () -> Un
     }
 }
 
+/** Строка настройки с переключателем «вкл/выкл». */
 @Composable
-fun CheckRow(text: String, checked: Boolean, onChange: (Boolean) -> Unit) {
-    Row(Modifier.fillMaxWidth().heightIn(min = MinTouch).clickable(role = Role.Checkbox) { onChange(!checked) }, verticalAlignment = Alignment.CenterVertically) {
-        Checkbox(checked, null)
-        Text(text, Modifier.padding(start = 8.dp), style = MaterialTheme.typography.bodyMedium)
-    }
+fun CheckRow(text: String, checked: Boolean, onChange: (Boolean) -> Unit) = ToggleRow(text, checked, onChange)
+
+/** Цвет типа дня: зал, дом, волейбол, отдых. */
+@Composable
+private fun dayColor(kind: String) = when (kind) {
+    "gym" -> MaterialTheme.colorScheme.primary
+    "home" -> DiaryTheme.extras.home
+    "vb" -> DiaryTheme.extras.volley
+    else -> DiaryTheme.extras.friends
 }
 
 // ---------- блоки ----------
@@ -318,7 +351,7 @@ private fun MetricsEditor(vm: TrainingViewModel, data: TrainingData, back: () ->
                     DebouncedField("Цель числом", m.goal?.let { Js.fmt(it) } ?: "", { v -> vm.updatePlan { PlanEdit.editMetric(it, m.id, goal = v) } }, Modifier.weight(1f), decimal = true)
                 }
                 DebouncedField("Цель словами, по желанию", m.goalText, { v -> vm.updatePlan { PlanEdit.editMetric(it, m.id, goalText = v) } }, maxLength = 80)
-                ChoiceChips(listOf(1 to "Больше — лучше", -1 to "Меньше — лучше"), m.dir, { d -> vm.updatePlan { PlanEdit.editMetric(it, m.id, dir = d) } })
+                SegmentedControl(listOf(1 to "Больше — лучше", -1 to "Меньше — лучше"), m.dir, { d -> vm.updatePlan { PlanEdit.editMetric(it, m.id, dir = d) } })
                 DebouncedField("Как замерять, по желанию", m.how, { v -> vm.updatePlan { PlanEdit.editMetric(it, m.id, how = v) } }, maxLength = 200)
                 if (askDelete == m.id) ConfirmBox("Удалить «${m.name}» вместе с историей замеров?", "Да, удалить", { vm.deleteMetric(m.id); askDelete = null }, { askDelete = null }, cancelLabel = "Нет")
                 else QuietButton("Удалить показатель", { askDelete = m.id })
@@ -341,7 +374,7 @@ private fun TracksEditor(vm: TrainingViewModel, data: TrainingData, back: () -> 
             fun edit(f: (ru.diary.training.domain.Track) -> ru.diary.training.domain.Track) = vm.updatePlan { PlanEdit.setTrack(it, tr.id, f) }
             DiaryCard {
                 DebouncedField("Название занятия", tr.name, { v -> edit { it.copy(name = v.take(60)) } }, maxLength = 60)
-                ChoiceChips(Texts.TRACK_KIND.map { it.key to it.value }, tr.kind, { k -> edit { it.copy(kind = k) } })
+                SegmentedControl(Texts.TRACK_KIND.map { it.key to it.value }, tr.kind, { k -> edit { it.copy(kind = k) } })
                 Stepper("Цель, дней в неделю (0 — нет)", tr.goal.toString(), { edit { PlanEdit.stepTrack(it, PlanEdit.TrackField.Goal, -1) } }, { edit { PlanEdit.stepTrack(it, PlanEdit.TrackField.Goal, 1) } })
                 DebouncedField("Цель словами, например 5–6", tr.goalText, { v -> edit { it.copy(goalText = v.take(20)) } }, maxLength = 20)
                 if (tr.kind == "timed") {
@@ -412,8 +445,11 @@ private fun SetupScreen(vm: TrainingViewModel, data: TrainingData, today: String
             )
         } else {
             BuiltinData.builtinTemplates.forEach { b ->
+                val src = remember { MutableInteractionSource() }
                 Surface(
-                    onClick = { ask = "tpl:" + b.id }, shape = RoundedCornerShape(14.dp), color = MaterialTheme.colorScheme.surfaceContainerLow, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp),
+                    onClick = { ask = "tpl:" + b.id }, interactionSource = src, shape = RoundedCornerShape(18.dp), color = DiaryTheme.extras.glass,
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.6f)),
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).pressScale(src, 0.97f),
                 ) {
                     Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
                         Column(Modifier.weight(1f)) { Text(b.name, style = MaterialTheme.typography.titleSmall); Muted(b.sub) }
@@ -454,11 +490,15 @@ private fun ProgramsScreen(vm: TrainingViewModel, data: TrainingData, onBack: ()
         ScreenTitle("Программы")
         Muted("Программы с отметкой «в очереди» чередуются сами после каждой тренировки. Остальные (например, домашние) выбираются на главной.")
         if (data.programs.isEmpty()) Muted("Программ пока нет. Создайте первую.")
+        val letters = ProgramLetters.display(data.programs)
         data.programs.forEach { p ->
             DiaryCard {
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                    Text(p.title, Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
-                    if (p.rot) Badge("в очереди", MaterialTheme.colorScheme.primary)
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                    LetterBadge(letters.getValue(p.id))
+                    Column(Modifier.weight(1f)) {
+                        Text(ProgramLetters.split(p.title).second, style = MaterialTheme.typography.titleMedium)
+                        if (p.rot) Muted("в очереди: чередуется с другими")
+                    }
                 }
                 Muted(
                     if (p.items.isEmpty()) "Пока без упражнений"
@@ -482,6 +522,15 @@ private fun ProgramsScreen(vm: TrainingViewModel, data: TrainingData, onBack: ()
     }
 }
 
+/** Буква программы на градиентной плашке. */
+@Composable
+private fun LetterBadge(letter: String) {
+    val x = DiaryTheme.extras
+    androidx.compose.foundation.layout.Box(
+        Modifier.size(48.dp).background(x.buttonBrush, RoundedCornerShape(16.dp)), contentAlignment = Alignment.Center,
+    ) { Text(letter, style = MaterialTheme.typography.titleLarge, color = x.onButton) }
+}
+
 @Composable
 private fun Callout(text: String) = ru.diary.core.ui.Callout { Text(text, style = MaterialTheme.typography.bodySmall) }
 
@@ -495,8 +544,15 @@ private fun ProgramEditor(vm: TrainingViewModel, data: TrainingData, id: String,
     var ask by rememberSaveable { mutableStateOf<String?>(null) }
     TabColumn {
         BackLink("Все программы", back)
+        val (letter, name) = ProgramLetters.split(p.title)
         DiaryCard {
-            DebouncedField("Название", p.title, { t -> vm.updateProgram(id) { it.copy(title = t.trim().ifEmpty { "Программа" }.take(60)) } }, maxLength = 60)
+            Text("Буква на главном экране", style = MaterialTheme.typography.titleSmall)
+            SegmentedControl(
+                ProgramLetters.CHOICES.map { it to it.ifEmpty { "—" } }, letter,
+                { l -> vm.updateProgram(id) { it.copy(title = ProgramLetters.join(l, ProgramLetters.split(it.title).second)) } },
+            )
+            Muted(if (letter.isEmpty()) "Без буквы на плашке будет первая буква названия." else "На главном экране программа выбирается плашкой «$letter».")
+            DebouncedField("Название", name, { t -> vm.updateProgram(id) { it.copy(title = ProgramLetters.join(ProgramLetters.split(it.title).first, t)) } }, maxLength = 56)
             CheckRow("В очереди: чередуется с другими такими программами", p.rot) { v -> vm.updateProgram(id) { it.copy(rot = v) } }
         }
         SectionTitle("Упражнения")

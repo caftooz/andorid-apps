@@ -1,5 +1,7 @@
 package ru.diary.core.ui
 
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
@@ -106,7 +108,9 @@ fun DiaryCard(modifier: Modifier = Modifier, onClick: (() -> Unit)? = null, cont
     val border = BorderStroke(1.dp, Brush.linearGradient(listOf(x.rim, x.rim.copy(alpha = 0f), primary.copy(alpha = 0.22f))))
     val shadow = Modifier.shadow(if (x.dark) 0.dp else 10.dp, shape, ambientColor = primary.copy(alpha = 0.35f), spotColor = primary.copy(alpha = 0.22f))
     val body: @Composable () -> Unit = {
-        Column(Modifier.padding(horizontal = 18.dp, vertical = 16.dp).animateContentSize(tween(240)), verticalArrangement = Arrangement.spacedBy(10.dp)) { content() }
+        // Без animateContentSize: высоту меняет только раскрывающийся блок внутри (Reveal). Две анимации размера
+        // одновременно спорили друг с другом, и раскрытие то замедлялось, то снова ускорялось.
+        Column(Modifier.padding(horizontal = 18.dp, vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) { content() }
     }
     if (onClick == null) {
         Surface(modifier.fillMaxWidth().then(shadow), shape = shape, color = x.glass, border = border) { body() }
@@ -125,8 +129,8 @@ fun DiaryCard(modifier: Modifier = Modifier, onClick: (() -> Unit)? = null, cont
 fun Reveal(visible: Boolean, modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     AnimatedVisibility(
         visible, modifier,
-        enter = expandVertically(tween(240)) + fadeIn(tween(240)),
-        exit = shrinkVertically(tween(180)) + fadeOut(tween(120)),
+        enter = expandVertically(tween(280, easing = LinearOutSlowInEasing), expandFrom = Alignment.Top) + fadeIn(tween(220, delayMillis = 40)),
+        exit = shrinkVertically(tween(220, easing = FastOutLinearInEasing), shrinkTowards = Alignment.Top) + fadeOut(tween(140)),
     ) { Column(verticalArrangement = Arrangement.spacedBy(8.dp)) { content() } }
 }
 
@@ -253,6 +257,20 @@ fun <T> ChoiceChips(
 ) {
     FlowRow(modifier, horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
         options.forEach { (value, label) -> Pill(label, value == selected) { onSelect(value) } }
+    }
+}
+
+/** Переключатели с несколькими выбранными вариантами (например, «что болело»). */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun <T> ToggleChips(
+    options: List<Pair<T, String>>,
+    selected: Set<T>,
+    onToggle: (T) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    FlowRow(modifier, horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        options.forEach { (value, label) -> Pill(label, value in selected) { onToggle(value) } }
     }
 }
 
