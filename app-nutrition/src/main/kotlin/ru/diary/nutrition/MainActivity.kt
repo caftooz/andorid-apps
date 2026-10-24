@@ -16,7 +16,7 @@ import ru.diary.nutrition.ui.NutritionViewModel
 
 class MainActivity : ComponentActivity() {
     private val vm: NutritionViewModel by viewModels {
-        NutritionViewModel.Factory(container.repository, container.settings, container.client)
+        NutritionViewModel.Factory(container.repository, container.settings, container.client, container.lookup)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

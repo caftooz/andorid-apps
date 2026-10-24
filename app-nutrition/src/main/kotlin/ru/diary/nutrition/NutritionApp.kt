@@ -1,5 +1,6 @@
 package ru.diary.nutrition
 
+import ru.diary.nutrition.data.ProductLookup
 import android.app.Application
 import android.content.Context
 import ru.diary.core.contract.DiaryClient
@@ -22,6 +23,7 @@ class AppContainer(private val context: Context) {
     val settings = SettingsStore(context)
     val client = DiaryClient(context)
     val updater = Updater(context, "caftooz", "andorid-apps", "app-nutrition-release.apk")
+    val lookup = ProductLookup(updater.installedVersion)
 }
 
 class NutritionApp : Application() {

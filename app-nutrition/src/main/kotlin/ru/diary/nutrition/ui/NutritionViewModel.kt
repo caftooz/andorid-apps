@@ -1,5 +1,9 @@
 package ru.diary.nutrition.ui
 
+import ru.diary.nutrition.domain.Products
+import ru.diary.nutrition.domain.Product
+import ru.diary.nutrition.domain.OffResult
+import ru.diary.nutrition.data.ProductLookup
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -43,10 +47,21 @@ sealed interface TrainingLink {
     data class Ready(val meta: TrainingMeta, val days: Map<String, TrainingDay>) : TrainingLink
 }
 
+/** Состояние сканирования штрих-кода на вкладке «Блюда». */
+sealed interface ScanState {
+    data object Idle : ScanState
+    data class Looking(val code: String) : ScanState
+    /** Продукт известен: осталось выбрать граммы. `saved` — он уже в «Моих продуктах». */
+    data class Ready(val product: Product, val saved: Boolean) : ScanState
+    /** Нужно ввести КБЖУ с этикетки; `draft` — то, что удалось найти (например, только название). */
+    data class Manual(val code: String, val draft: Product?, val note: String) : ScanState
+}
+
 class NutritionViewModel(
     private val repo: NutritionRepository,
     private val settingsStore: SettingsStore,
     private val client: DiaryClient,
+    private val lookup: ProductLookup,
     private val clock: () -> Long = System::currentTimeMillis,
 ) : ViewModel() {
 
@@ -58,6 +73,9 @@ class NutritionViewModel(
 
     private val _link = MutableStateFlow<TrainingLink>(TrainingLink.None)
     val link: StateFlow<TrainingLink> = _link.asStateFlow()
+
+    private val _scan = MutableStateFlow<ScanState>(ScanState.Idle)
+    val scan: StateFlow<ScanState> = _scan.asStateFlow()
 
     private val _messages = MutableSharedFlow<UiMessage>(extraBufferCapacity = 8)
     val messages: SharedFlow<UiMessage> = _messages.asSharedFlow()
@@ -122,6 +140,61 @@ class NutritionViewModel(
         return true
     }
 
+    fun setOnlineLookup(v: Boolean) { viewModelScope.launch { settingsStore.setOnlineLookup(v) } }
+
+    /** Штрих-код считан камерой или введён вручную: ищем у себя, затем (если разрешено) в Open Food Facts. */
+    fun onBarcode(raw: String) {
+        val code = Products.normalize(raw)
+        if (code == null) { say("Не похоже на штрих-код продукта: нужны 8, 12, 13 или 14 цифр"); return }
+        data.value?.products?.firstOrNull { it.code == code }?.let { _scan.value = ScanState.Ready(it, saved = true); return }
+        if (!settings.value.onlineLookup) {
+            _scan.value = ScanState.Manual(code, null, "Поиск в интернете выключен в настройках. Перепишите КБЖУ с этикетки — в следующий раз продукт найдётся сразу.")
+            return
+        }
+        _scan.value = ScanState.Looking(code)
+        viewModelScope.launch {
+            val r = lookup.find(code, clock())
+            if ((_scan.value as? ScanState.Looking)?.code != code) return@launch
+            _scan.value = when (r) {
+                is ProductLookup.Lookup.Failed -> ScanState.Manual(code, null, "Не удалось связаться с базой продуктов (${r.reason}). Можно ввести КБЖУ с этикетки.")
+                is ProductLookup.Lookup.Done -> when (val res = r.result) {
+                    OffResult.NotFound -> ScanState.Manual(code, null, "Этого продукта нет в базе. Перепишите КБЖУ с этикетки — он сохранится в «Моих продуктах».")
+                    is OffResult.Found -> if (res.complete) ScanState.Ready(res.product, saved = false)
+                    else ScanState.Manual(code, res.product, "В базе нет части данных. Проверьте и дополните их по этикетке.")
+                }
+            }
+        }
+    }
+
+    fun openProduct(p: Product) { _scan.value = ScanState.Ready(p, saved = true) }
+    fun editProduct(p: Product) { _scan.value = ScanState.Manual(p.code, p, "Исправьте данные по этикетке. Значения — на 100 г.") }
+    fun cancelScan() { _scan.value = ScanState.Idle }
+
+    /** Сохраняет продукт из формы и сразу предлагает выбрать граммы. */
+    fun saveManualProduct(code: String, name: String, brand: String, kcal: String, p: String, f: String, c: String, pack: String): Boolean {
+        val prod = Products.manual(code, name, brand, kcal, p, f, c, pack, clock())
+        if (prod == null) { say("Нужны название и калорийность на 100 г (не больше 1000 ккал)"); return false }
+        mutate { d -> d.copy(products = listOf(prod) + d.products.filter { it.code != code }) }
+        _scan.value = ScanState.Ready(prod, saved = true)
+        return true
+    }
+
+    /** «Съел»: запись в дневник; продукт из базы при этом запоминается в «Моих продуктах». */
+    fun eatProduct(p: Product, grams: Int, date: String) {
+        if (grams !in 1..5000) { say("Укажите вес от 1 до 5000 г"); return }
+        val e = Products.eat(p, grams, date, nowTime(), clock())
+        val stamped = p.copy(updated = clock())
+        mutate { d -> d.copy(log = d.log + e, products = listOf(stamped) + d.products.filter { it.code != p.code }) }
+        _scan.value = ScanState.Idle
+        say("Записано: ${p.name}, $grams г · ${Dates.label(date, today.value).lowercase()}", "Отменить") { removeQuiet(e.id) }
+    }
+
+    fun deleteProduct(code: String) {
+        mutate { d -> d.copy(products = d.products.filter { it.code != code }) }
+        _scan.value = ScanState.Idle
+        say("Продукт удалён из «Моих продуктов». Записи в дневнике остались.")
+    }
+
     fun deleteDish(id: String) = mutate { d -> d.copy(custom = d.custom.filter { it.id != id }) }
 
     fun exportText(): String? = data.value?.let {
@@ -145,8 +218,10 @@ class NutritionViewModel(
     @Suppress("unused")
     private fun fmt(d: Double) = Js.fmt(d)
 
-    class Factory(private val repo: NutritionRepository, private val settings: SettingsStore, private val client: DiaryClient) : ViewModelProvider.Factory {
+    class Factory(
+        private val repo: NutritionRepository, private val settings: SettingsStore, private val client: DiaryClient, private val lookup: ProductLookup,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T = NutritionViewModel(repo, settings, client) as T
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = NutritionViewModel(repo, settings, client, lookup) as T
     }
 }

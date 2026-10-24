@@ -1,5 +1,10 @@
 package ru.diary.nutrition.ui
 
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import ru.diary.nutrition.domain.amountLabel
 import ru.diary.core.ui.ToggleRow
 import ru.diary.core.ui.TileOption
 import ru.diary.core.ui.IconTiles
@@ -95,6 +100,28 @@ fun TabColumn(content: @Composable ColumnScope.() -> Unit) {
 
 // ---------- Блюда ----------
 
+/** Вкладка «Мои продукты» в ряду категорий. */
+private const val PRODUCTS_TAB = "products"
+
+/** Авторы фотографий блюд: свободные лицензии требуют их указать. */
+@Composable
+private fun PhotoCredits() {
+    val credits = DishPhotos.credits(LocalContext.current)
+    var open by rememberSaveable { mutableStateOf(false) }
+    Muted("Фотографии взяты из открытых источников (Flickr, Wikimedia Commons) под свободными лицензиями Creative Commons. Снимки уменьшены и обрезаны.")
+    QuietButton(if (open) "Скрыть авторов" else "Показать авторов", { open = !open })
+    Reveal(open) {
+        val names = ru.diary.nutrition.domain.Catalog.builtin.associate { it.id to it.name }
+        credits.forEach { (id, c) ->
+            Column(Modifier.padding(vertical = 2.dp)) {
+                Text(names[id] ?: id, style = MaterialTheme.typography.titleSmall)
+                Muted("«${c.title}» — ${c.author}, ${c.license}")
+                if (c.source.isNotEmpty()) Muted(c.source)
+            }
+        }
+    }
+}
+
 /** Значок и цвет категории блюда. */
 private fun catIcon(cat: String) = when (cat) { "breakfast" -> "sun"; "side" -> "star"; "snack" -> "flame"; else -> "dish" }
 
@@ -124,6 +151,9 @@ fun DishesScreen(vm: NutritionViewModel, data: NutritionData, today: String, dat
                 HeroStat("${t.kcal}", "ккал", Modifier.weight(1f))
             }
         }
+        ScanButtons(vm)
+        val scan by vm.scan.collectAsStateWithLifecycle()
+        ScanPanel(vm, scan, date, today)
         Muted("Записываю на")
         SegmentedControl(
             buildList { add(today to "Сегодня"); add(y to "Вчера"); if (date != today && date != y) add(date to Dates.label(date, today)) },
@@ -131,14 +161,19 @@ fun DishesScreen(vm: NutritionViewModel, data: NutritionData, today: String, dat
         )
         Muted("Порция")
         SegmentedControl(PORTIONS.map { it.first to it.second }, portion, { portion = it })
-        ChoiceChipsRow(CATS, cat, { cat = it })
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-            Muted("Порядок: " + if (byAge) "давно не ел сверху" else "по алфавиту")
-            QuietButton(if (byAge) "По алфавиту" else "Давно не ел сверху", { byAge = !byAge })
+        ChoiceChipsRow(CATS + (PRODUCTS_TAB to "Мои продукты"), cat, { cat = it })
+        if (cat == PRODUCTS_TAB) {
+            data.products.forEachIndexed { i, p -> Appear(index = i) { ProductRow(vm, p) } }
+            if (data.products.isEmpty()) EmptyState("barcode", "Здесь будут продукты, которые вы отсканировали. Нажмите «Сканировать» и наведите камеру на штрих-код упаковки.")
+        } else {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                Muted("Порядок: " + if (byAge) "давно не ел сверху" else "по алфавиту")
+                QuietButton(if (byAge) "По алфавиту" else "Давно не ел сверху", { byAge = !byAge })
+            }
+            val list = NutritionLogic.ordered(data, today, byAge).filter { cat == "all" || it.cat == cat }
+            list.forEachIndexed { i, d -> Appear(index = i) { DishRow(vm, data, d, today, date, portion, open == d.id, { open = if (open == d.id) null else d.id }, askDelete == d.id, { askDelete = it }) } }
+            if (list.isEmpty()) EmptyState("dish", "В этой категории пока нет блюд.")
         }
-        val list = NutritionLogic.ordered(data, today, byAge).filter { cat == "all" || it.cat == cat }
-        list.forEachIndexed { i, d -> Appear(index = i) { DishRow(vm, data, d, today, date, portion, open == d.id, { open = if (open == d.id) null else d.id }, askDelete == d.id, { askDelete = it }) } }
-        if (list.isEmpty()) EmptyState("dish", "В этой категории пока нет блюд.")
 
         QuietButton(if (addOpen) "Скрыть форму" else "Добавить своё блюдо", { addOpen = !addOpen })
         Reveal(addOpen) { AddDishForm(vm) { addOpen = false } }
@@ -159,7 +194,9 @@ private fun DishRow(
     val stale = ago == null || ago >= 7
     DiaryCard(onClick = onToggle) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            IconBubble(catIcon(d.cat), catColor(d.cat), size = 44.dp)
+            if (!d.custom && d.id in DishPhotos.credits(LocalContext.current)) {
+                DishPhoto(d.id, Modifier.size(64.dp).clip(RoundedCornerShape(18.dp)), sample = 4)
+            } else IconBubble(catIcon(d.cat), catColor(d.cat), size = 44.dp)
             Column(
                 Modifier.weight(1f).heightIn(min = MinTouch).semantics { stateDescription = if (open) "развёрнуто" else "свёрнуто" },
             ) {
@@ -177,6 +214,11 @@ private fun DishRow(
 
 @Composable
 private fun DishDetail(vm: NutritionViewModel, d: Dish, askDelete: Boolean, setAsk: (String?) -> Unit) {
+    val credit = if (d.custom) null else DishPhotos.credits(LocalContext.current)[d.id]
+    if (credit != null) {
+        DishPhoto(d.id, Modifier.fillMaxWidth().height(200.dp).clip(RoundedCornerShape(20.dp)))
+        Muted("Фото: ${credit.author} · ${credit.license}")
+    }
     Row(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
         Text("${d.kcal} ккал", style = MaterialTheme.typography.titleSmall)
         Text("Б ${d.p} г", style = MaterialTheme.typography.titleSmall, color = DiaryTheme.extras.protein)
@@ -262,7 +304,8 @@ fun DiaryScreen(vm: NutritionViewModel, data: NutritionData, today: String, date
                     Muted("${t.kcal} из ~${Goals.kcal} ккал")
                 }
             }
-            Muted("Значения приблизительные.")
+            if (t.fat > 0 || t.carbs > 0) MacroRow(t.kcal.toDouble(), t.protein.toDouble(), t.fat.toDouble(), t.carbs.toDouble())
+            Muted("Значения приблизительные. Жиры и углеводы — по блюдам каталога и отсканированным продуктам.")
         }
         if (link is TrainingLink.Ready) DayBalance(link, date, t.kcal, t.protein)
 
@@ -293,7 +336,10 @@ private fun EntryRow(e: Entry, onDelete: () -> Unit) {
                 Text(e.name, style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f, fill = false))
                 if (!e.plan) ru.diary.core.ui.Muted("вне плана")
             }
-            Muted((if (e.plan) portionLabel(e.portion) + " · " else "") + (if (e.kcal > 0) "${e.kcal} ккал" else "ккал не указаны") + (if (e.protein > 0) " · Б ${e.protein} г" else ""))
+            Muted(
+                (if (e.plan) amountLabel(e) + " · " else "") + (if (e.kcal > 0) "${e.kcal} ккал" else "ккал не указаны") + (if (e.protein > 0) " · Б ${e.protein} г" else "") +
+                    (e.fat?.let { " · Ж $it г" } ?: "") + (e.carbs?.let { " · У $it г" } ?: ""),
+            )
         }
         QuietButton("Удалить", onDelete, Modifier.semantics { contentDescription = "Удалить запись: ${e.name}" })
     }
@@ -477,6 +523,13 @@ fun SettingsScreen(vm: NutritionViewModel, link: TrainingLink) {
         }
         SectionTitle("Где хранятся данные")
         Muted("Данные хранятся только на этом телефоне и никуда не отправляются. Делайте экспорт, чтобы не потерять историю.")
+        SectionTitle("Сканирование продуктов")
+        ToggleRow(
+            "Искать продукты в Open Food Facts", s.onlineLookup, { vm.setOnlineLookup(it) },
+            subtitle = "Открытая база продуктов. Туда уходит только номер штрих-кода. Без поиска продукт вводится с этикетки один раз и дальше находится сразу.",
+        )
+        SectionTitle("Фотографии блюд")
+        PhotoCredits()
         SectionTitle("Обновления")
         UpdateSection(ctx.container.updater)
         if (DiaryContract.SHARING_ENABLED) {
