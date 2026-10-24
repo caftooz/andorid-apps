@@ -24,7 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
+import ru.diary.core.ui.DiaryBackdrop
 import ru.diary.core.ui.DiaryNavBar
+import androidx.compose.ui.graphics.Color
 import ru.diary.core.ui.NavItem
 import ru.diary.core.update.UpdatePrompt
 import ru.diary.nutrition.container
@@ -49,8 +51,8 @@ fun NutritionRoot(vm: NutritionViewModel) {
     }
     UpdatePrompt(LocalContext.current.container.updater)
     val d = data
-    Scaffold(
-        snackbarHost = { SnackbarHost(snackbar) },
+    DiaryBackdrop { Scaffold(
+        snackbarHost = { SnackbarHost(snackbar) }, containerColor = Color.Transparent,
         bottomBar = { DiaryNavBar(TABS, pager.currentPage, { i -> scope.launch { pager.animateScrollToPage(i) } }) },
     ) { pad ->
         if (d == null) {
@@ -63,5 +65,5 @@ fun NutritionRoot(vm: NutritionViewModel) {
                 else -> DishesScreen(vm, d, today, date) { date = it }
             }
         }
-    }
+    } }
 }

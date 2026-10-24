@@ -1,5 +1,11 @@
 package ru.diary.training.ui
 
+import androidx.compose.ui.graphics.Brush
+import ru.diary.core.ui.EmptyState
+import ru.diary.core.ui.IconBubble
+import ru.diary.core.ui.IconBadge
+import ru.diary.core.ui.HeroStat
+import ru.diary.core.ui.HeroHeader
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -79,9 +85,13 @@ fun TodayScreen(
 
     TabColumn {
         Appear(index = 0) {
-            Column {
-                ScreenTitle("Сегодня")
-                Muted(Dates.weekdayDate(today))
+            HeroHeader("Сегодня", subtitle = Dates.weekdayDate(today), icon = "sun") {
+                val st = Logic.streak(data.sessions, today)
+                val gym = Logic.weekCounts(data.sessions, ws).gym
+                Row(Modifier.fillMaxWidth().padding(top = 6.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    HeroStat("$gym/$WEEKLY_GOAL", "зал на неделе", Modifier.weight(1f))
+                    HeroStat("$st", if (st == 1) "неделя подряд" else "недель подряд", Modifier.weight(1f))
+                }
             }
         }
         Appear(index = 1) { TodayPlanCard(data, today, onGoto) }
@@ -124,7 +134,7 @@ fun TodayScreen(
             val key = "t:" + tr.id
             DiaryCard {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Icon(DiaryIcons.get(tr.ic), null, tint = DiaryTheme.extras.home, modifier = Modifier.size(24.dp))
+                    IconBadge(tr.ic, DiaryTheme.extras.home)
                     Column(Modifier.weight(1f)) {
                         Text(
                             tr.name, style = MaterialTheme.typography.titleMedium,
@@ -156,7 +166,7 @@ fun TodayScreen(
         SectionTitle("Последние занятия")
         val recent = data.sessions.sortedByDescending { it.date + it.start }.take(6)
         if (recent.isEmpty()) {
-            Muted("Здесь появятся ваши тренировки. Нажмите «Провести тренировку», чтобы начать с первой программы.")
+            EmptyState("gym", "Здесь появятся ваши тренировки. Нажмите «Провести тренировку», чтобы начать с первой программы.")
         } else {
             DiaryCard {
                 recent.forEach { s -> RecentRow(s, data, today) { vm.removeSession(s.id) } }
@@ -167,7 +177,9 @@ fun TodayScreen(
 
 @Composable
 private fun RecentRow(s: Session, data: TrainingData, today: String, onDelete: () -> Unit) {
-    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        val cat = Texts.cat(s)
+        IconBubble(Texts.CAT_ICON.getValue(cat), Texts.catColor(cat))
         Column(Modifier.weight(1f).padding(vertical = 4.dp)) {
             Text("${Texts.dateLabel(s.date, today)} · ${Texts.typeName(s, data.plan)}", style = MaterialTheme.typography.titleSmall)
             Muted(Texts.sessionSummary(s, data.plan) + if (s.pain.isNotEmpty()) " · болело: ${s.pain.joinToString(", ").lowercase()}" else "")
@@ -192,12 +204,12 @@ private fun QuickButtons(selected: String?, onClick: (String) -> Unit) {
             Surface(
                 onClick = { onClick(k) },
                 modifier = Modifier.weight(1f).heightIn(min = 72.dp).semantics { contentDescription = label + if (on) ", выбрано" else "" },
-                shape = RoundedCornerShape(14.dp),
-                color = if (on) color.copy(alpha = 0.16f) else MaterialTheme.colorScheme.surface,
+                shape = RoundedCornerShape(22.dp),
+                color = if (on) color.copy(alpha = 0.16f) else DiaryTheme.extras.glass,
                 border = BorderStroke(if (on) 2.dp else 1.dp, if (on) color else MaterialTheme.colorScheme.outline),
             ) {
-                Column(Modifier.padding(8.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                    Icon(DiaryIcons.get(ic), null, tint = color, modifier = Modifier.size(24.dp))
+                Column(Modifier.padding(10.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically)) {
+                    IconBadge(ic, color, size = 40.dp)
                     Text(label, style = MaterialTheme.typography.labelLarge)
                 }
             }
@@ -273,12 +285,15 @@ private fun TodayTiles(data: TrainingData, today: String) {
 @Composable
 fun Tile(icon: String, value: String, label: String, color: Color, modifier: Modifier = Modifier) {
     Surface(
-        modifier.semantics(mergeDescendants = true) { contentDescription = "$value $label" }, shape = RoundedCornerShape(14.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        modifier.semantics(mergeDescendants = true) { contentDescription = "$value $label" }, shape = RoundedCornerShape(20.dp),
+        color = DiaryTheme.extras.glass, border = BorderStroke(1.dp, color.copy(alpha = 0.3f)),
     ) {
-        Column(Modifier.padding(10.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Icon(DiaryIcons.get(icon), null, tint = color, modifier = Modifier.size(20.dp))
-            Text(value, style = MaterialTheme.typography.titleMedium)
+        Column(
+            Modifier.background(Brush.verticalGradient(listOf(color.copy(alpha = 0.14f), Color.Transparent))).padding(horizontal = 6.dp, vertical = 12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            IconBubble(icon, color, size = 34.dp)
+            Text(value, style = MaterialTheme.typography.titleMedium, maxLines = 1)
             Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
@@ -295,7 +310,7 @@ private fun TodayPlanCard(data: TrainingData, today: String, onGoto: (String) ->
     DiaryCard {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
             if (inPlan) RingIndicator(w!!.toFloat() / total, w.toString(), "из $total")
-            else Icon(DiaryIcons.get("target"), null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(56.dp))
+            else IconBadge("target", MaterialTheme.colorScheme.primary, size = 60.dp)
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 Text(
                     when {

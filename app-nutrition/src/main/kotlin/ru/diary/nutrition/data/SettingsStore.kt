@@ -13,14 +13,14 @@ import ru.diary.core.theme.ThemeMode
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("nutrition_settings")
 
-data class Settings(val theme: ThemeMode = ThemeMode.System, val dynamicColor: Boolean = true)
+data class Settings(val theme: ThemeMode = ThemeMode.System, val dynamicColor: Boolean = false)
 
 class SettingsStore(private val context: Context) {
     private val themeKey = stringPreferencesKey("theme")
-    private val dynKey = booleanPreferencesKey("dynamic_color")
+    private val dynKey = booleanPreferencesKey("dynamic_color_v2")
 
     val settings: Flow<Settings> = context.dataStore.data.map { p ->
-        Settings(p[themeKey]?.let { runCatching { ThemeMode.valueOf(it) }.getOrNull() } ?: ThemeMode.System, p[dynKey] ?: true)
+        Settings(p[themeKey]?.let { runCatching { ThemeMode.valueOf(it) }.getOrNull() } ?: ThemeMode.System, p[dynKey] ?: false)
     }
 
     suspend fun setTheme(m: ThemeMode) = context.dataStore.edit { it[themeKey] = m.name }

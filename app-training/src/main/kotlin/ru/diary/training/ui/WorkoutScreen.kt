@@ -1,5 +1,12 @@
 package ru.diary.training.ui
 
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.shadow
+import androidx.compose.foundation.shape.CircleShape
+import ru.diary.core.theme.DiaryTheme
+import ru.diary.core.charts.MeterBar
+import ru.diary.core.ui.HeroHeader
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
@@ -124,7 +131,14 @@ fun WorkoutScreen(vm: TrainingViewModel, data: TrainingData, active: ActiveWorko
                 TabColumn {
                     if (Logic.deloadNow(data.plan, today)) Callout { Text("Неделя разгрузки: подходов вдвое меньше, веса те же.") }
                     Logic.volleyNote(data.plan, data.sessions, today).takeIf { it.isNotEmpty() }?.let { Callout { Text(it) } }
-                    Text(active.title, style = MaterialTheme.typography.titleLarge)
+                    val doneSets = active.ex.sumOf { Logic.doneCount(it) }
+                    val allSets = active.ex.sumOf { it.sets.size }
+                    HeroHeader(active.title, subtitle = "Идёт тренировка · $doneSets из $allSets подходов", icon = "gym") {
+                        MeterBar(
+                            if (allSets > 0) doneSets.toFloat() / allSets else 0f, "Выполнено $doneSets из $allSets подходов",
+                            Modifier.padding(top = 4.dp), color = DiaryTheme.extras.onHero,
+                        )
+                    }
                     RestSettings(vm)
                     if (active.ex.any { it.first && it.d.kind == "w" }) {
                         Callout { Text("Подбираем веса. После каждого подхода нажмите «Легко», «Нормально» или «Тяжело». Приложение подскажет следующий вес и запомнит рабочий.") }
@@ -234,7 +248,7 @@ private fun SetRow(vm: TrainingViewModel, ex: ActiveEx, i: Int, j: Int, s: Activ
     val haptic = LocalHapticFeedback.current
     val checkScale by animateFloatAsState(if (s.done) 1.08f else 1f, spring(dampingRatio = 0.45f, stiffness = 400f), label = "check")
     Surface(
-        shape = RoundedCornerShape(12.dp), color = rowColor,
+        shape = RoundedCornerShape(18.dp), color = rowColor,
         modifier = Modifier.fillMaxWidth(),
     ) {
         Column(Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -250,7 +264,8 @@ private fun SetRow(vm: TrainingViewModel, ex: ActiveEx, i: Int, j: Int, s: Activ
                         contentDescription = (if (s.done) "Отменить подход " else "Подход выполнен: ") + (j + 1)
                         selected = s.done
                     },
-                    contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp), shape = RoundedCornerShape(12.dp),
+                    contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp), shape = CircleShape,
+                    border = if (s.done) null else BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)),
                     colors = if (s.done) androidx.compose.material3.ButtonDefaults.outlinedButtonColors(containerColor = MaterialTheme.colorScheme.primary, contentColor = MaterialTheme.colorScheme.onPrimary)
                     else androidx.compose.material3.ButtonDefaults.outlinedButtonColors(),
                 ) { Text("✓") }
@@ -311,10 +326,21 @@ private fun WorkoutBar(vm: TrainingViewModel, a: ActiveWorkout, onFinish: () -> 
     val resting = a.restEnd > 0 && left > 0
     val over = a.restEnd > 0 && left <= 0
     LaunchedEffect(over, a.restEnd) { if (over && now - a.restEnd > 90_000) vm.stopRest() }
-    val bg by animateColorAsState(if (over) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface, tween(350), label = "barBg")
-    val fg by animateColorAsState(if (over) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface, tween(350), label = "barFg")
-    Surface(color = bg, contentColor = fg, tonalElevation = 3.dp, border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)) {
-        Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
+    val x = DiaryTheme.extras
+    val on by animateFloatAsState(if (over) 1f else 0f, tween(350), label = "barOn")
+    val fg by animateColorAsState(if (over) x.onHero else MaterialTheme.colorScheme.onSurface, tween(350), label = "barFg")
+    val glow = x.hero.firstOrNull() ?: MaterialTheme.colorScheme.primary
+    val hero = x.heroBrush
+    val shape = RoundedCornerShape(28.dp)
+    Surface(
+        Modifier.padding(horizontal = 12.dp, vertical = 8.dp).shadow(14.dp, shape, ambientColor = glow, spotColor = glow),
+        shape = shape, color = MaterialTheme.colorScheme.surfaceContainerHigh, contentColor = fg,
+        border = BorderStroke(1.dp, Brush.linearGradient(listOf(x.rim, MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)))),
+    ) {
+        Row(
+            Modifier.fillMaxWidth().drawBehind { drawRect(hero, alpha = on) }.padding(horizontal = 18.dp, vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
             Column(Modifier.weight(1f).semantics(mergeDescendants = true) { stateDescription = if (resting) "Отдых" else "Тренировка" }) {
                 when {
                     resting -> {

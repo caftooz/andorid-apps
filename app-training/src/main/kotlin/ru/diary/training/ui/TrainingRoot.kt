@@ -38,7 +38,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import kotlinx.coroutines.launch
+import ru.diary.core.ui.DiaryBackdrop
 import ru.diary.core.ui.DiaryNavBar
+import androidx.compose.ui.graphics.Color
 import ru.diary.core.ui.NavItem
 import ru.diary.core.update.UpdatePrompt
 import ru.diary.training.container
@@ -73,7 +75,7 @@ fun TrainingRoot(vm: TrainingViewModel, integration: LiveIntegration) {
     }
     val d = data
     if (!ready || d == null) {
-        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
+        DiaryBackdrop(contentAlignment = Alignment.Center) { CircularProgressIndicator() }
         return
     }
     integration.Overlay()
@@ -81,8 +83,10 @@ fun TrainingRoot(vm: TrainingViewModel, integration: LiveIntegration) {
     UpdatePrompt(LocalContext.current.container.updater, enabled = active == null)
     val a = active
     if (a != null) {
-        Scaffold(snackbarHost = { SnackbarHost(snackbar) }) { pad ->
-            Box(Modifier.padding(pad)) { WorkoutScreen(vm, d, a, today) }
+        DiaryBackdrop {
+            Scaffold(snackbarHost = { SnackbarHost(snackbar) }, containerColor = Color.Transparent) { pad ->
+                Box(Modifier.padding(pad)) { WorkoutScreen(vm, d, a, today) }
+            }
         }
         return
     }
@@ -103,8 +107,8 @@ fun TrainingRoot(vm: TrainingViewModel, integration: LiveIntegration) {
         }
     }
 
-    Scaffold(
-        snackbarHost = { SnackbarHost(snackbar) },
+    DiaryBackdrop { Scaffold(
+        snackbarHost = { SnackbarHost(snackbar) }, containerColor = Color.Transparent,
         bottomBar = {
             AnimatedVisibility(onMain, enter = slideInVertically(tween(260)) { it } + fadeIn(tween(260)), exit = slideOutVertically(tween(200)) { it } + fadeOut(tween(120))) {
                 DiaryNavBar(TABS, pager.currentPage, { i -> scope.launch { pager.animateScrollToPage(i) } })
@@ -133,5 +137,5 @@ fun TrainingRoot(vm: TrainingViewModel, integration: LiveIntegration) {
             }
             planGraph(nav, vm, d, today)
         }
-    }
+    } }
 }

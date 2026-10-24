@@ -17,7 +17,7 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("t
 /** Настройки приложения. */
 data class Settings(
     val theme: ThemeMode = ThemeMode.System,
-    val dynamicColor: Boolean = true,
+    val dynamicColor: Boolean = false,
     /** Автоматический отдых: берётся значение упражнения, иначе `restLen`. */
     val restAuto: Boolean = true,
     val restLen: Int = 90,
@@ -27,7 +27,7 @@ data class Settings(
 class SettingsStore(private val context: Context) {
     private object Keys {
         val theme = stringPreferencesKey("theme")
-        val dynamic = booleanPreferencesKey("dynamic_color")
+        val dynamic = booleanPreferencesKey("dynamic_color_v2")
         val restAuto = booleanPreferencesKey("rest_auto")
         val restLen = intPreferencesKey("rest_len")
         val notifAsked = booleanPreferencesKey("notifications_asked")
@@ -36,7 +36,7 @@ class SettingsStore(private val context: Context) {
     val settings: Flow<Settings> = context.dataStore.data.map { p ->
         Settings(
             theme = p[Keys.theme]?.let { runCatching { ThemeMode.valueOf(it) }.getOrNull() } ?: ThemeMode.System,
-            dynamicColor = p[Keys.dynamic] ?: true,
+            dynamicColor = p[Keys.dynamic] ?: false,
             restAuto = p[Keys.restAuto] ?: true,
             restLen = (p[Keys.restLen] ?: 90).coerceIn(5, 3600),
             notificationsAsked = p[Keys.notifAsked] ?: false,
