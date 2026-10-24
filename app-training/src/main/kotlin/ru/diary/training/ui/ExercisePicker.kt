@@ -1,5 +1,8 @@
 package ru.diary.training.ui
 
+import ru.diary.core.ui.SegmentedControl
+import ru.diary.core.ui.TileOption
+import ru.diary.core.ui.IconTiles
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -99,10 +102,13 @@ fun ExercisePicker(
             Callout {
                 LabeledField("Название", name, { name = it }, maxLength = 80, placeholder = "Например, отжимания на брусьях дома")
                 Muted("Тип")
-                ChoiceChips(Texts.KIND_NAME.map { it.key to it.value }, kind, { kind = it; step = if (it == "w") 1.0 else BuiltinData.defaultsFor(it).step })
+                IconTiles(
+                    listOf(TileOption("w", "gym", "С весом"), TileOption("bw", "friends", "Без веса"), TileOption("time", "calendar", "На время")),
+                    kind, { kind = it; step = if (it == "w") 1.0 else BuiltinData.defaultsFor(it).step },
+                )
                 if (kind == "w") {
                     Muted("Шаг веса, кг")
-                    ChoiceChips(listOf(1.0, 2.5, 5.0).map { it to Js.fmt(it) }, step, { step = it })
+                    SegmentedControl(listOf(1.0, 2.5, 5.0).map { it to Js.fmt(it) + " кг" }, step, { step = it })
                 }
                 LabeledField("Заметка по технике, по желанию", tip, { tip = it }, maxLength = 300, singleLine = false, minLines = 2)
                 PrimaryButton("Создать и добавить", {

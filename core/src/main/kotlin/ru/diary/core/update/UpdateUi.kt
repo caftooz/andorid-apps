@@ -1,5 +1,6 @@
 package ru.diary.core.update
 
+import ru.diary.core.ui.ToggleRow
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -43,10 +44,7 @@ fun UpdateSection(updater: Updater, modifier: Modifier = Modifier) {
 
     androidx.compose.foundation.layout.Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Muted("Установлена версия ${updater.installedVersion}. Приложение ищет новую версию в выпусках GitHub (это единственное обращение к сети) и скачивает её сама; установку подтверждаете вы одним нажатием.")
-        Row(Modifier.fillMaxWidth().heightIn(min = MinTouch).clickable(role = Role.Checkbox) { auto = !auto; updater.autoCheck = auto }, verticalAlignment = Alignment.CenterVertically) {
-            Checkbox(auto, null)
-            Text("Проверять обновления при запуске", Modifier.padding(start = 8.dp), style = MaterialTheme.typography.bodyMedium)
-        }
+        ToggleRow("Проверять обновления при запуске", auto, { auto = it; updater.autoCheck = it })
         when (val s = state) {
             UpdateState.Idle, is UpdateState.UpToDate -> {
                 if (s is UpdateState.UpToDate) Muted("У вас последняя версия.")
@@ -97,7 +95,7 @@ fun UpdatePrompt(updater: Updater, enabled: Boolean = true) {
                     if (needPermission) Text("Разрешите установку на открывшемся экране, вернитесь и нажмите «Установить» ещё раз.", style = MaterialTheme.typography.bodySmall)
                 }
             },
-            confirmButton = { TextButton({ if (updater.install()) dismissed = ready.info.version else needPermission = true }) { Text("Установить") } },
+            confirmButton = { QuietButton("Установить", { if (updater.install()) dismissed = ready.info.version else needPermission = true }) },
             dismissButton = { QuietButton("Позже", { dismissed = ready.info.version }) },
         )
     }

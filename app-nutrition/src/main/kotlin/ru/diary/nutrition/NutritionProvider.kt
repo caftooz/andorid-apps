@@ -32,6 +32,8 @@ class NutritionProvider : ContentProvider() {
 
     override fun query(uri: Uri, projection: Array<out String>?, selection: String?, selectionArgs: Array<out String>?, sortOrder: String?): Cursor {
         enforce()
+        // Обмен данными временно выключен: сосед получает пустой ответ и просто скрывает свои блоки.
+        if (!DiaryContract.SHARING_ENABLED) return MatrixCursor(arrayOf("version"))
         val ctx = context!!
         Catalog.builtin // загружает цели из каталога
         val cursor: MatrixCursor = when (uri.lastPathSegment) {

@@ -1,5 +1,8 @@
 package ru.diary.training.ui
 
+import ru.diary.core.ui.SegmentedControl
+import ru.diary.core.ui.TileOption
+import ru.diary.core.ui.IconTiles
 import ru.diary.core.ui.HeroHeader
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -52,7 +55,13 @@ fun ProgressScreen(vm: TrainingViewModel, data: TrainingData, today: String, sta
     var tab by rememberSaveable(startTab) { mutableStateOf(startTab.takeIf { it in setOf("train", "ex", "max", "log") } ?: "train") }
     TabColumn {
         HeroHeader("Прогресс", subtitle = "Активность, рекорды и замеры", icon = "trend")
-        ChoiceChips(listOf("train" to "Активность", "ex" to "Упражнения", "max" to "Замеры", "log" to "Журнал"), tab, { tab = it })
+        IconTiles(
+            listOf(
+                TileOption("train", "chart", "Активность"), TileOption("ex", "gym", "Рекорды"),
+                TileOption("max", "target", "Замеры"), TileOption("log", "book", "Журнал"),
+            ),
+            tab, { tab = it },
+        )
         when (tab) {
             "ex" -> ExercisesTab(data, today)
             "max" -> MaxTab(vm, data, today, onGoto)
@@ -79,7 +88,7 @@ private fun ActivityTab(data: TrainingData, today: String) {
         ws to parts
     }
     val used = data.sessions.map { Texts.cat(it) }.toSet()
-    ChoiceChips(listOf("min" to "Минуты", "kcal" to "Ккал"), key, { key = it })
+    SegmentedControl(listOf("min" to "Минуты", "kcal" to "Ккал"), key, { key = it })
     val columns = weeks.map { (ws, parts) ->
         BarColumn(Dates.ddmm(ws), Texts.CAT_ORDER.mapNotNull { c -> parts[c]?.let { BarPart(it, Texts.catColor(c)) } })
     }
@@ -208,7 +217,7 @@ private fun MaxTab(vm: TrainingViewModel, data: TrainingData, today: String, onG
                 if (m.how.isNotEmpty()) Muted(m.how)
                 LabeledField("Результат, ${m.unit}", value, { value = it }, decimal = true)
                 val y = Dates.addDays(today, -1)
-                ChoiceChips(listOf(today to "Сегодня", y to "Вчера"), day ?: today, { day = it })
+                SegmentedControl(listOf(today to "Сегодня", y to "Вчера"), day ?: today, { day = it })
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     PrimaryButton("Записать", { vm.saveMax(m.id, value, day); if (value.isNotBlank()) open = null })
                     QuietButton("Отмена", { open = null })
