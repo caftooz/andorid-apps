@@ -69,7 +69,9 @@ jobs:
           KEYSTORE_BASE64: ${{ secrets.DIARY_KEYSTORE_BASE64 }}
         run: |
           test -n "$KEYSTORE_BASE64" || { echo "Секрет DIARY_KEYSTORE_BASE64 не задан"; exit 1; }
-          echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/diary.jks"
+          # Секрет мог быть получен на Windows (certutil): убрать строки-заголовки, CR и пробелы.
+          printf '%s' "$KEYSTORE_BASE64" | sed '/-----/d' | tr -d ' \r\n\t' | base64 -d > "$RUNNER_TEMP/diary.jks" \
+            || { echo "Секрет DIARY_KEYSTORE_BASE64 — не корректный base64 файла .jks"; exit 1; }
 
       - name: Сборка подписанных release-APK
         if: steps.check.outputs.skip != 'true'
