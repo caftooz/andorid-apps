@@ -1,31 +1,17 @@
 {
- "chicken-bake": {
-  "title": "Roasted Chicken",
-  "author": "vauvau",
+ "baked-fish": {
+  "title": "Grilled Salmon",
+  "author": "Prayitno / Thank you for (12 millions +) view",
   "license": "CC BY 2.0",
   "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-  "source": "https://www.flickr.com/photos/98193606@N00/4359372268"
+  "source": "https://www.flickr.com/photos/34128007@N04/15950616571"
  },
- "buckwheat": {
-  "title": "Гречневая каша",
-  "author": "Laitr Keiows",
-  "license": "CC BY-SA 3.0",
-  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-  "source": "https://commons.wikimedia.org/w/index.php?curid=8446430"
- },
- "rice": {
-  "title": "Bap (cooked rice)",
-  "author": "rozh3",
-  "license": "CC BY 2.5",
-  "licenseUrl": "https://creativecommons.org/licenses/by/2.5/",
-  "source": "https://commons.wikimedia.org/w/index.php?curid=54714704"
- },
- "lentil-soup": {
-  "title": "hearty red lentil soup",
-  "author": "jules:stonesoup",
-  "license": "CC BY 2.0",
-  "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-  "source": "https://www.flickr.com/photos/58367355@N00/14717052850"
+ "boiled-eggs": {
+  "title": "boiled eggs",
+  "author": "vanessa lollipop",
+  "license": "CC BY-SA 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+  "source": "https://www.flickr.com/photos/58450786@N05/8560903591"
  },
  "braised-meat": {
   "title": "Chhole (Indian Curried Chick peas)",
@@ -34,12 +20,19 @@
   "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
   "source": "https://www.flickr.com/photos/70522326@N00/401966637"
  },
- "chili": {
-  "title": "Chili con carne",
-  "author": "cyclonebill",
-  "license": "CC BY-SA 2.0",
-  "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
-  "source": "https://www.flickr.com/photos/23178876@N03/2222710953"
+ "buckwheat": {
+  "title": "ihawan sisig",
+  "author": "goodiesfirst",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+  "source": "https://www.flickr.com/photos/49215102@N00/4498530961"
+ },
+ "chicken-bake": {
+  "title": "Chicken Charlemagne",
+  "author": "basheertome",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+  "source": "https://www.flickr.com/photos/10019047@N05/15757336193"
  },
  "chicken-rice": {
   "title": "Halibut with mango salsa on coconut brown rice",
@@ -48,54 +41,19 @@
   "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
   "source": "https://www.flickr.com/photos/17879025@N00/434662467"
  },
- "baked-fish": {
-  "title": "Panko Baked Cod",
-  "author": "Rusty Clark ~ 100K Photos",
-  "license": "CC BY 2.0",
-  "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-  "source": "https://www.flickr.com/photos/23206546@N04/7556440570"
- },
- "tuna-pasta": {
-  "title": "Tuna Pasta for Kids",
-  "author": "kidzactivities",
-  "license": "CC BY 2.0",
-  "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-  "source": "https://www.flickr.com/photos/103885864@N04/10036078564"
- },
- "plov": {
-  "title": "Plov",
-  "author": "secretlondon123",
+ "chili": {
+  "title": "Chili con carne",
+  "author": "cyclonebill",
   "license": "CC BY-SA 2.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
-  "source": "https://www.flickr.com/photos/25834786@N03/3432157063"
+  "source": "https://www.flickr.com/photos/23178876@N03/4431800858"
  },
  "cottage-bake": {
-  "title": "Syrniki",
-  "author": "say_cheddar",
+  "title": "Cheesecake",
+  "author": "Dusty J",
   "license": "CC BY 2.0",
   "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-  "source": "https://www.flickr.com/photos/29271559@N02/26062281686"
- },
- "sandwich-kefir": {
-  "title": "Poached egg toast",
-  "author": "Lablascovegmenu",
-  "license": "CC BY 2.0",
-  "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-  "source": "https://www.flickr.com/photos/35022955@N06/8338523526"
- },
- "omelet": {
-  "title": "Vegetable omelette",
-  "author": "Ken_Mayer",
-  "license": "CC BY 2.0",
-  "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-  "source": "https://www.flickr.com/photos/14529688@N08/9742060066"
- },
- "oatmeal": {
-  "title": "Oatmeal, Part 2",
-  "author": "emmadiscovery",
-  "license": "CC BY 2.0",
-  "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-  "source": "https://www.flickr.com/photos/8174757@N02/6835999820"
+  "source": "https://www.flickr.com/photos/55608722@N06/12577501314"
  },
  "cottage-fruit": {
   "title": "Cottage cheese",
@@ -111,26 +69,68 @@
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
   "source": "https://www.flickr.com/photos/25834786@N03/4368815740"
  },
- "pb-sandwich": {
-  "title": "Peanut butter toast at Trouble Coffee in Bayview",
-  "author": "dalecruse",
+ "lentil-soup": {
+  "title": "Red Lentil Soup - Creamy",
+  "author": "bobjudge",
   "license": "CC BY 2.0",
   "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-  "source": "https://www.flickr.com/photos/91873384@N04/23708485701"
- },
- "boiled-eggs": {
-  "title": "boiled eggs",
-  "author": "vanessa lollipop",
-  "license": "CC BY-SA 2.0",
-  "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
-  "source": "https://www.flickr.com/photos/58450786@N05/8560903591"
+  "source": "https://www.flickr.com/photos/8286199@N08/3210281474"
  },
  "nuts": {
-  "title": "STOP & SHOP Deluxe Mixed Nuts",
-  "author": "s58y",
+  "title": "Pistachio nuts glass bowl",
+  "author": "неизвестный автор",
+  "license": "CC0",
+  "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "source": "https://www.rawpixel.com/image/6019786/photo-image-public-domain-plant-food"
+ },
+ "oatmeal": {
+  "title": "Oatmeal, Part 2",
+  "author": "emmadiscovery",
   "license": "CC BY 2.0",
   "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-  "source": "https://www.flickr.com/photos/45032885@N04/4415406430"
+  "source": "https://www.flickr.com/photos/8174757@N02/6835999820"
+ },
+ "omelet": {
+  "title": "Brunch",
+  "author": "rlerdorf",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+  "source": "https://www.flickr.com/photos/56053642@N00/5955322064"
+ },
+ "pb-sandwich": {
+  "title": "Pan de Sal and Peanut Butter",
+  "author": "arnold | inuyaki",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+  "source": "https://www.flickr.com/photos/58819758@N00/2984407109"
+ },
+ "plov": {
+  "title": "Plov",
+  "author": "secretlondon123",
+  "license": "CC BY-SA 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+  "source": "https://www.flickr.com/photos/25834786@N03/3432157063"
+ },
+ "rice": {
+  "title": "T.Pot White Rice",
+  "author": "Calgary Reviews",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+  "source": "https://www.flickr.com/photos/51930963@N02/5583597879"
+ },
+ "sandwich-kefir": {
+  "title": "Poached egg",
+  "author": "Kai Hendry",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+  "source": "https://www.flickr.com/photos/16105436@N00/2964510041"
+ },
+ "tuna-pasta": {
+  "title": "Good Potluck Dish",
+  "author": "NatalieMaynor",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+  "source": "https://www.flickr.com/photos/93178668@N00/7809379956"
  },
  "yogurt-apple": {
   "title": "Breakfast yogurt bowl",

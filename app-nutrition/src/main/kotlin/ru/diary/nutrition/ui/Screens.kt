@@ -156,7 +156,7 @@ private const val PRODUCTS_TAB = "products"
 private fun PhotoCredits() {
     val credits = DishPhotos.credits(LocalContext.current)
     var open by rememberSaveable { mutableStateOf(false) }
-    Muted("Фотографии взяты из открытых источников (Flickr, Wikimedia Commons) под свободными лицензиями Creative Commons. Снимки уменьшены и обрезаны.")
+    Muted("Фотографии взяты из открытых источников (Flickr, Wikimedia Commons) под свободными лицензиями Creative Commons. Блюда вырезаны из исходных снимков и помещены на единый фон, снимки уменьшены.")
     QuietButton(if (open) "Скрыть авторов" else "Показать авторов", { open = !open })
     Reveal(open) {
         val names = ru.diary.nutrition.domain.Catalog.builtin.associate { it.id to it.name }
