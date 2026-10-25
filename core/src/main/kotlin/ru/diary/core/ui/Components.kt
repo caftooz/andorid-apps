@@ -287,6 +287,7 @@ fun LabeledField(
     placeholder: String? = null,
     minLines: Int = 1,
     maxLength: Int = Int.MAX_VALUE,
+    password: Boolean = false,
 ) {
     val x = DiaryTheme.extras
     val cs = MaterialTheme.colorScheme
@@ -299,6 +300,7 @@ fun LabeledField(
             unfocusedBorderColor = cs.outline, focusedBorderColor = cs.primary,
         ),
         placeholder = placeholder?.let { { Text(it) } },
+        visualTransformation = if (password) androidx.compose.ui.text.input.PasswordVisualTransformation() else androidx.compose.ui.text.input.VisualTransformation.None,
         keyboardOptions = KeyboardOptions(keyboardType = if (decimal) KeyboardType.Decimal else if (numeric) KeyboardType.Number else KeyboardType.Text),
     )
 }

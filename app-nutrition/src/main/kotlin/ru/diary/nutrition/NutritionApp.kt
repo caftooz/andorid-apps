@@ -1,5 +1,7 @@
 package ru.diary.nutrition
 
+import ru.diary.nutrition.data.GeminiRecognizer
+import ru.diary.nutrition.data.SecretStore
 import ru.diary.nutrition.data.ProductLookup
 import android.app.Application
 import android.content.Context
@@ -24,6 +26,8 @@ class AppContainer(private val context: Context) {
     val client = DiaryClient(context)
     val updater = Updater(context, "caftooz", "andorid-apps", "app-nutrition-release.apk")
     val lookup = ProductLookup(updater.installedVersion)
+    val secrets = SecretStore(context)
+    val gemini = GeminiRecognizer()
 }
 
 class NutritionApp : Application() {

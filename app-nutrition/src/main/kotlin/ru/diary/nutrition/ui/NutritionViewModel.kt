@@ -1,5 +1,8 @@
 package ru.diary.nutrition.ui
 
+import ru.diary.nutrition.domain.PhotoMeal
+import ru.diary.nutrition.data.GeminiRecognizer
+import ru.diary.nutrition.data.SecretStore
 import ru.diary.nutrition.domain.Weigh
 import ru.diary.nutrition.domain.WeighItem
 import ru.diary.nutrition.domain.Goals
@@ -51,6 +54,14 @@ sealed interface TrainingLink {
     data class Ready(val meta: TrainingMeta, val days: Map<String, TrainingDay>) : TrainingLink
 }
 
+/** Распознавание фото блюда: идёт запрос, черновик на проверку или ошибка. */
+sealed interface PhotoState {
+    data object Idle : PhotoState
+    data object Working : PhotoState
+    data class Draft(val meal: PhotoMeal) : PhotoState
+    data class Error(val message: String) : PhotoState
+}
+
 /** Состояние сканирования штрих-кода на вкладке «Блюда». */
 sealed interface ScanState {
     data object Idle : ScanState
@@ -66,6 +77,8 @@ class NutritionViewModel(
     private val settingsStore: SettingsStore,
     private val client: DiaryClient,
     private val lookup: ProductLookup,
+    private val secrets: SecretStore,
+    private val gemini: GeminiRecognizer,
     private val clock: () -> Long = System::currentTimeMillis,
 ) : ViewModel() {
 
@@ -78,6 +91,12 @@ class NutritionViewModel(
     private val _link = MutableStateFlow<TrainingLink>(TrainingLink.None)
     val link: StateFlow<TrainingLink> = _link.asStateFlow()
 
+    private val _photo = MutableStateFlow<PhotoState>(PhotoState.Idle)
+    val photo: StateFlow<PhotoState> = _photo.asStateFlow()
+
+    private val _hasPhotoKey = MutableStateFlow(false)
+    val hasPhotoKey: StateFlow<Boolean> = _hasPhotoKey.asStateFlow()
+
     private val _scan = MutableStateFlow<ScanState>(ScanState.Idle)
     val scan: StateFlow<ScanState> = _scan.asStateFlow()
 
@@ -85,6 +104,7 @@ class NutritionViewModel(
     val messages: SharedFlow<UiMessage> = _messages.asSharedFlow()
 
     init {
+        refreshPhotoKey()
         viewModelScope.launch {
             while (true) { delay(30_000); _today.value = Dates.today() }
         }
@@ -146,6 +166,51 @@ class NutritionViewModel(
         mutate { it.copy(custom = it.custom + c) }
         say("Блюдо добавлено")
         return true
+    }
+
+    // ---------- Фото блюда (Gemini) ----------
+
+    fun refreshPhotoKey() { viewModelScope.launch(Dispatchers.IO) { _hasPhotoKey.value = !secrets.get(SecretStore.GEMINI_KEY).isNullOrBlank() } }
+
+    fun savePhotoKey(key: String) {
+        val k = key.trim()
+        if (k.length < 20) { say("Ключ слишком короткий — скопируйте его целиком из Google AI Studio"); return }
+        viewModelScope.launch(Dispatchers.IO) { secrets.put(SecretStore.GEMINI_KEY, k); _hasPhotoKey.value = true; settingsStore.setPhotoAi(true) }
+        say("Ключ сохранён")
+    }
+
+    fun removePhotoKey() {
+        viewModelScope.launch(Dispatchers.IO) { secrets.remove(SecretStore.GEMINI_KEY); _hasPhotoKey.value = false; settingsStore.setPhotoAi(false) }
+        say("Ключ удалён")
+    }
+
+    fun setPhotoAi(v: Boolean) { viewModelScope.launch { settingsStore.setPhotoAi(v) } }
+    fun setPhotoModel(m: String) { viewModelScope.launch { settingsStore.setPhotoModel(m) } }
+
+    /** Распознать фото: уменьшенный JPEG уходит в Gemini, ответ — состав из продуктов базы. */
+    fun recognizePhoto(jpeg: ByteArray) {
+        _photo.value = PhotoState.Working
+        viewModelScope.launch {
+            val key = withContext(Dispatchers.IO) { secrets.get(SecretStore.GEMINI_KEY) }
+            if (key.isNullOrBlank()) { _photo.value = PhotoState.Error("Сначала добавьте ключ Gemini API"); return@launch }
+            _photo.value = when (val r = gemini.recognize(jpeg, key, settings.value.photoModel)) {
+                is GeminiRecognizer.Result.Ok ->
+                    if (r.meal.items.isEmpty()) PhotoState.Error(r.meal.note.ifEmpty { "Не удалось найти еду на фото." }) else PhotoState.Draft(r.meal)
+                is GeminiRecognizer.Result.Failed -> PhotoState.Error(r.message)
+            }
+        }
+    }
+
+    fun photoError(message: String) { _photo.value = PhotoState.Error(message) }
+    fun resetPhoto() { _photo.value = PhotoState.Idle }
+
+    /** Записать проверенное блюдо одной строкой дневника. */
+    fun savePhotoMeal(meal: PhotoMeal, date: String) {
+        if (meal.items.isEmpty()) { say("Добавьте хотя бы один продукт"); return }
+        val e = meal.toEntry(date, nowTime(), clock())
+        mutate { it.copy(log = it.log + e) }
+        _photo.value = PhotoState.Idle
+        say("Записано: ${e.name}, ${meal.grams} г · ${Dates.label(date, today.value).lowercase()}", "Отменить") { removeQuiet(e.id) }
     }
 
     fun setNorm(f: NormField, v: Int) { viewModelScope.launch { settingsStore.setNorm(f, v) } }
@@ -242,8 +307,9 @@ class NutritionViewModel(
 
     class Factory(
         private val repo: NutritionRepository, private val settings: SettingsStore, private val client: DiaryClient, private val lookup: ProductLookup,
+        private val secrets: SecretStore, private val gemini: GeminiRecognizer,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T = NutritionViewModel(repo, settings, client, lookup) as T
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = NutritionViewModel(repo, settings, client, lookup, secrets, gemini) as T
     }
 }
