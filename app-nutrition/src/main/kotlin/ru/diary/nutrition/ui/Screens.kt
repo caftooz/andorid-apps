@@ -185,6 +185,7 @@ private fun catColor(cat: String) = when (cat) {
 fun DishesScreen(vm: NutritionViewModel, data: NutritionData, today: String, date: String, onDate: (String) -> Unit) {
     // Порция всегда обычная; точное количество — через «Взвесить».
     var weighOpen by rememberSaveable { mutableStateOf(false) }
+    var photoOpen by rememberSaveable { mutableStateOf(false) }
     var weighItem by remember { mutableStateOf<WeighItem?>(null) }
     var cat by rememberSaveable { mutableStateOf("all") }
     var byAge by rememberSaveable { mutableStateOf(true) }
@@ -201,6 +202,7 @@ fun DishesScreen(vm: NutritionViewModel, data: NutritionData, today: String, dat
                 HeroStat("${t.kcal}", "ккал", Modifier.weight(1f))
             }
         }
+        PhotoBanner { photoOpen = true }
         ScanButtons(vm) { weighItem = null; weighOpen = true }
         val scan by vm.scan.collectAsStateWithLifecycle()
         ScanPanel(vm, scan, date, today)
@@ -233,6 +235,7 @@ fun DishesScreen(vm: NutritionViewModel, data: NutritionData, today: String, dat
         ) { open = null; askDelete = null }
     }
     if (weighOpen) WeighSheet(vm, data, date, today, weighItem) { weighOpen = false; weighItem = null }
+    if (photoOpen) PhotoMealSheet(vm, date, today) { photoOpen = false }
     if (addOpen) DiarySheet({ addOpen = false }, title = "Своё блюдо", subtitle = "Ккал и белок на порцию", icon = "plus") { close ->
         AddDishForm(vm, close)
     }
@@ -585,6 +588,8 @@ fun SettingsScreen(vm: NutritionViewModel, link: TrainingLink) {
         }
         SectionTitle("Где хранятся данные")
         Muted("Данные хранятся только на этом телефоне и никуда не отправляются. Делайте экспорт, чтобы не потерять историю.")
+        SectionTitle("Блюдо по фото")
+        PhotoAiSetup(vm)
         SectionTitle("Сканирование продуктов")
         ToggleRow(
             "Искать продукты в Open Food Facts", s.onlineLookup, { vm.setOnlineLookup(it) },
