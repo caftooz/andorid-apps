@@ -57,10 +57,13 @@ class ProductsTest {
         val d = NutritionTransfer.parseImport(text)!!
         assertEquals(listOf(p), d.products)
         assertEquals(e, d.log.single())
-        // Записи блюд экспортируются без новых полей, как в веб-версии.
+        // Записи без жиров/углеводов (вне плана, старые) экспортируются без новых полей, как в веб-версии.
+        val oop = NutritionLogic.outOfPlan("Кафе", "500", "20", "2026-10-24", "12:00", 1L)
+        val obj = NutritionTransfer.entryJson(oop)
+        assertTrue("fat" !in obj && "carbs" !in obj && "fiber" !in obj)
+        // Записи блюд теперь несут жиры, углеводы и клетчатку из состава.
         val dish = NutritionLogic.eat(Catalog.builtin.first(), "2026-10-24", "12:00", 1.0, 1L)
-        val obj = NutritionTransfer.entryJson(dish)
-        assertTrue("fat" !in obj && "carbs" !in obj)
+        assertEquals(dish, NutritionTransfer.cleanEntry(NutritionTransfer.entryJson(dish)))
         val merged = NutritionTransfer.applyImport(NutritionData(products = listOf(p)), d, NutritionTransfer.Mode.Merge)
         assertEquals(1, merged.products.size)
     }

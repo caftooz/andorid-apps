@@ -17,11 +17,17 @@ import ru.diary.core.date.Dates
 import ru.diary.core.util.Js
 import kotlin.random.Random
 
-/** Цели из прототипа: белок в граммах (от и до) и ориентир по калориям. */
+/**
+ * Дневные нормы. Белок и калории по умолчанию — из прототипа, жиры, углеводы и клетчатка — типичные ориентиры
+ * для активного взрослого. Пользователь меняет их в настройках, ViewModel синхронизирует значения сюда.
+ */
 object Goals {
     var proteinMin = 105
     var proteinMax = 130
     var kcal = 2500
+    var fat = 80
+    var carbs = 300
+    var fiber = 30
 }
 
 val CATS = listOf("all" to "Все", "breakfast" to "Завтраки", "main" to "Обед и ужин", "side" to "Гарниры", "snack" to "Перекусы")
@@ -44,6 +50,9 @@ data class Dish(
     val steps: List<String>,
     val custom: Boolean = false,
     val notes: String = "",
+    /** Вес порции и клетчатка — для блюд с известным составом (`compositions.json`). */
+    val grams: Int? = null,
+    val fiber: Double? = null,
 )
 
 data class CustomDish(val id: String, val name: String, val cat: String, val kcal: Int, val p: Int, val notes: String)
@@ -65,8 +74,11 @@ data class Entry(
     val plan: Boolean,
     val fat: Int? = null,
     val carbs: Int? = null,
+    val fiber: Double? = null,
 ) {
     val isProduct: Boolean get() = dish?.startsWith(PRODUCT_PREFIX) == true
+    /** Записано по весу (взвешено или отсканировано): `portion` — граммы. */
+    val byWeight: Boolean get() = isProduct || dish?.startsWith(WEIGHED_PREFIX) == true
 }
 
 const val PRODUCT_PREFIX = "bc:"
@@ -86,6 +98,7 @@ data class Product(
     val packG: Int?,
     val source: String,
     val updated: Long,
+    val fiber: Double = 0.0,
 )
 
 data class NutritionData(
@@ -102,13 +115,14 @@ object Products {
     private fun dec(v: String): Double? = v.trim().replace(',', '.').toDoubleOrNull()?.takeIf { it >= 0 && it.isFinite() }
 
     /** Продукт из полей формы; `null`, если нет названия или калорийности. */
-    fun manual(code: String, name: String, brand: String, kcal: String, p: String, f: String, c: String, pack: String, now: Long): Product? {
+    fun manual(code: String, name: String, brand: String, kcal: String, p: String, f: String, c: String, pack: String, now: Long, fiber: String = ""): Product? {
         val n = name.trim().take(120)
         val k = dec(kcal) ?: return null
         if (n.isEmpty() || k > 1000) return null
         return Product(
             code, n, brand.trim().take(80), k, (dec(p) ?: 0.0).coerceAtMost(100.0), (dec(f) ?: 0.0).coerceAtMost(100.0),
             (dec(c) ?: 0.0).coerceAtMost(100.0), pack.trim().toIntOrNull()?.takeIf { it in 1..20000 }, "user", now,
+            fiber = (dec(fiber) ?: 0.0).coerceAtMost(100.0),
         )
     }
 
@@ -118,7 +132,7 @@ object Products {
         return Entry(
             Ids.uid(now), date, time, PRODUCT_PREFIX + prod.code, prod.name, grams.toDouble(),
             Js.round(prod.kcal * k).toInt(), Js.round(prod.p * k).toInt(), true,
-            fat = Js.round(prod.f * k).toInt(), carbs = Js.round(prod.c * k).toInt(),
+            fat = Js.round(prod.f * k).toInt(), carbs = Js.round(prod.c * k).toInt(), fiber = Weigh.round1(prod.fiber * k),
         )
     }
 
@@ -126,7 +140,7 @@ object Products {
 }
 
 /** Подпись количества: для продукта — граммы, для блюда — размер порции. */
-fun amountLabel(e: Entry): String = if (e.isProduct) "${e.portion.toInt()} г" else portionLabel(e.portion)
+fun amountLabel(e: Entry): String = if (e.byWeight) "${e.portion.toInt()} г" else portionLabel(e.portion)
 
 fun portionLabel(p: Double): String = PORTIONS.firstOrNull { it.first == p }?.second?.lowercase() ?: "×" + Js.numToString(p)
 
@@ -156,12 +170,20 @@ object Catalog {
     val builtin: List<Dish> by lazy {
         root.getValue("dishes").jsonArray.map { e ->
             val o = e.jsonObject
-            Dish(
+            val d = Dish(
                 id = o.getValue("id").jsonPrimitive.content, name = o.getValue("name").jsonPrimitive.content, cat = o.getValue("cat").jsonPrimitive.content,
                 kcal = o["kcal"].intOrNull() ?: 0, p = o["p"].intOrNull() ?: 0, f = o["f"].intOrNull(), c = o["c"].intOrNull(),
                 tags = o["tags"].strings(), time = o["time"].strOrNull(), batch = o["batch"].strOrNull(),
                 ing = o["ing"].strings(), steps = o["steps"].strings(),
             )
+            // Если состав блюда известен, пищевая ценность порции считается по продуктам, а не берётся из прототипа.
+            val parts = Foods.parts(d.id)
+            if (parts.isEmpty()) d else Foods.total(parts).let { n ->
+                d.copy(
+                    kcal = Js.round(n.kcal).toInt(), p = Js.round(n.p).toInt(), f = Js.round(n.f).toInt(), c = Js.round(n.c).toInt(),
+                    grams = Foods.grams(parts), fiber = Weigh.round1(n.fiber),
+                )
+            }
         }
     }
 
@@ -171,7 +193,7 @@ object Catalog {
 }
 
 /** Агрегаты за день для интерфейса и для провайдера данных. */
-data class DayTotals(val kcal: Int, val protein: Int, val fat: Int, val carbs: Int, val meals: Int)
+data class DayTotals(val kcal: Int, val protein: Int, val fat: Int, val carbs: Int, val meals: Int, val fiber: Double = 0.0)
 
 data class WeekStats(
     val days: List<Pair<String, Int>>,
@@ -200,6 +222,8 @@ object NutritionLogic {
     fun eat(dish: Dish, date: String, time: String, portion: Double, now: Long): Entry = Entry(
         Ids.uid(now), date, time, dish.id, dish.name, portion,
         Js.round(dish.kcal * portion).toInt(), Js.round(dish.p * portion).toInt(), true,
+        fat = dish.f?.let { Js.round(it * portion).toInt() }, carbs = dish.c?.let { Js.round(it * portion).toInt() },
+        fiber = dish.fiber?.let { Weigh.round1(it * portion) },
     )
 
     fun outOfPlan(name: String, kcal: String, protein: String, date: String, time: String, now: Long): Entry = Entry(
@@ -231,15 +255,17 @@ object NutritionLogic {
     /** Жиры и углеводы: у продуктов — из записи, у блюд — по каталогу; для записей вне плана и своих блюд они неизвестны (0). */
     fun totals(data: NutritionData, date: String): DayTotals {
         val all = Catalog.all(data.custom).associateBy { it.id }
-        var k = 0; var p = 0; var f = 0.0; var c = 0.0
+        var k = 0; var p = 0; var f = 0.0; var c = 0.0; var fib = 0.0
         val es = entriesOn(data, date)
         for (e in es) {
             k += e.kcal; p += e.protein
-            if (e.fat != null || e.carbs != null) { f += e.fat ?: 0; c += e.carbs ?: 0; continue }
             val d = e.dish?.let { all[it] }
-            if (d != null) { f += (d.f ?: 0) * e.portion; c += (d.c ?: 0) * e.portion }
+            // Старые записи блюд хранят только ккал и белок: остальное берётся из каталога по порции.
+            f += e.fat?.toDouble() ?: ((d?.f ?: 0) * e.portion)
+            c += e.carbs?.toDouble() ?: ((d?.c ?: 0) * e.portion)
+            fib += e.fiber ?: ((d?.fiber ?: 0.0) * e.portion)
         }
-        return DayTotals(k, p, Js.round(f).toInt(), Js.round(c).toInt(), es.size)
+        return DayTotals(k, p, Js.round(f).toInt(), Js.round(c).toInt(), es.size, Weigh.round1(fib))
     }
 
     fun week(data: NutritionData, today: String): WeekStats {
@@ -298,12 +324,13 @@ object NutritionTransfer {
         // Новые поля пишутся только когда есть: записи блюд остаются в точности как в веб-версии.
         e.fat?.let { put("fat", JsonPrimitive(it)) }
         e.carbs?.let { put("carbs", JsonPrimitive(it)) }
+        e.fiber?.let { put("fiber", JsonPrimitive(it)) }
     }
 
     fun productJson(p: Product): JsonObject = buildJsonObject {
         put("code", p.code); put("name", p.name); put("brand", p.brand)
         put("kcal100", JsonPrimitive(p.kcal)); put("protein100", JsonPrimitive(p.p)); put("fat100", JsonPrimitive(p.f)); put("carbs100", JsonPrimitive(p.c))
-        put("packGrams", int(p.packG)); put("source", p.source); put("updated", JsonPrimitive(p.updated))
+        put("packGrams", int(p.packG)); put("source", p.source); put("updated", JsonPrimitive(p.updated)); put("fiber100", JsonPrimitive(p.fiber))
     }
 
     fun customJson(c: CustomDish): JsonObject = buildJsonObject {
@@ -349,6 +376,7 @@ object NutritionTransfer {
             plan = (e["plan"] as? JsonPrimitive)?.let { it.content != "false" } ?: true,
             fat = e["fat"]?.takeIf { it !is JsonNull }?.let { NutritionLogic.num(it) },
             carbs = e["carbs"]?.takeIf { it !is JsonNull }?.let { NutritionLogic.num(it) },
+            fiber = e["fiber"]?.takeIf { it !is JsonNull }?.let { Js.toNumber(it) }?.takeIf { it.isFinite() && it >= 0 }?.let { Weigh.round1(it) },
         )
     }
 
@@ -363,6 +391,7 @@ object NutritionTransfer {
             dbl(o["kcal100"]).coerceAtMost(1000.0), dbl(o["protein100"]).coerceAtMost(100.0), dbl(o["fat100"]).coerceAtMost(100.0), dbl(o["carbs100"]).coerceAtMost(100.0),
             Js.toNumber(o["packGrams"]).takeIf { it.isFinite() && it >= 1 && it <= 20000 }?.toInt(),
             if (Js.str(o["source"]) == "off") "off" else "user", Js.toNumber(o["updated"]).takeIf { it.isFinite() && it > 0 }?.toLong() ?: 0L,
+            fiber = dbl(o["fiber100"]).coerceAtMost(100.0),
         )
     }
 

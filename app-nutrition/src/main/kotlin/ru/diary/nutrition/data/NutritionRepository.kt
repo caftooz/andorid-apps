@@ -20,9 +20,9 @@ class NutritionRepository(db: NutritionDatabase, private val onChanged: () -> Un
 
     val data: Flow<NutritionData> = combine(dao.entries(), dao.custom(), dao.products()) { e, c, p ->
         NutritionData(
-            e.map { Entry(it.id, it.date, it.time, it.dish, it.name, it.portion, it.kcal, it.protein, it.plan, it.fat, it.carbs) },
+            e.map { Entry(it.id, it.date, it.time, it.dish, it.name, it.portion, it.kcal, it.protein, it.plan, it.fat, it.carbs, it.fiber) },
             c.map { CustomDish(it.id, it.name, it.cat, it.kcal, it.p, it.notes) },
-            p.map { Product(it.code, it.name, it.brand, it.kcal, it.p, it.f, it.c, it.packG, it.source, it.updated) },
+            p.map { Product(it.code, it.name, it.brand, it.kcal, it.p, it.f, it.c, it.packG, it.source, it.updated, it.fiber) },
         )
     }
 
@@ -53,7 +53,7 @@ class NutritionRepository(db: NutritionDatabase, private val onChanged: () -> Un
         onChanged()
     }
 
-    private fun entity(e: Entry) = EntryEntity(e.id, e.date, e.time, e.dish, e.name, e.portion, e.kcal, e.protein, e.plan, e.fat, e.carbs)
-    private fun productEntity(p: Product) = ProductEntity(p.code, p.name, p.brand, p.kcal, p.p, p.f, p.c, p.packG, p.source, p.updated)
+    private fun entity(e: Entry) = EntryEntity(e.id, e.date, e.time, e.dish, e.name, e.portion, e.kcal, e.protein, e.plan, e.fat, e.carbs, e.fiber)
+    private fun productEntity(p: Product) = ProductEntity(p.code, p.name, p.brand, p.kcal, p.p, p.f, p.c, p.packG, p.source, p.updated, p.fiber)
     private fun customEntities(l: List<CustomDish>) = l.mapIndexed { i, c -> CustomDishEntity(c.id, i, c.name, c.cat, c.kcal, c.p, c.notes) }
 }

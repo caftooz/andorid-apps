@@ -1,5 +1,6 @@
 package ru.diary.nutrition.data
 
+import androidx.room.ColumnInfo
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.room.migration.Migration
 import android.content.Context
@@ -30,6 +31,7 @@ data class EntryEntity(
     val plan: Boolean,
     val fat: Int? = null,
     val carbs: Int? = null,
+    val fiber: Double? = null,
 )
 
 /** Продукт по штрих-коду, КБЖУ на 100 г. */
@@ -45,6 +47,7 @@ data class ProductEntity(
     val packG: Int?,
     val source: String,
     val updated: Long,
+    @ColumnInfo(defaultValue = "0") val fiber: Double = 0.0,
 )
 
 /** Своё блюдо пользователя. */
@@ -93,13 +96,21 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
     }
 }
 
-@Database(entities = [EntryEntity::class, CustomDishEntity::class, ProductEntity::class], version = 2, exportSchema = true)
+/** Версия 3: клетчатка у записей и продуктов. */
+val MIGRATION_2_3 = object : Migration(2, 3) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE entries ADD COLUMN fiber REAL")
+        db.execSQL("ALTER TABLE products ADD COLUMN fiber REAL NOT NULL DEFAULT 0")
+    }
+}
+
+@Database(entities = [EntryEntity::class, CustomDishEntity::class, ProductEntity::class], version = 3, exportSchema = true)
 abstract class NutritionDatabase : RoomDatabase() {
     abstract fun dao(): NutritionDao
 
     companion object {
         const val NAME = "nutrition.db"
         fun create(context: Context): NutritionDatabase = Room.databaseBuilder(context.applicationContext, NutritionDatabase::class.java, NAME)
-            .addMigrations(MIGRATION_1_2).build()
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3).build()
     }
 }

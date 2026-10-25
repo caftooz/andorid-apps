@@ -44,6 +44,7 @@ object OpenFoodFacts {
             code, name.take(120), brand.take(80), round1(kcal ?: 0.0).coerceAtMost(1000.0),
             round1(n.num("proteins_100g") ?: 0.0).coerceAtMost(100.0), round1(n.num("fat_100g") ?: 0.0).coerceAtMost(100.0),
             round1(n.num("carbohydrates_100g") ?: 0.0).coerceAtMost(100.0), pack, "off", now,
+            fiber = round1(n.num("fiber_100g") ?: 0.0).coerceAtMost(100.0),
         )
         return OffResult.Found(prod, complete = name.isNotEmpty() && kcal != null)
     }

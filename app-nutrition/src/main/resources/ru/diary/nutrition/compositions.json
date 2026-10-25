@@ -1,0 +1,23 @@
+{
+ "_note": "Состав одной порции встроенных блюд: продукт из foods.json и его вес в граммах в готовом виде. Из этого считаются проценты, вес порции и КБЖУ с клетчаткой. Веса взяты из рецептов (catalog.json), поделённых на число порций.",
+ "chicken-bake": [["chicken-thigh", 150], ["potato-baked", 180], ["carrot-cooked", 60], ["onion", 40], ["oil-sunflower", 7]],
+ "buckwheat": [["buckwheat", 200]],
+ "rice": [["rice", 180]],
+ "lentil-soup": [["lentils", 150], ["potato-boiled", 60], ["carrot-cooked", 40], ["onion", 30], ["tomato-can", 20], ["water", 100]],
+ "braised-meat": [["beef-stew", 130], ["zucchini", 80], ["pepper-bell", 50], ["carrot-cooked", 40], ["onion", 30], ["tomato-can", 20]],
+ "chili": [["beef-ground", 100], ["beans-can", 120], ["tomato-can", 130], ["onion", 30], ["garlic", 3]],
+ "chicken-rice": [["chicken-thigh", 150], ["rice", 200], ["cucumber", 75], ["tomato", 75], ["oil-olive", 5]],
+ "baked-fish": [["pollock", 200], ["potato-baked", 250], ["onion", 30], ["oil-sunflower", 5]],
+ "tuna-pasta": [["pasta", 220], ["tuna-can", 120], ["tomato", 150], ["onion", 30], ["oil-olive", 5]],
+ "plov": [["rice", 200], ["beef-stew", 100], ["carrot-cooked", 60], ["onion", 30], ["oil-sunflower", 7]],
+ "cottage-bake": [["tvorog-5", 125], ["egg-raw", 25], ["semolina-dry", 9], ["honey", 8]],
+ "sandwich-kefir": [["kefir", 200], ["egg", 100], ["bread-wholewheat", 60], ["cheese", 30]],
+ "omelet": [["egg-raw", 150], ["milk", 50], ["tomato", 50], ["pepper-bell", 50], ["cheese", 30], ["butter", 5]],
+ "oatmeal": [["milk", 200], ["banana", 120], ["oats-dry", 60], ["walnuts", 15]],
+ "cottage-fruit": [["tvorog-2", 200], ["strawberry", 100], ["muesli", 30]],
+ "kefir-banana": [["kefir", 250], ["banana", 120]],
+ "pb-sandwich": [["bread-wholewheat", 60], ["pb", 17]],
+ "boiled-eggs": [["egg", 110]],
+ "nuts": [["walnuts", 10], ["almonds", 10], ["cashews", 10]],
+ "yogurt-apple": [["yogurt", 200], ["apple", 180]]
+}

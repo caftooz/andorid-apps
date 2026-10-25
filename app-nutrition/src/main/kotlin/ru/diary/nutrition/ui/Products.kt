@@ -1,5 +1,6 @@
 package ru.diary.nutrition.ui
 
+import ru.diary.core.ui.pressScale
 import ru.diary.core.ui.DiarySheet
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.layout.Arrangement
@@ -43,12 +44,13 @@ import ru.diary.nutrition.domain.Products
 
 /** Кнопки «Сканировать» и «Ввести код» над списком блюд. Камера открывается экраном библиотеки ZXing. */
 @Composable
-fun ScanButtons(vm: NutritionViewModel) {
+fun ScanButtons(vm: NutritionViewModel, onWeigh: () -> Unit) {
     val launcher = rememberLauncherForActivityResult(ScanContract()) { r -> r.contents?.let(vm::onBarcode) }
     var typing by rememberSaveable { mutableStateOf(false) }
     var code by rememberSaveable { mutableStateOf("") }
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        PrimaryButton("Сканировать", {
+        ActionTile("Взвесить", "scale", DiaryTheme.extras.accent, Modifier.weight(1f), onWeigh)
+        ActionTile("Сканировать", "barcode", MaterialTheme.colorScheme.primary, Modifier.weight(1f)) {
             launcher.launch(
                 ScanOptions()
                     .setDesiredBarcodeFormats(ScanOptions.EAN_13, ScanOptions.EAN_8, ScanOptions.UPC_A, ScanOptions.UPC_E, ScanOptions.ITF)
@@ -57,12 +59,28 @@ fun ScanButtons(vm: NutritionViewModel) {
                     .setOrientationLocked(false)
                     .addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN),
             )
-        }, Modifier.weight(1f))
-        SecondaryButton("Ввести код", { typing = true })
+        }
+        ActionTile("Ввести код", "keyboard", DiaryTheme.extras.home, Modifier.weight(1f)) { typing = true }
     }
     if (typing) DiarySheet({ typing = false }, title = "Ввести штрих-код", subtitle = "8–14 цифр под полосками", icon = "barcode") { close ->
         LabeledField("Цифры под штрих-кодом", code, { code = it.filter(Char::isDigit) }, numeric = true, maxLength = 14)
         PrimaryButton("Найти", { val c = code; code = ""; close(); vm.onBarcode(c) }, Modifier.fillMaxWidth(), enabled = code.length >= 8)
+    }
+}
+
+/** Плитка действия: градиентный значок и подпись, нажатие с «пружинкой». */
+@Composable
+private fun ActionTile(label: String, icon: String, color: androidx.compose.ui.graphics.Color, modifier: Modifier, onClick: () -> Unit) {
+    val src = androidx.compose.runtime.remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
+    androidx.compose.material3.Surface(
+        onClick = onClick, interactionSource = src, shape = androidx.compose.foundation.shape.RoundedCornerShape(22.dp),
+        color = DiaryTheme.extras.glass, border = androidx.compose.foundation.BorderStroke(1.dp, color.copy(alpha = 0.35f)),
+        modifier = modifier.pressScale(src, 0.93f),
+    ) {
+        Column(Modifier.padding(vertical = 14.dp, horizontal = 6.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            IconBadge(icon, color, size = 46.dp)
+            Text(label, style = MaterialTheme.typography.labelLarge, maxLines = 1)
+        }
     }
 }
 
@@ -115,7 +133,7 @@ private fun ReadyCard(vm: NutritionViewModel, p: Product, saved: Boolean, date: 
                 Muted(listOf(p.brand, if (p.source == "off") "из Open Food Facts" else "ваш продукт").filter { it.isNotEmpty() }.joinToString(" · "))
             }
         }
-        Muted("На 100 г")
+        Muted("На 100 г" + if (p.fiber > 0) " · клетчатка ${fmt1(p.fiber)} г" else "")
         MacroRow(p.kcal, p.p, p.f, p.c)
         SegmentedControl(
             buildList {
@@ -161,6 +179,7 @@ private fun ManualCard(vm: NutritionViewModel, s: ScanState.Manual, close: () ->
     var fat by rememberSaveable(s.code) { mutableStateOf(num(d?.f)) }
     var carb by rememberSaveable(s.code) { mutableStateOf(num(d?.c)) }
     var pack by rememberSaveable(s.code) { mutableStateOf(d?.packG?.toString().orEmpty()) }
+    var fib by rememberSaveable(s.code) { mutableStateOf(num(d?.fiber)) }
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             IconBadge("barcode", DiaryTheme.extras.accent)
@@ -181,9 +200,10 @@ private fun ManualCard(vm: NutritionViewModel, s: ScanState.Manual, close: () ->
             LabeledField("Жиры, г", fat, { fat = it }, Modifier.weight(1f), decimal = true, maxLength = 5)
             LabeledField("Углеводы, г", carb, { carb = it }, Modifier.weight(1f), decimal = true, maxLength = 5)
         }
+        LabeledField("Клетчатка, г, по желанию", fib, { fib = it }, decimal = true, maxLength = 5)
         LabeledField("Вес упаковки, г, по желанию", pack, { pack = it.filter(Char::isDigit) }, numeric = true, maxLength = 5)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            PrimaryButton("Сохранить", { vm.saveManualProduct(s.code, name, brand, kcal, prot, fat, carb, pack) })
+            PrimaryButton("Сохранить", { vm.saveManualProduct(s.code, name, brand, kcal, prot, fat, carb, pack, fib) })
             QuietButton("Отмена", close)
         }
     }
