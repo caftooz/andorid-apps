@@ -1,5 +1,9 @@
 package ru.diary.nutrition.ui
 
+import ru.diary.nutrition.domain.Weigh
+import ru.diary.nutrition.domain.WeighItem
+import ru.diary.nutrition.domain.Goals
+import ru.diary.nutrition.data.NormField
 import ru.diary.nutrition.domain.Products
 import ru.diary.nutrition.domain.Product
 import ru.diary.nutrition.domain.OffResult
@@ -84,6 +88,10 @@ class NutritionViewModel(
         viewModelScope.launch {
             while (true) { delay(30_000); _today.value = Dates.today() }
         }
+        // Нормы из настроек нужны и логике (подсказки недели), и провайдеру.
+        viewModelScope.launch {
+            settings.collect { s -> Goals.kcal = s.norms.kcal; Goals.proteinMin = s.norms.protein; Goals.proteinMax = maxOf(Goals.proteinMax, s.norms.protein); Goals.fat = s.norms.fat; Goals.carbs = s.norms.carbs; Goals.fiber = s.norms.fiber }
+        }
         // Данные «Тренировок» перечитываются при изменении, установке и удалении приложения.
         viewModelScope.launch {
             client.watch(DiaryContract.Training.PACKAGE, DiaryContract.Training.DAYS_URI).collect { refreshLink() }
@@ -140,6 +148,19 @@ class NutritionViewModel(
         return true
     }
 
+    fun setNorm(f: NormField, v: Int) { viewModelScope.launch { settingsStore.setNorm(f, v) } }
+
+    /** «Взвесить»: продукт или однородное блюдо, пищевая ценность пересчитывается на граммы. */
+    fun eatWeighed(item: WeighItem, grams: Int, date: String) {
+        if (grams !in 1..5000) { say("Укажите вес от 1 до 5000 г"); return }
+        val e = Weigh.eat(item, grams, date, nowTime(), clock())
+        mutate { d ->
+            val prods = item.product?.let { p -> listOf(p.copy(updated = clock())) + d.products.filter { it.code != p.code } } ?: d.products
+            d.copy(log = d.log + e, products = prods)
+        }
+        say("Записано: ${item.name}, $grams г · ${Dates.label(date, today.value).lowercase()}", "Отменить") { removeQuiet(e.id) }
+    }
+
     fun setOnlineLookup(v: Boolean) { viewModelScope.launch { settingsStore.setOnlineLookup(v) } }
 
     /** Штрих-код считан камерой или введён вручную: ищем у себя, затем (если разрешено) в Open Food Facts. */
@@ -171,8 +192,8 @@ class NutritionViewModel(
     fun cancelScan() { _scan.value = ScanState.Idle }
 
     /** Сохраняет продукт из формы и сразу предлагает выбрать граммы. */
-    fun saveManualProduct(code: String, name: String, brand: String, kcal: String, p: String, f: String, c: String, pack: String): Boolean {
-        val prod = Products.manual(code, name, brand, kcal, p, f, c, pack, clock())
+    fun saveManualProduct(code: String, name: String, brand: String, kcal: String, p: String, f: String, c: String, pack: String, fiber: String = ""): Boolean {
+        val prod = Products.manual(code, name, brand, kcal, p, f, c, pack, clock(), fiber)
         if (prod == null) { say("Нужны название и калорийность на 100 г (не больше 1000 ккал)"); return false }
         mutate { d -> d.copy(products = listOf(prod) + d.products.filter { it.code != code }) }
         _scan.value = ScanState.Ready(prod, saved = true)

@@ -1,5 +1,10 @@
 package ru.diary.nutrition.ui
 
+import ru.diary.nutrition.data.NormField
+import ru.diary.nutrition.data.Norms
+import ru.diary.nutrition.domain.Foods
+import ru.diary.nutrition.domain.Weigh
+import ru.diary.nutrition.domain.WeighItem
 import ru.diary.nutrition.domain.Catalog
 import ru.diary.core.ui.DiarySheet
 import androidx.compose.ui.draw.clip
@@ -102,6 +107,47 @@ fun TabColumn(content: @Composable ColumnScope.() -> Unit) {
 
 // ---------- Блюда ----------
 
+/** Итог дня против норм: белок кольцом, остальное полосками «съедено / норма». */
+@Composable
+private fun NormsCard(t: ru.diary.nutrition.domain.DayTotals, n: Norms) {
+    DiaryCard {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            RingIndicator(
+                t.protein.toFloat() / n.protein, "${t.protein}", "из ${n.protein} г",
+                color = if (t.protein >= n.protein) MaterialTheme.colorScheme.primary else DiaryTheme.extras.protein, size = 92.dp,
+            )
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text("Белок за день", style = MaterialTheme.typography.titleMedium)
+                Muted(if (t.protein >= n.protein) "Норма набрана" else "Осталось ${n.protein - t.protein} г")
+            }
+        }
+        NormBar("Калории", t.kcal.toDouble(), n.kcal, "ккал", MaterialTheme.colorScheme.primary)
+        NormBar("Жиры", t.fat.toDouble(), n.fat, "г", DiaryTheme.extras.volley)
+        NormBar("Углеводы", t.carbs.toDouble(), n.carbs, "г", DiaryTheme.extras.accent)
+        NormBar("Клетчатка", t.fiber, n.fiber, "г", DiaryTheme.extras.cardio)
+        Muted("Значения приблизительные: блюда — по составу, продукты — по базе USDA и этикеткам.")
+    }
+}
+
+@Composable
+private fun NormBar(label: String, value: Double, norm: Int, unit: String, color: androidx.compose.ui.graphics.Color) {
+    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Text(label, style = MaterialTheme.typography.bodyMedium)
+            Text("${fmt1(value)} / $norm $unit", style = MaterialTheme.typography.labelLarge, color = if (value > norm * 1.1) DiaryTheme.extras.warn else MaterialTheme.colorScheme.onSurface)
+        }
+        MeterBar((value / norm).toFloat().coerceIn(0f, 1f), "$label: ${fmt1(value)} из $norm $unit", color = color, height = 8.dp)
+    }
+}
+
+@Composable
+private fun NormStepper(label: String, value: Int, f: NormField, vm: NutritionViewModel) {
+    ru.diary.core.ui.Stepper(
+        label, "$value", { vm.setNorm(f, value - f.step) }, { vm.setNorm(f, value + f.step) },
+        minusEnabled = value > f.min, plusEnabled = value < f.max,
+    )
+}
+
 /** Вкладка «Мои продукты» в ряду категорий. */
 private const val PRODUCTS_TAB = "products"
 
@@ -137,7 +183,9 @@ private fun catColor(cat: String) = when (cat) {
 
 @Composable
 fun DishesScreen(vm: NutritionViewModel, data: NutritionData, today: String, date: String, onDate: (String) -> Unit) {
-    var portion by rememberSaveable { mutableDoubleStateOf(1.0) }
+    // Порция всегда обычная; точное количество — через «Взвесить».
+    var weighOpen by rememberSaveable { mutableStateOf(false) }
+    var weighItem by remember { mutableStateOf<WeighItem?>(null) }
     var cat by rememberSaveable { mutableStateOf("all") }
     var byAge by rememberSaveable { mutableStateOf(true) }
     var open by rememberSaveable { mutableStateOf<String?>(null) }
@@ -153,7 +201,7 @@ fun DishesScreen(vm: NutritionViewModel, data: NutritionData, today: String, dat
                 HeroStat("${t.kcal}", "ккал", Modifier.weight(1f))
             }
         }
-        ScanButtons(vm)
+        ScanButtons(vm) { weighItem = null; weighOpen = true }
         val scan by vm.scan.collectAsStateWithLifecycle()
         ScanPanel(vm, scan, date, today)
         Muted("Записываю на")
@@ -161,8 +209,6 @@ fun DishesScreen(vm: NutritionViewModel, data: NutritionData, today: String, dat
             buildList { add(today to "Сегодня"); add(y to "Вчера"); if (date != today && date != y) add(date to Dates.label(date, today)) },
             date, onDate,
         )
-        Muted("Порция")
-        SegmentedControl(PORTIONS.map { it.first to it.second }, portion, { portion = it })
         ChoiceChipsRow(CATS + (PRODUCTS_TAB to "Мои продукты"), cat, { cat = it })
         if (cat == PRODUCTS_TAB) {
             data.products.forEachIndexed { i, p -> Appear(index = i) { ProductRow(vm, p) } }
@@ -173,7 +219,7 @@ fun DishesScreen(vm: NutritionViewModel, data: NutritionData, today: String, dat
                 QuietButton(if (byAge) "По алфавиту" else "Давно не ел сверху", { byAge = !byAge })
             }
             val list = NutritionLogic.ordered(data, today, byAge).filter { cat == "all" || it.cat == cat }
-            list.forEachIndexed { i, d -> Appear(index = i) { DishRow(vm, data, d, today, date, portion) { open = d.id } } }
+            list.forEachIndexed { i, d -> Appear(index = i) { DishRow(vm, data, d, today, date) { open = d.id } } }
             if (list.isEmpty()) EmptyState("dish", "В этой категории пока нет блюд.")
         }
 
@@ -181,15 +227,19 @@ fun DishesScreen(vm: NutritionViewModel, data: NutritionData, today: String, dat
     }
     // Подробности блюда, новое блюдо — во всплывающих панелях поверх списка.
     Catalog.all(data.custom).firstOrNull { it.id == open }?.let { d ->
-        DishSheet(vm, d, date, today, portion, { portion = it }, askDelete == d.id, { askDelete = it }) { open = null; askDelete = null }
+        DishSheet(
+            vm, d, date, today, askDelete == d.id, { askDelete = it },
+            onWeigh = { item -> open = null; askDelete = null; weighItem = item; weighOpen = true },
+        ) { open = null; askDelete = null }
     }
+    if (weighOpen) WeighSheet(vm, data, date, today, weighItem) { weighOpen = false; weighItem = null }
     if (addOpen) DiarySheet({ addOpen = false }, title = "Своё блюдо", subtitle = "Ккал и белок на порцию", icon = "plus") { close ->
         AddDishForm(vm, close)
     }
 }
 
 @Composable
-private fun DishRow(vm: NutritionViewModel, data: NutritionData, d: Dish, today: String, date: String, portion: Double, onOpen: () -> Unit) {
+private fun DishRow(vm: NutritionViewModel, data: NutritionData, d: Dish, today: String, date: String, onOpen: () -> Unit) {
     val last = NutritionLogic.lastEaten(data, d.id)
     val ago = last?.let { Dates.daysBetween(it, today) }
     val txt = when {
@@ -205,11 +255,11 @@ private fun DishRow(vm: NutritionViewModel, data: NutritionData, d: Dish, today:
             Column(Modifier.weight(1f).heightIn(min = MinTouch)) {
                 Text(d.name, style = MaterialTheme.typography.titleSmall)
                 Text(
-                    "$txt · ${d.kcal} ккал · Б ${d.p} г", style = MaterialTheme.typography.bodySmall,
+                    "$txt · ${d.kcal} ккал · Б ${d.p} г" + (d.grams?.let { " · порция $it г" } ?: ""), style = MaterialTheme.typography.bodySmall,
                     color = if (stale) DiaryTheme.extras.warn else MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-            PrimaryButton("Съел", { vm.eat(d, date, portion) }, Modifier.semantics { contentDescription = "Съел: ${d.name}" })
+            PrimaryButton("Съел", { vm.eat(d, date, 1.0) }, Modifier.semantics { contentDescription = "Съел: ${d.name}" })
         }
     }
 }
@@ -217,8 +267,8 @@ private fun DishRow(vm: NutritionViewModel, data: NutritionData, d: Dish, today:
 /** Блюдо во всплывающей панели: фото, КБЖУ, выбор порции, «Съел», рецепт. */
 @Composable
 private fun DishSheet(
-    vm: NutritionViewModel, d: Dish, date: String, today: String, portion: Double, onPortion: (Double) -> Unit,
-    askDelete: Boolean, setAsk: (String?) -> Unit, onDismiss: () -> Unit,
+    vm: NutritionViewModel, d: Dish, date: String, today: String,
+    askDelete: Boolean, setAsk: (String?) -> Unit, onWeigh: (WeighItem) -> Unit, onDismiss: () -> Unit,
 ) {
     val credit = if (d.custom) null else DishPhotos.credits(LocalContext.current)[d.id]
     DiarySheet(onDismiss) { close ->
@@ -227,12 +277,17 @@ private fun DishSheet(
             Text(d.name, style = MaterialTheme.typography.titleLarge)
             Muted((CAT_NAME[d.cat] ?: "") + (d.time?.let { " · $it" } ?: ""))
         }
-        Muted("На одну порцию")
+        Muted("Порция" + (d.grams?.let { " ≈ $it г" } ?: "") + (d.fiber?.let { " · клетчатка ${fmt1(it)} г" } ?: ""))
         MacroRow(d.kcal.toDouble(), d.p.toDouble(), (d.f ?: 0).toDouble(), (d.c ?: 0).toDouble())
-        SegmentedControl(PORTIONS.map { it.first to it.second }, portion, onPortion)
-        PrimaryButton(
-            "Съел · ${portionLabel(portion)} · ${Dates.label(date, today).lowercase()}", { vm.eat(d, date, portion); close() }, Modifier.fillMaxWidth(),
-        )
+        PrimaryButton("Съел порцию · ${Dates.label(date, today).lowercase()}", { vm.eat(d, date, 1.0); close() }, Modifier.fillMaxWidth())
+        val asWeighed = Weigh.dish(d)
+        if (asWeighed != null) {
+            SecondaryButton("Взвесить порцию", { onWeigh(asWeighed) }, Modifier.fillMaxWidth())
+            // Состав со ссылками: нажатие открывает продукт во «Взвесить».
+            Composition(Foods.shares(asWeighed.parts).map { Triple(it.first.id, it.first.name, it.second) }) { id ->
+                Foods.byId[id]?.let { onWeigh(Weigh.food(it)) }
+            }
+        }
         DishDetail(vm, d, askDelete, setAsk, close)
         if (credit != null) Muted("Фото: ${credit.author} · ${credit.license}")
     }
@@ -303,25 +358,8 @@ fun DiaryScreen(vm: NutritionViewModel, data: NutritionData, today: String, date
             SecondaryButton("‹ Раньше", { onDate(Dates.addDays(date, -1)) }, Modifier.semantics { contentDescription = "Предыдущий день" })
             SecondaryButton("Позже ›", { onDate(Dates.addDays(date, 1)) }, enabled = date < today, modifier = Modifier.semantics { contentDescription = "Следующий день" })
         }
-        DiaryCard {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                RingIndicator(
-                    t.protein.toFloat() / Goals.proteinMin, "${t.protein}", "из ${Goals.proteinMin} г",
-                    color = if (t.protein >= Goals.proteinMin) MaterialTheme.colorScheme.primary else DiaryTheme.extras.protein, size = 96.dp,
-                )
-                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text("Белок за день", style = MaterialTheme.typography.titleMedium)
-                    Muted("Цель ${Goals.proteinMin}–${Goals.proteinMax} г")
-                    MeterBar(
-                        (t.kcal.toFloat() / Goals.kcal).coerceAtMost(1f), "Калории за день: ${t.kcal} из примерно ${Goals.kcal}",
-                        color = DiaryTheme.extras.accent,
-                    )
-                    Muted("${t.kcal} из ~${Goals.kcal} ккал")
-                }
-            }
-            if (t.fat > 0 || t.carbs > 0) MacroRow(t.kcal.toDouble(), t.protein.toDouble(), t.fat.toDouble(), t.carbs.toDouble())
-            Muted("Значения приблизительные. Жиры и углеводы — по блюдам каталога и отсканированным продуктам.")
-        }
+        val s by vm.settings.collectAsStateWithLifecycle()
+        NormsCard(t, s.norms)
         if (link is TrainingLink.Ready) DayBalance(link, date, t.kcal, t.protein)
 
         if (es.isEmpty()) EmptyState("book", "За этот день записей нет. Отметьте блюдо кнопкой «Съел» на вкладке «Блюда».")
@@ -353,7 +391,7 @@ private fun EntryRow(e: Entry, onDelete: () -> Unit) {
             }
             Muted(
                 (if (e.plan) amountLabel(e) + " · " else "") + (if (e.kcal > 0) "${e.kcal} ккал" else "ккал не указаны") + (if (e.protein > 0) " · Б ${e.protein} г" else "") +
-                    (e.fat?.let { " · Ж $it г" } ?: "") + (e.carbs?.let { " · У $it г" } ?: ""),
+                    (e.fat?.let { " · Ж $it г" } ?: "") + (e.carbs?.let { " · У $it г" } ?: "") + (e.fiber?.takeIf { it > 0 }?.let { " · клетч. ${fmt1(it)} г" } ?: ""),
             )
         }
         QuietButton("Удалить", onDelete, Modifier.semantics { contentDescription = "Удалить запись: ${e.name}" })
@@ -535,6 +573,15 @@ fun SettingsScreen(vm: NutritionViewModel, link: TrainingLink) {
         Muted("«Системная» следует настройке телефона.")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             ToggleRow("Цвета обоев (Material You) вместо фирменных", s.dynamicColor, { vm.setDynamicColor(it) })
+        }
+        SectionTitle("Нормы на день")
+        Muted("С ними сравнивается «съедено» в дневнике.")
+        DiaryCard {
+            NormStepper("Калории, ккал", s.norms.kcal, NormField.Kcal, vm)
+            NormStepper("Белки, г", s.norms.protein, NormField.Protein, vm)
+            NormStepper("Жиры, г", s.norms.fat, NormField.Fat, vm)
+            NormStepper("Углеводы, г", s.norms.carbs, NormField.Carbs, vm)
+            NormStepper("Клетчатка, г", s.norms.fiber, NormField.Fiber, vm)
         }
         SectionTitle("Где хранятся данные")
         Muted("Данные хранятся только на этом телефоне и никуда не отправляются. Делайте экспорт, чтобы не потерять историю.")
