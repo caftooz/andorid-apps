@@ -399,7 +399,10 @@ private fun NumberStepper(
                 cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
                 modifier = Modifier.weight(1f).heightIn(min = MinTouch).semantics { contentDescription = label },
                 decorationBox = { inner ->
-                    Box(Modifier.heightIn(min = MinTouch), contentAlignment = Alignment.Center) { inner() }
+                    Box(Modifier.heightIn(min = MinTouch), contentAlignment = Alignment.Center) {
+                        if (text.isEmpty()) Text("0", style = TextStyle(textAlign = TextAlign.Center, fontSize = (if (big) MaterialTheme.typography.headlineLarge else MaterialTheme.typography.titleMedium).fontSize), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
+                        inner()
+                    }
                 },
             )
             StepCircle("+", "$label: больше", !locked, big) { onStep(1) }
