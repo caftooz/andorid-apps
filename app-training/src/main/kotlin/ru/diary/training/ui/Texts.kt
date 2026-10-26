@@ -11,6 +11,7 @@ import ru.diary.training.domain.DayPlan
 import ru.diary.training.domain.Plan
 import ru.diary.training.domain.Program
 import ru.diary.training.domain.Session
+import ru.diary.training.domain.Track
 
 /** Тексты и подписи, перенесённые из прототипа. */
 object Texts {
@@ -50,10 +51,24 @@ object Texts {
         }
         val sl = s.sl
         if (s.type == "track" && !sl.isNullOrEmpty()) {
-            return "${typeName(s, plan)} · ${sl.size} ${Js.plural(sl.size, "подход", "подхода", "подходов")} · ${sl.sum()} повт."
+            val sets = "${typeName(s, plan)} · ${sl.size} ${Js.plural(sl.size, "подход", "подхода", "подходов")}"
+            val sl2 = s.sl2
+            val tr = plan.tracks.firstOrNull { it.id == s.tid }
+            if (!sl2.isNullOrEmpty() && tr != null) {
+                return "$sets · ${exName(tr.metric, tr, plan).lowercase()} ${sl.sum()} + ${exName(tr.pair, tr, plan).lowercase()} ${sl2.sum()}"
+            }
+            return "$sets · ${sl.sum()} повт."
         }
         return "${typeName(s, plan)} · ${s.min} мин$kcal" + if (s.rpe > 0) " · нагрузка ${s.rpe} из 5" else ""
     }
+
+    /** Название упражнения «подходов за день»: показатель или, если его нет, само занятие. */
+    fun exName(metricId: String, t: Track, plan: Plan): String =
+        plan.metrics.firstOrNull { it.id == metricId }?.name ?: if (metricId.isEmpty()) t.name else "Упражнение"
+
+    /** «Подтягивания 5 + отжимания 10» — что добавит одна кнопка связки. */
+    fun pairLine(t: Track, plan: Plan, hi: Int, hi2: Int): String =
+        "${exName(t.metric, t, plan)} $hi + ${exName(t.pair, t, plan).lowercase()} $hi2"
 
     fun dayLabel(d: DayPlan, programs: List<Program>): String {
         val p = if (d.k == "gym" && d.prog.isNotEmpty()) programs.firstOrNull { it.id == d.prog } else null

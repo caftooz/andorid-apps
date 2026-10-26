@@ -80,6 +80,7 @@ object Cleaning {
             tid = if (Js.truthy(tidRaw)) Js.str(tidRaw, 40) else null,
             kcal = if (kc > 0) kc else null,
             sl = (s["sl"] as? JsonArray)?.map { int(it, 0.0, 0, 999) }?.take(40),
+            sl2 = (s["sl2"] as? JsonArray)?.map { int(it, 0.0, 0, 999) }?.take(40),
         )
     }
 
@@ -235,6 +236,8 @@ object Cleaning {
             dayTarget = int(t.f("dayTarget"), 8.0, 1, 30),
             base = int(t.f("base"), 10.0, 1, 999),
             tip = Js.str(t.f("tip"), 500),
+            pair = if (kind == "sets") Js.str(t.f("pair"), 40) else "",
+            base2 = int(t.f("base2"), 10.0, 1, 999),
         )
     }
 

@@ -11,6 +11,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.put
+import ru.diary.training.ui.ProgramLetters
 import ru.diary.training.domain.ActiveWorkout
 import ru.diary.training.domain.BuiltinData
 import ru.diary.training.domain.Cleaning
@@ -38,7 +39,8 @@ class TrainingRepository(private val db: TrainingDatabase, private val onChanged
 
     val data: Flow<TrainingData> = combine(
         dao.sessions().map { l -> l.mapNotNull { Cleaning.cleanSession(parse(it.json)) } },
-        dao.programs().map { l -> l.mapNotNull { Cleaning.cleanProgram(parse(it.json)) } },
+        // Программы всегда по алфавиту (буква, затем название): так их видят главная, план, очередь и виджет.
+        dao.programs().map { l -> ProgramLetters.sorted(l.mapNotNull { Cleaning.cleanProgram(parse(it.json)) }) },
         dao.customEx().map { l -> l.mapNotNull { Cleaning.cleanCustomEx(parse(it.json)) } },
         dao.plan().map { e -> e?.let { Cleaning.cleanPlan(parse(it.json)) } ?: BuiltinData.defaultPlan() },
         dao.maxes().map { l -> l.map { MaxEntry(it.id, it.date, it.m, it.v) } },

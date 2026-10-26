@@ -80,6 +80,7 @@ object Transfer {
         s.tid?.let { put("tid", it) }
         s.kcal?.let { put("kcal", JsonPrimitive(it)) }
         s.sl?.let { sl -> putJsonArray("sl") { sl.forEach { add(JsonPrimitive(it)) } } }
+        s.sl2?.let { sl -> putJsonArray("sl2") { sl.forEach { add(JsonPrimitive(it)) } } }
     }
 
     fun programJson(p: Program, catalog: ExerciseCatalog? = null): JsonObject = buildJsonObject {
@@ -136,6 +137,7 @@ object Transfer {
                     put("metric", t.metric)
                     put("pctLo", JsonPrimitive(t.pctLo)); put("pctHi", JsonPrimitive(t.pctHi))
                     put("dayTarget", JsonPrimitive(t.dayTarget)); put("base", JsonPrimitive(t.base)); put("tip", t.tip)
+                    if (t.pair.isNotEmpty()) { put("pair", t.pair); put("base2", JsonPrimitive(t.base2)) }
                 })
             }
         }
