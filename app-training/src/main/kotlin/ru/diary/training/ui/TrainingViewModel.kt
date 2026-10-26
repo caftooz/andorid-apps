@@ -169,7 +169,7 @@ class TrainingViewModel(
         say("Запись удалена", "Отменить") { mutate { d -> d.copy(sessions = d.sessions + s) } }
     }
 
-    fun addTrackSet(tid: String, reps: Int) = mutate { d -> d.copy(sessions = Logic.addTrackSet(d.sessions, tid, reps, today.value, clock())) }
+    fun addTrackSet(tid: String, reps: Int, reps2: Int? = null) = mutate { d -> d.copy(sessions = Logic.addTrackSet(d.sessions, tid, reps, today.value, clock(), reps2)) }
     fun undoTrackSet(tid: String) = mutate { d -> d.copy(sessions = Logic.undoTrackSet(d.sessions, tid, today.value)) }
 
     // ---------- активная тренировка ----------
@@ -367,7 +367,13 @@ class TrainingViewModel(
             cur.copy(
                 maxes = cur.maxes + entry,
                 plan = cur.plan.copy(tracks = cur.plan.tracks.map { t ->
-                    if (t.kind == "sets" && t.metric == metricId && v >= 1) t.copy(base = Js.clamp(Js.round(v), 1.0, 999.0).toInt()) else t
+                    val b = Js.clamp(Js.round(v), 1.0, 999.0).toInt()
+                    when {
+                        t.kind != "sets" || v < 1 -> t
+                        t.metric == metricId -> t.copy(base = b)
+                        t.pair == metricId -> t.copy(base2 = b)
+                        else -> t
+                    }
                 }),
             )
         }

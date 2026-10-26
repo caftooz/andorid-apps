@@ -10,7 +10,8 @@ data class ExResult(val id: String, val name: String?, val kind: String?, val se
 
 /**
  * Запись о занятии. `type`: gym | volley | friends | other | track.
- * Для `track` в `tid` лежит id домашнего занятия, а `sl` — повторы по подходам за день.
+ * Для `track` в `tid` лежит id домашнего занятия, а `sl` — повторы по подходам за день;
+ * `sl2` — повторы второго упражнения связки (например, отжимания после подтягиваний), подход в подход с `sl`.
  */
 data class Session(
     val id: String,
@@ -27,6 +28,7 @@ data class Session(
     val tid: String? = null,
     val kcal: Int? = null,
     val sl: List<Int>? = null,
+    val sl2: List<Int>? = null,
 )
 
 data class ProgramItem(val id: String, val sets: Int, val lo: Int, val hi: Int)
@@ -79,7 +81,11 @@ data class Metric(
 data class TrackStep(val n: String, val t: String)
 data class TrackItem(val n: String, val d: String, val t: String)
 
-/** Домашнее занятие. `kind`: timed (по времени) или sets (подходы за день). */
+/**
+ * Домашнее занятие. `kind`: timed (по времени) или sets (подходы за день).
+ * У «подходов за день» может быть второе упражнение связки `pair` (id показателя) со своим максимумом `base2`:
+ * одна кнопка записывает подход сразу в оба.
+ */
 data class Track(
     val id: String,
     val name: String,
@@ -98,6 +104,8 @@ data class Track(
     val dayTarget: Int,
     val base: Int,
     val tip: String,
+    val pair: String = "",
+    val base2: Int = 10,
 )
 
 data class Plan(

@@ -392,6 +392,10 @@ private fun TracksEditor(vm: TrainingViewModel, data: TrainingData, back: () -> 
                     ChoiceChips(listOf("" to "Свой максимум вручную") + plan.metrics.map { it.id to it.name }, tr.metric, { id ->
                         vm.updatePlan { p -> PlanEdit.setTrack(p, tr.id) { PlanEdit.setTrackMetric(it, id, p, data.maxes) } }
                     })
+                    Muted("Вместе с (подход добавляется в оба)")
+                    ChoiceChips(listOf("" to "Ничего") + plan.metrics.filter { it.id != tr.metric && it.unit == "раз" }.map { it.id to it.name }, tr.pair, { id ->
+                        vm.updatePlan { p -> PlanEdit.setTrack(p, tr.id) { PlanEdit.setTrackPair(it, id, p, data.maxes) } }
+                    })
                     Stepper("Подход от, % максимума", tr.pctLo.toString(), { edit { PlanEdit.stepTrack(it, PlanEdit.TrackField.PctLo, -1) } }, { edit { PlanEdit.stepTrack(it, PlanEdit.TrackField.PctLo, 1) } })
                     Stepper("до, %", tr.pctHi.toString(), { edit { PlanEdit.stepTrack(it, PlanEdit.TrackField.PctHi, -1) } }, { edit { PlanEdit.stepTrack(it, PlanEdit.TrackField.PctHi, 1) } })
                     Stepper("Подходов в день", tr.dayTarget.toString(), { edit { PlanEdit.stepTrack(it, PlanEdit.TrackField.DayTarget, -1) } }, { edit { PlanEdit.stepTrack(it, PlanEdit.TrackField.DayTarget, 1) } })

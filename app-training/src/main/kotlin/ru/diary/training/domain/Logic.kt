@@ -266,6 +266,20 @@ object Logic {
         return r
     }
 
+    /** Повторы второго упражнения связки за день. */
+    fun pairSetsToday(sessions: List<Session>, tid: String, today: String): List<Int> {
+        var r: List<Int> = emptyList()
+        for (x in sessions) if (x.type == "track" && x.tid == tid && x.date == today) r = x.sl2 ?: emptyList()
+        return r
+    }
+
+    /** Повторы для кнопки «+ подход»: верх диапазона основного упражнения и, если есть связка, второго. */
+    fun trackReps(t: Track, plan: Plan): Pair<Int, Int?> {
+        val hi = setReps(t.base, t.pctLo, t.pctHi).second
+        val hi2 = if (t.pair.isNotEmpty() && plan.metrics.any { it.id == t.pair }) setReps(t.base2, t.pctLo, t.pctHi).second else null
+        return hi to hi2
+    }
+
     // ---------- программы ----------
 
     /** Краткое описание программы: число упражнений, подходов и оценка времени (`progBrief`). */
@@ -411,22 +425,30 @@ object Logic {
     }
 
     /** Добавить подход к занятию «подходы за день»; создаёт запись дня при необходимости. */
-    fun addTrackSet(sessions: List<Session>, tid: String, reps: Int, today: String, now: Long): List<Session> {
+    fun addTrackSet(sessions: List<Session>, tid: String, reps: Int, today: String, now: Long, reps2: Int? = null): List<Session> {
         val idx = sessions.indexOfLast { it.type == "track" && it.tid == tid && it.date == today }
         if (idx < 0) {
-            val s = Session(Ids.uid(now), today, "track", null, "", now, 0, 0, emptyList(), "", emptyList(), tid = tid, sl = listOf(reps))
+            val s = Session(
+                Ids.uid(now), today, "track", null, "", now, 0, 0, emptyList(), "", emptyList(), tid = tid,
+                sl = listOf(reps), sl2 = reps2?.let { listOf(it) },
+            )
             return sessions + s
         }
-        return sessions.toMutableList().also { it[idx] = it[idx].copy(sl = (it[idx].sl ?: emptyList()) + reps) }
+        val cur = sessions[idx]
+        val sl2 = if (reps2 != null) (cur.sl2 ?: emptyList()) + reps2 else cur.sl2
+        return sessions.toMutableList().also { it[idx] = cur.copy(sl = (cur.sl ?: emptyList()) + reps, sl2 = sl2) }
     }
 
     /** Убрать последний подход; пустая запись дня удаляется. */
     fun undoTrackSet(sessions: List<Session>, tid: String, today: String): List<Session> {
         val idx = sessions.indexOfLast { it.type == "track" && it.tid == tid && it.date == today }
         if (idx < 0) return sessions
-        val sl = (sessions[idx].sl ?: emptyList()).dropLast(1)
+        val cur = sessions[idx]
+        val sl = (cur.sl ?: emptyList()).dropLast(1)
+        // Подходы связки идут парами: убираем и второе упражнение, если его последний подход был в этой паре.
+        val sl2 = cur.sl2?.let { if (it.size > sl.size) it.dropLast(1) else it }?.takeIf { it.isNotEmpty() }
         return if (sl.isEmpty()) sessions.filterIndexed { i, _ -> i != idx }
-        else sessions.toMutableList().also { it[idx] = it[idx].copy(sl = sl) }
+        else sessions.toMutableList().also { it[idx] = cur.copy(sl = sl, sl2 = sl2) }
     }
 }
 

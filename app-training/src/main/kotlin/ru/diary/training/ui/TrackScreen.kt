@@ -42,6 +42,8 @@ import ru.diary.core.ui.QuietButton
 import ru.diary.core.ui.SecondaryButton
 import ru.diary.core.util.Js
 import ru.diary.training.domain.Logic
+import ru.diary.core.ui.ChoiceChips
+import ru.diary.training.domain.PlanEdit
 import ru.diary.training.domain.Track
 import ru.diary.training.domain.TrainingData
 
@@ -108,10 +110,17 @@ fun TrackScreen(vm: TrainingViewModel, data: TrainingData, today: String, id: St
             val (lo, hi) = Logic.setReps(tr.base, tr.pctLo, tr.pctHi)
             val sl = Logic.setsToday(data.sessions, tr.id, today)
             val metric = data.plan.metrics.firstOrNull { it.id == tr.metric }
+            val pairM = data.plan.metrics.firstOrNull { it.id == tr.pair }
+            fun edit(f: (Track) -> Track) = vm.updatePlan { p -> PlanEdit.setTrack(p, tr.id, f) }
             DiaryCard {
                 DebouncedField(
                     "Ваш максимум" + (metric?.let { ": " + it.name.lowercase() } ?: ""), tr.base.toString(),
-                    { t -> t.toIntOrNull()?.takeIf { it in 1..999 }?.let { b -> vm.updatePlan { p -> p.copy(tracks = p.tracks.map { if (it.id == tr.id) it.copy(base = b) else it }) } } },
+                    { t -> t.toIntOrNull()?.takeIf { it in 1..999 }?.let { b -> edit { it.copy(base = b) } } },
+                    numeric = true,
+                )
+                if (pairM != null) DebouncedField(
+                    "Максимум: " + pairM.name.lowercase(), tr.base2.toString(),
+                    { t -> t.toIntOrNull()?.takeIf { it in 1..999 }?.let { b -> edit { it.copy(base2 = b) } } },
                     numeric = true,
                 )
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -119,11 +128,29 @@ fun TrackScreen(vm: TrainingViewModel, data: TrainingData, today: String, id: St
                     Tile("flame", "${tr.dayTarget}", "подходов в день", DiaryTheme.extras.volley, Modifier.weight(1f))
                     Tile("check", "${sl.sum()}", "повт. сегодня", DiaryTheme.extras.cardio, Modifier.weight(1f))
                 }
+                if (pairM != null) {
+                    val (lo2, hi2) = Logic.setReps(tr.base2, tr.pctLo, tr.pctHi)
+                    val sl2 = Logic.pairSetsToday(data.sessions, tr.id, today)
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Tile("gym", if (lo2 == hi2) "$lo2" else "$lo2–$hi2", pairM.name.lowercase() + " в подходе", MaterialTheme.colorScheme.primary, Modifier.weight(1f))
+                        Tile("check", "${sl2.sum()}", pairM.name.lowercase() + " сегодня", DiaryTheme.extras.cardio, Modifier.weight(1f))
+                    }
+                }
                 DotRow(sl.size, tr.dayTarget)
+                val (h1, h2) = Logic.trackReps(tr, data.plan)
+                if (h2 != null) Muted("Одна кнопка — подход в оба: " + Texts.pairLine(tr, data.plan, h1, h2).lowercase())
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    PrimaryButton("+ подход ($hi)", { vm.addTrackSet(tr.id, hi) })
+                    PrimaryButton(if (h2 != null) "+ подход" else "+ подход ($h1)", { vm.addTrackSet(tr.id, h1, h2) })
                     SecondaryButton("Убрать последний", { vm.undoTrackSet(tr.id) }, enabled = sl.isNotEmpty())
                 }
+            }
+            DiaryCard {
+                Text("Вместе с", style = MaterialTheme.typography.titleSmall)
+                Muted("Делаете подряд второе упражнение? Выберите его — подход будет добавляться в оба сразу.")
+                ChoiceChips(
+                    listOf("" to "Ничего") + data.plan.metrics.filter { it.id != tr.metric && it.unit == "раз" }.map { it.id to it.name },
+                    tr.pair, { id -> vm.updatePlan { p -> PlanEdit.setTrack(p, tr.id) { PlanEdit.setTrackPair(it, id, p, data.maxes) } } },
+                )
             }
             if (tr.tip.isNotEmpty()) Accordion("Советы") { Muted(tr.tip) }
         }

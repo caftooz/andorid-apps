@@ -74,6 +74,13 @@ object PlanEdit {
         TrackField.DayTarget -> t.copy(dayTarget = Js.clamp(t.dayTarget + dir, 1, 30))
     }
 
+    /** Второе упражнение связки (пусто — без связки); его база — последний замер этого показателя. */
+    fun setTrackPair(t: Track, metricId: String, plan: Plan, maxes: List<MaxEntry>): Track {
+        if (metricId.isEmpty() || plan.metrics.none { it.id == metricId }) return t.copy(pair = "")
+        val last = Logic.maxesOf(maxes, metricId).lastOrNull()
+        return t.copy(pair = metricId, base2 = last?.let { Js.clamp(Js.round(it.v), 1.0, 999.0).toInt() } ?: t.base2)
+    }
+
     /** При выборе показателя-максимума берётся последний замер как база подходов. */
     fun setTrackMetric(t: Track, metricId: String, plan: Plan, maxes: List<MaxEntry>): Track {
         val tm = t.copy(metric = metricId)

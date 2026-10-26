@@ -151,6 +151,8 @@ fun TodayScreen(
                         if (tr.kind == "sets") {
                             val sl = Logic.setsToday(data.sessions, tr.id, today)
                             DotRow(sl.size, tr.dayTarget)
+                            val (hi, hi2) = Logic.trackReps(tr, plan)
+                            if (hi2 != null) Muted(Texts.pairLine(tr, plan, hi, hi2))
                         } else {
                             val n = counts.t[tr.id] ?: 0
                             if (tr.goal > 0) DotRow(n, tr.goal) else Muted("$n на этой неделе")
@@ -158,8 +160,8 @@ fun TodayScreen(
                     }
                     if (tr.kind == "sets") {
                         val sl = Logic.setsToday(data.sessions, tr.id, today)
-                        val (_, hi) = Logic.setReps(tr.base, tr.pctLo, tr.pctHi)
-                        PrimaryButton("+ $hi", { vm.addTrackSet(tr.id, hi) })
+                        val (hi, hi2) = Logic.trackReps(tr, plan)
+                        PrimaryButton(if (hi2 != null) "+ подход" else "+ $hi", { vm.addTrackSet(tr.id, hi, hi2) })
                         if (sl.isNotEmpty()) QuietButton("↶", { vm.undoTrackSet(tr.id) }, Modifier.semantics { contentDescription = "Убрать последний подход" })
                     } else {
                         SecondaryButton("Записать", { quickQ = key })

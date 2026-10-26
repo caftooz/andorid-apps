@@ -126,6 +126,29 @@ class WorkoutLogicTest {
     }
 
     @Test
+    fun pairedTrackSetsGoTogether() {
+        val plan = BuiltinData.defaultPlan()
+        val pull = plan.tracks.first { it.id == "pullday" }.copy(base = 10)
+        assertEquals(5 to null, Logic.trackReps(pull, plan), "без связки — только подтягивания")
+        val both = PlanEdit.setTrackPair(pull, "push", plan, listOf(MaxEntry("m1", today, "push", 30.0)))
+        assertEquals("push" to 30, both.pair to both.base2, "база второго упражнения — последний замер")
+        val (h1, h2) = Logic.trackReps(both, plan)
+        assertEquals(5 to 15, h1 to h2)
+
+        var list = Logic.addTrackSet(emptyList(), "pullday", h1, today, now, h2)
+        list = Logic.addTrackSet(list, "pullday", h1, today, now, h2)
+        assertEquals(listOf(5, 5), Logic.setsToday(list, "pullday", today))
+        assertEquals(listOf(15, 15), Logic.pairSetsToday(list, "pullday", today))
+        list = Logic.undoTrackSet(list, "pullday", today)
+        assertEquals(listOf(5), Logic.setsToday(list, "pullday", today))
+        assertEquals(listOf(15), Logic.pairSetsToday(list, "pullday", today), "отмена убирает подход из обоих")
+
+        val back = Cleaning.cleanSession(Transfer.sessionJson(list.single()))
+        assertEquals(listOf(15), back?.sl2, "второе упражнение переживает экспорт")
+        assertEquals("", PlanEdit.setTrackPair(both, "", plan, emptyList()).pair)
+    }
+
+    @Test
     fun rotationFollowsLastWorkout() {
         val progs = BuiltinData.defaultPrograms()
         assertEquals("A", Logic.nextProg(progs, emptyList()))
