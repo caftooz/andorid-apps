@@ -42,6 +42,9 @@ import ru.diary.core.ui.QuietButton
 import ru.diary.core.ui.SecondaryButton
 import ru.diary.core.util.Js
 import ru.diary.training.domain.Logic
+import ru.diary.core.ui.IconBubble
+import ru.diary.core.ui.SheetRow
+import ru.diary.training.domain.Guides
 import ru.diary.core.ui.ChoiceChips
 import ru.diary.training.domain.PlanEdit
 import ru.diary.training.domain.Track
@@ -55,6 +58,12 @@ fun TrackScreen(vm: TrainingViewModel, data: TrainingData, today: String, id: St
     val n = Logic.weekCounts(data.sessions, Dates.weekStart(today)).t[tr.id] ?: 0
     var logOpen by rememberSaveable { mutableStateOf(false) }
     var done by rememberSaveable { mutableStateOf(setOf<String>()) }
+    // Открытая инструкция: «t:» — общая часть занятия, «i:<название>» — шаг или упражнение.
+    var guide by rememberSaveable { mutableStateOf<String?>(null) }
+    guide?.let { g ->
+        val (title, text) = if (g == "t:") "Как заниматься" to Guides.forTrack(tr.id) else g.removePrefix("i:") to Guides.forItem(g.removePrefix("i:"))
+        if (text != null) GuideSheet(title, text, tr.ic) { guide = null }
+    }
 
     TabColumn {
         BackLink("Сегодня", onBack)
@@ -68,7 +77,9 @@ fun TrackScreen(vm: TrainingViewModel, data: TrainingData, today: String, id: St
                 } else Muted("$n дн. на этой неделе")
             }
         }
-        if (tr.intro.isNotEmpty()) Accordion("О занятии") { Muted(tr.intro) }
+        if (Guides.forTrack(tr.id) != null) {
+            SheetRow("Как заниматься", { guide = "t:" }, subtitle = "Разминка, основы и советы", leading = { IconBubble("star", DiaryTheme.extras.home) })
+        } else if (tr.intro.isNotEmpty()) Accordion("О занятии") { Muted(tr.intro) }
         if (tr.steps.isNotEmpty()) {
             DiaryCard {
                 tr.steps.forEachIndexed { i, s ->
@@ -88,6 +99,7 @@ fun TrackScreen(vm: TrainingViewModel, data: TrainingData, today: String, id: St
                         Column(Modifier.padding(vertical = 8.dp)) {
                             Text(s.n, style = if (cur) MaterialTheme.typography.titleSmall else MaterialTheme.typography.bodyMedium)
                             if (cur && s.t.isNotEmpty()) Muted(s.t)
+                            if (Guides.forItem(s.n) != null) GuideLink({ guide = "i:" + s.n })
                         }
                     }
                 }
@@ -101,6 +113,7 @@ fun TrackScreen(vm: TrainingViewModel, data: TrainingData, today: String, id: St
                     Column {
                         CheckItem(it0.n, key in done, { done = if (key in done) done - key else done + key })
                         if (sub.isNotEmpty()) Muted(sub, Modifier.padding(start = 44.dp))
+                        if (Guides.forItem(it0.n) != null) GuideLink({ guide = "i:" + it0.n }, Modifier.padding(start = 32.dp))
                     }
                 }
             }
