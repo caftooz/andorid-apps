@@ -1,5 +1,14 @@
 package ru.diary.training.ui
 
+import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.background
+import ru.diary.core.ui.BackLink
+import ru.diary.core.ui.NumberBadge
 import ru.diary.core.ui.IconBubble
 import ru.diary.core.ui.SheetRow
 import ru.diary.core.ui.DiarySheet
@@ -103,10 +112,6 @@ import ru.diary.training.domain.TrainingData
 @Composable
 fun WorkoutScreen(vm: TrainingViewModel, data: TrainingData, active: ActiveWorkout, today: String) {
     var finishing by rememberSaveable { mutableStateOf(false) }
-    var openEx by rememberSaveable { mutableStateOf(active.ex.firstOrNull()?.id) }
-    var warmOpen by rememberSaveable { mutableStateOf(true) }
-    var pickerOpen by rememberSaveable { mutableStateOf(false) }
-    var discardAsk by rememberSaveable { mutableStateOf(false) }
     val ctx = LocalContext.current
     val settings by vm.settings.collectAsStateWithLifecycle()
     var askNotif by rememberSaveable { mutableStateOf(false) }
@@ -132,37 +137,31 @@ fun WorkoutScreen(vm: TrainingViewModel, data: TrainingData, active: ActiveWorko
         )
     }
 
+    // Этапы тренировки: «warm» — разминка, «list» — список упражнений, «ex:<id>» — одно упражнение крупно.
+    var stage by rememberSaveable {
+        val started = active.ex.any { Logic.doneCount(it) > 0 }
+        val warmDone = active.warmList.indices.all { active.warm[it] == true }
+        mutableStateOf(if (active.warmList.isNotEmpty() && !warmDone && !started) "warm" else "list")
+    }
+    val focused = stage.removePrefix("ex:").takeIf { stage.startsWith("ex:") }?.let { id -> active.ex.indexOfFirst { it.id == id } }?.takeIf { it >= 0 }
+    LaunchedEffect(stage, focused) { if (stage.startsWith("ex:") && focused == null) stage = "list" }
+    BackHandler(enabled = stage != "list") { stage = "list" }
+
     Column(Modifier.fillMaxWidth()) {
-        Box(Modifier.weight(1f)) {
-            run {
-                TabColumn {
-                    if (Logic.deloadNow(data.plan, today)) Callout { Text("Неделя разгрузки: подходов вдвое меньше, веса те же.") }
-                    Logic.volleyNote(data.plan, data.sessions, today).takeIf { it.isNotEmpty() }?.let { Callout { Text(it) } }
-                    val doneSets = active.ex.sumOf { Logic.doneCount(it) }
-                    val allSets = active.ex.sumOf { it.sets.size }
-                    HeroHeader(active.title, subtitle = "Идёт тренировка · $doneSets из $allSets подходов", icon = "gym") {
-                        MeterBar(
-                            if (allSets > 0) doneSets.toFloat() / allSets else 0f, "Выполнено $doneSets из $allSets подходов",
-                            Modifier.padding(top = 4.dp), color = DiaryTheme.extras.onHero,
-                        )
-                    }
-                    RestSettings(vm)
-                    if (active.ex.any { it.first && it.d.kind == "w" }) {
-                        Callout { Text("Подбираем веса. После каждого подхода нажмите «Легко», «Нормально» или «Тяжело». Приложение подскажет следующий вес и запомнит рабочий.") }
-                    }
-                    if (active.ex.isEmpty()) Callout { Text("Добавьте упражнения, которые будете делать. Можно выбрать из списка или создать своё.") }
-                    if (active.warmList.isNotEmpty()) WarmCard(vm, active, warmOpen) { warmOpen = !warmOpen }
-                    active.ex.forEachIndexed { i, ex ->
-                        ExerciseCard(vm, ex, i, open = openEx == ex.id, onToggle = { openEx = if (openEx == ex.id) null else ex.id }, onRestStarted = onRestStarted) { next -> openEx = next }
-                    }
-                    QuietButton("+ Добавить упражнение", { pickerOpen = true })
-                    if (pickerOpen) {
-                        ExercisePickerSheet(vm, data, active.ex.map { it.id }, onDismiss = { pickerOpen = false }) { d -> vm.addExerciseToWorkout(d); openEx = d.id; pickerOpen = false }
-                    }
-                    if (discardAsk) {
-                        ConfirmBox("Удалить эту тренировку без сохранения?", "Да, удалить", { vm.discardWorkout() }, { discardAsk = false }, cancelLabel = "Нет")
-                    } else QuietButton("Отменить тренировку", { discardAsk = true })
-                }
+        AnimatedContent(
+            targetState = if (focused != null) "ex" else stage, modifier = Modifier.weight(1f), label = "stage",
+            transitionSpec = {
+                val fwd = targetState == "ex" || (initialState == "warm" && targetState == "list")
+                (fadeIn(tween(220)) + slideInHorizontally(tween(260)) { w -> if (fwd) w / 6 else -w / 6 }) togetherWith fadeOut(tween(160))
+            },
+        ) { st ->
+            when {
+                st == "warm" -> WarmStage(vm, active, onDone = { stage = "list" })
+                st == "ex" && focused != null -> ExerciseStage(
+                    vm, active, focused, onRestStarted = onRestStarted, onBack = { stage = "list" },
+                    onNext = { id -> stage = if (id != null) "ex:$id" else "list" }, onFinish = { finishing = true },
+                )
+                else -> ListStage(vm, data, active, today, onWarm = { stage = "warm" }, onOpen = { id -> stage = "ex:$id" })
             }
         }
         WorkoutBar(vm, active) { finishing = true }
@@ -171,6 +170,165 @@ fun WorkoutScreen(vm: TrainingViewModel, data: TrainingData, active: ActiveWorko
     if (finishing) {
         DiarySheet({ finishing = false }, title = "Тренировка закончена", subtitle = active.title, icon = "check") { close ->
             FinishForm(vm, active, onBack = close)
+        }
+    }
+}
+
+/** Этап 1: разминка отдельным экраном. */
+@Composable
+private fun WarmStage(vm: TrainingViewModel, a: ActiveWorkout, onDone: () -> Unit) {
+    val done = a.warmList.indices.count { a.warm[it] == true }
+    TabColumn {
+        HeroHeader("Разминка", subtitle = "${a.title} · $done из ${a.warmList.size}", icon = "flame") {
+            MeterBar(if (a.warmList.isNotEmpty()) done.toFloat() / a.warmList.size else 0f, "Разминка: $done из ${a.warmList.size}", Modifier.padding(top = 4.dp), color = DiaryTheme.extras.onHero)
+        }
+        DiaryCard {
+            a.warmList.forEachIndexed { k, text -> CheckItem(text, a.warm[k] == true, { vm.toggleWarm(k) }) }
+        }
+        PrimaryButton(if (done == a.warmList.size) "Готово — к упражнениям" else "К упражнениям", onDone, Modifier.fillMaxWidth())
+        if (done < a.warmList.size) QuietButton("Пропустить разминку", onDone)
+    }
+}
+
+/** Этап 2: компактный список упражнений; нажатие открывает упражнение целиком. */
+@Composable
+private fun ListStage(vm: TrainingViewModel, data: TrainingData, active: ActiveWorkout, today: String, onWarm: () -> Unit, onOpen: (String) -> Unit) {
+    var pickerOpen by rememberSaveable { mutableStateOf(false) }
+    var discardAsk by rememberSaveable { mutableStateOf(false) }
+    TabColumn {
+        if (Logic.deloadNow(data.plan, today)) Callout { Text("Неделя разгрузки: подходов вдвое меньше, веса те же.") }
+        Logic.volleyNote(data.plan, data.sessions, today).takeIf { it.isNotEmpty() }?.let { Callout { Text(it) } }
+        val doneSets = active.ex.sumOf { Logic.doneCount(it) }
+        val allSets = active.ex.sumOf { it.sets.size }
+        HeroHeader(active.title, subtitle = "Идёт тренировка · $doneSets из $allSets подходов", icon = "gym") {
+            MeterBar(
+                if (allSets > 0) doneSets.toFloat() / allSets else 0f, "Выполнено $doneSets из $allSets подходов",
+                Modifier.padding(top = 4.dp), color = DiaryTheme.extras.onHero,
+            )
+        }
+        val next = Logic.nextOpenEx(active)?.let { id -> active.ex.first { it.id == id } }
+        if (next != null) PrimaryButton((if (doneSets == 0) "Начать: " else "Продолжить: ") + next.d.name, { onOpen(next.id) }, Modifier.fillMaxWidth())
+        if (active.ex.isEmpty()) Callout { Text("Добавьте упражнения, которые будете делать. Можно выбрать из списка или создать своё.") }
+        if (active.warmList.isNotEmpty()) {
+            val wd = active.warmList.indices.count { active.warm[it] == true }
+            SheetRow("Разминка", onWarm, subtitle = if (wd == active.warmList.size) "Готово" else "$wd из ${active.warmList.size}",
+                leading = { IconBubble("flame", DiaryTheme.extras.volley) }, trailing = if (wd == active.warmList.size) "✓" else null)
+        }
+        active.ex.forEachIndexed { i, ex -> ExerciseRow(ex, i, isNext = ex.id == next?.id) { onOpen(ex.id) } }
+        QuietButton("+ Добавить упражнение", { pickerOpen = true })
+        if (pickerOpen) {
+            ExercisePickerSheet(vm, data, active.ex.map { it.id }, onDismiss = { pickerOpen = false }) { d -> vm.addExerciseToWorkout(d); pickerOpen = false; onOpen(d.id) }
+        }
+        RestSettings(vm)
+        if (discardAsk) {
+            ConfirmBox("Удалить эту тренировку без сохранения?", "Да, удалить", { vm.discardWorkout() }, { discardAsk = false }, cancelLabel = "Нет")
+        } else QuietButton("Отменить тренировку", { discardAsk = true })
+    }
+}
+
+/** Краткое описание подходов: «3 × 8–10 · 40 кг» или «2 из 3 · 40 кг × 10». */
+private fun exSummary(ex: ActiveEx): String {
+    val done = Logic.doneCount(ex)
+    val unit = if (ex.d.kind == "time") " с" else ""
+    val reps = (if (ex.lo != ex.hi) "${ex.lo}–${ex.hi}" else "${ex.lo}") + unit
+    val s = ex.sets.lastOrNull { it.done } ?: ex.sets.firstOrNull()
+    val w = if (ex.d.kind == "w" && s != null && s.w > 0) " · ${Js.fmt(s.w)} кг" else ""
+    return if (done == 0) "${ex.sets.size} × $reps$w" else "$done из ${ex.sets.size} подходов$w"
+}
+
+@Composable
+private fun ExerciseRow(ex: ActiveEx, i: Int, isNext: Boolean, onClick: () -> Unit) {
+    val done = Logic.doneCount(ex)
+    val complete = ex.sets.isNotEmpty() && done == ex.sets.size
+    SheetRow(
+        ex.d.name, onClick, subtitle = exSummary(ex),
+        leading = {
+            if (complete) Box(Modifier.size(34.dp).background(MaterialTheme.colorScheme.primary, CircleShape), contentAlignment = Alignment.Center) {
+                Text("✓", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onPrimary)
+            } else NumberBadge(i + 1)
+        },
+        trailing = when { complete -> null; isNext -> "Дальше"; done > 0 -> "$done/${ex.sets.size}"; else -> null },
+    )
+}
+
+/** Этап 3: одно упражнение крупно — текущий подход, обратная связь и список подходов. */
+@Composable
+private fun ExerciseStage(
+    vm: TrainingViewModel, a: ActiveWorkout, i: Int, onRestStarted: () -> Unit, onBack: () -> Unit, onNext: (String?) -> Unit, onFinish: () -> Unit,
+) {
+    val ex = a.ex[i]
+    val haptic = LocalHapticFeedback.current
+    val weighted = ex.d.kind == "w"
+    val cur = ex.sets.indexOfFirst { !it.done }.takeIf { it >= 0 }
+    val lastDone = ex.sets.indexOfLast { it.done }.takeIf { it >= 0 }
+    val per = ex.d.per.takeIf { it.isNotEmpty() }?.let { BuiltinData.perLabel[it] }
+    TabColumn {
+        BackLink("Все упражнения", onBack)
+        Column {
+            Text(ex.d.name, style = MaterialTheme.typography.headlineSmall)
+            Muted(listOfNotNull("Упражнение ${i + 1} из ${a.ex.size}", exSummary(ex), per).joinToString(" · "))
+        }
+        if (ex.hint.isNotEmpty()) Callout { Text(ex.hint, style = MaterialTheme.typography.bodyMedium) }
+        if (ex.first && weighted) Muted("Подбираем вес: после подхода отметьте, как далось, — следующий вес подстроится.")
+        if (ex.d.tip.isNotEmpty()) Accordion("Техника") { Muted(ex.d.tip) }
+
+        // Как далось последний выполненный подход — сразу после отметки, пока идёт отдых.
+        if (weighted && lastDone != null && (cur == null || cur == lastDone + 1)) {
+            DiaryCard {
+                Text("Как далось: подход ${lastDone + 1}, ${Js.fmt(ex.sets[lastDone].w)} кг × ${ex.sets[lastDone].r}", style = MaterialTheme.typography.titleSmall)
+                SegmentedControl(Texts.FB.map { it.key to it.value }, ex.sets[lastDone].fb, { vm.feedback(i, lastDone, it) })
+            }
+        }
+
+        if (cur != null) {
+            val s = ex.sets[cur]
+            DiaryCard {
+                Text("Подход ${cur + 1} из ${ex.sets.size}", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
+                if (weighted) NumberStepper("Вес, кг", s.w, false, decimal = true, big = true, modifier = Modifier.fillMaxWidth(),
+                    onStep = { vm.stepSet(i, cur, 'w', it) }, onType = { vm.inputSet(i, cur, 'w', it) })
+                NumberStepper(if (ex.d.kind == "time") "Секунды" else "Повторы", s.r.toDouble(), false, decimal = false, big = true, modifier = Modifier.fillMaxWidth(),
+                    onStep = { vm.stepSet(i, cur, 'r', it) }, onType = { vm.inputSet(i, cur, 'r', it) })
+                PrimaryButton("✓  Подход выполнен", {
+                    onRestStarted(); haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                    vm.toggleDone(i, cur)
+                }, Modifier.fillMaxWidth().heightIn(min = 60.dp))
+            }
+        } else {
+            val nextId = Logic.nextOpenEx(a)
+            Callout { Text("Упражнение выполнено", style = MaterialTheme.typography.titleSmall) }
+            if (nextId != null) {
+                PrimaryButton("Следующее: " + a.ex.first { it.id == nextId }.d.name + " →", { onNext(nextId) }, Modifier.fillMaxWidth())
+                SecondaryButton("Ко всем упражнениям", onBack, Modifier.fillMaxWidth())
+            } else {
+                PrimaryButton("Закончить тренировку", onFinish, Modifier.fillMaxWidth())
+                SecondaryButton("Ко всем упражнениям", onBack, Modifier.fillMaxWidth())
+            }
+        }
+
+        DiaryCard {
+            Text("Подходы", style = MaterialTheme.typography.titleSmall)
+            ex.sets.forEachIndexed { j, s -> SetLine(ex, j, s, current = j == cur) { vm.toggleDone(i, j) } }
+            QuietButton("+ Подход", { vm.addSet(i) })
+        }
+    }
+}
+
+/** Строка подхода в списке: номер, вес × повторы, отметка; у выполненного — «↶» для отмены. */
+@Composable
+private fun SetLine(ex: ActiveEx, j: Int, s: ActiveSet, current: Boolean, onUndo: () -> Unit) {
+    val unit = if (ex.d.kind == "time") " с" else ""
+    val value = (if (ex.d.kind == "w") "${Js.fmt(s.w)} кг × " else "") + "${s.r}$unit"
+    val cs = MaterialTheme.colorScheme
+    val bg by animateColorAsState(
+        when { s.done -> cs.primary.copy(alpha = 0.12f); current -> cs.surfaceVariant.copy(alpha = 0.7f); else -> androidx.compose.ui.graphics.Color.Transparent }, tween(300), label = "setLine",
+    )
+    Surface(shape = RoundedCornerShape(14.dp), color = bg, modifier = Modifier.fillMaxWidth()) {
+        Row(Modifier.padding(horizontal = 12.dp).heightIn(min = MinTouch), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Text(if (s.done) "✓" else "${j + 1}", style = MaterialTheme.typography.titleSmall, color = if (s.done || current) cs.primary else cs.onSurfaceVariant, modifier = Modifier.size(width = 20.dp, height = 24.dp))
+            Text(value, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+            s.fb?.let { Muted(Texts.FB[it] ?: "") }
+            if (s.done) QuietButton("↶", onUndo, Modifier.semantics { contentDescription = "Отменить подход ${j + 1}" })
+            else if (current) Muted("сейчас")
         }
     }
 }
@@ -218,103 +376,11 @@ private fun RestSettingsBody(vm: TrainingViewModel) {
     }
 }
 
-@Composable
-private fun WarmCard(vm: TrainingViewModel, a: ActiveWorkout, open: Boolean, onToggle: () -> Unit) {
-    val done = a.warmList.indices.count { a.warm[it] == true }
-    DiaryCard(onClick = if (!open) onToggle else null) {
-        CardHeader("Разминка", "$done/${a.warmList.size}", open, onToggle)
-        Reveal(open) {
-            a.warmList.forEachIndexed { k, text ->
-                CheckItem(text, a.warm[k] == true, { vm.toggleWarm(k) })
-            }
-        }
-    }
-}
-
-@Composable
-private fun CardHeader(title: String, count: String, open: Boolean, onToggle: () -> Unit, subtitle: String? = null) {
-    val src = remember { MutableInteractionSource() }
-    Surface(
-        onClick = onToggle, color = androidx.compose.ui.graphics.Color.Transparent, interactionSource = src, shape = RoundedCornerShape(16.dp),
-        modifier = Modifier.fillMaxWidth().pressScale(src, 0.98f).heightIn(min = MinTouch).semantics { stateDescription = if (open) "развёрнуто" else "свёрнуто"; contentDescription = "$title, $count" },
-    ) {
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-            Column(Modifier.weight(1f)) {
-                Text(title, style = MaterialTheme.typography.titleMedium)
-                subtitle?.let { Muted(it) }
-            }
-            Text(count, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
-        }
-    }
-}
-
-@Composable
-private fun ExerciseCard(vm: TrainingViewModel, ex: ActiveEx, i: Int, open: Boolean, onToggle: () -> Unit, onRestStarted: () -> Unit, onOpenNext: (String?) -> Unit) {
-    val done = Logic.doneCount(ex)
-    val per = ex.d.per.takeIf { it.isNotEmpty() }?.let { BuiltinData.perLabel[it] }
-    DiaryCard(onClick = if (!open) onToggle else null) {
-        CardHeader(ex.d.name, "$done/${ex.sets.size}", open, onToggle, subtitle = per)
-        Reveal(open) {
-            if (ex.d.tip.isNotEmpty()) Muted(ex.d.tip)
-            if (ex.hint.isNotEmpty()) Text(ex.hint, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
-            ex.sets.forEachIndexed { j, s -> SetRow(vm, ex, i, j, s, onRestStarted, onOpenNext) }
-            SecondaryButton("+ Подход", { vm.addSet(i) })
-        }
-    }
-}
-
-@Composable
-private fun SetRow(vm: TrainingViewModel, ex: ActiveEx, i: Int, j: Int, s: ActiveSet, onRestStarted: () -> Unit, onOpenNext: (String?) -> Unit) {
-    val weighted = ex.d.kind == "w"
-    val repsLabel = if (ex.d.kind == "time") "Секунды" else "Повторы"
-    val rowColor by animateColorAsState(
-        if (s.done) MaterialTheme.colorScheme.primary.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f), tween(300), label = "set",
-    )
-    val haptic = LocalHapticFeedback.current
-    val checkScale by animateFloatAsState(if (s.done) 1.08f else 1f, spring(dampingRatio = 0.45f, stiffness = 400f), label = "check")
-    Surface(
-        shape = RoundedCornerShape(18.dp), color = rowColor,
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        Column(Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Text("Подход ${j + 1}", style = MaterialTheme.typography.titleSmall)
-                val checkSrc = remember { MutableInteractionSource() }
-                OutlinedButton(
-                    onClick = {
-                        if (!s.done) { onRestStarted(); haptic.performHapticFeedback(HapticFeedbackType.LongPress) }
-                        vm.toggleDone(i, j)?.let(onOpenNext)
-                    },
-                    interactionSource = checkSrc,
-                    modifier = Modifier.size(MinTouch).scale(checkScale).pressScale(checkSrc, 0.85f).semantics {
-                        role = Role.Checkbox
-                        contentDescription = (if (s.done) "Отменить подход " else "Подход выполнен: ") + (j + 1)
-                        selected = s.done
-                    },
-                    contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp), shape = CircleShape,
-                    border = if (s.done) null else BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)),
-                    colors = if (s.done) androidx.compose.material3.ButtonDefaults.outlinedButtonColors(containerColor = MaterialTheme.colorScheme.primary, contentColor = MaterialTheme.colorScheme.onPrimary)
-                    else androidx.compose.material3.ButtonDefaults.outlinedButtonColors(),
-                ) { Text("✓") }
-            }
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                if (weighted) NumberStepper("Вес, кг", s.w, s.done, decimal = true, modifier = Modifier.weight(1f),
-                    onStep = { vm.stepSet(i, j, 'w', it) }, onType = { vm.inputSet(i, j, 'w', it) })
-                NumberStepper(repsLabel, s.r.toDouble(), s.done, decimal = false, modifier = Modifier.weight(1f),
-                    onStep = { vm.stepSet(i, j, 'r', it) }, onType = { vm.inputSet(i, j, 'r', it) })
-            }
-            Reveal(s.done && weighted) {
-                Muted("Как далось:")
-                SegmentedControl(Texts.FB.map { it.key to it.value }, s.fb, { vm.feedback(i, j, it) })
-            }
-        }
-    }
-}
-
 /** Значение с кнопками − и +. Набранный вручную текст не затирается, пока он совпадает со значением. */
 @Composable
 private fun NumberStepper(
     label: String, value: Double, locked: Boolean, decimal: Boolean, modifier: Modifier, onStep: (Int) -> Unit, onType: (String) -> Unit,
+    big: Boolean = false,
 ) {
     fun show(v: Double) = if (v == 0.0 && decimal) "" else Js.fmt(v)
     var text by remember { mutableStateOf(show(value)) }
@@ -322,34 +388,40 @@ private fun NumberStepper(
     Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Muted(label)
         Row(verticalAlignment = Alignment.CenterVertically) {
-            StepCircle("−", "$label: меньше", !locked) { onStep(-1) }
+            StepCircle("−", "$label: меньше", !locked, big) { onStep(-1) }
             BasicTextField(
                 value = text, onValueChange = { text = it; onType(it) }, enabled = !locked, singleLine = true,
-                textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurface, textAlign = TextAlign.Center, fontSize = MaterialTheme.typography.titleMedium.fontSize),
+                textStyle = TextStyle(
+                    color = MaterialTheme.colorScheme.onSurface, textAlign = TextAlign.Center,
+                    fontSize = (if (big) MaterialTheme.typography.headlineLarge else MaterialTheme.typography.titleMedium).fontSize,
+                ),
                 keyboardOptions = KeyboardOptions(keyboardType = if (decimal) KeyboardType.Decimal else KeyboardType.Number),
                 cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
                 modifier = Modifier.weight(1f).heightIn(min = MinTouch).semantics { contentDescription = label },
                 decorationBox = { inner ->
-                    Box(Modifier.heightIn(min = MinTouch), contentAlignment = Alignment.Center) { inner() }
+                    Box(Modifier.heightIn(min = MinTouch), contentAlignment = Alignment.Center) {
+                        if (text.isEmpty()) Text("0", style = TextStyle(textAlign = TextAlign.Center, fontSize = (if (big) MaterialTheme.typography.headlineLarge else MaterialTheme.typography.titleMedium).fontSize), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
+                        inner()
+                    }
                 },
             )
-            StepCircle("+", "$label: больше", !locked) { onStep(1) }
+            StepCircle("+", "$label: больше", !locked, big) { onStep(1) }
         }
     }
 }
 
 /** Круглая кнопка «−» или «+» с нажатием-пружинкой. */
 @Composable
-private fun StepCircle(sign: String, description: String, enabled: Boolean, onClick: () -> Unit) {
+private fun StepCircle(sign: String, description: String, enabled: Boolean, big: Boolean = false, onClick: () -> Unit) {
     val src = remember { MutableInteractionSource() }
     val cs = MaterialTheme.colorScheme
     Surface(
-        onClick, Modifier.size(MinTouch).pressScale(src, 0.86f).semantics { contentDescription = description }, enabled = enabled,
+        onClick, Modifier.size(if (big) 64.dp else MinTouch).pressScale(src, 0.86f).semantics { contentDescription = description }, enabled = enabled,
         shape = CircleShape, color = cs.primary.copy(alpha = if (enabled) 0.14f else 0.05f), interactionSource = src,
         border = BorderStroke(1.dp, cs.primary.copy(alpha = if (enabled) 0.3f else 0.1f)),
     ) {
         Box(contentAlignment = Alignment.Center) {
-            Text(sign, style = MaterialTheme.typography.titleLarge, color = if (enabled) cs.primary else cs.onSurface.copy(alpha = 0.38f))
+            Text(sign, style = if (big) MaterialTheme.typography.headlineMedium else MaterialTheme.typography.titleLarge, color = if (enabled) cs.primary else cs.onSurface.copy(alpha = 0.38f))
         }
     }
 }
@@ -382,7 +454,7 @@ private fun WorkoutBar(vm: TrainingViewModel, a: ActiveWorkout, onFinish: () -> 
                 when {
                     resting -> {
                         Text("Отдых ${left / 60}:${"%02d".format(left % 60)}", style = MaterialTheme.typography.titleLarge)
-                        Text("Следующий подход, когда будете готовы", style = MaterialTheme.typography.bodySmall)
+                        Text("до следующего подхода", style = MaterialTheme.typography.bodySmall)
                     }
                     over -> {
                         Text("Отдых закончен", style = MaterialTheme.typography.titleLarge)
@@ -395,8 +467,9 @@ private fun WorkoutBar(vm: TrainingViewModel, a: ActiveWorkout, onFinish: () -> 
                     }
                 }
             }
-            if (resting || over) QuietButton("Пропустить", { vm.stopRest() })
-            PrimaryButton("Закончить", onFinish)
+            // Во время отдыха панель занята таймером: «Закончить» возвращается, когда отдых пропущен или прошёл.
+            if (resting || over) PrimaryButton(if (over) "Дальше" else "Пропустить", { vm.stopRest() })
+            else PrimaryButton("Закончить", onFinish)
         }
     }
 }
