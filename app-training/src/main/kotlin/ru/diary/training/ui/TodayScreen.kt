@@ -149,22 +149,23 @@ fun TodayScreen(
                             modifier = Modifier.heightIn(min = MinTouch).pressClickable { onOpenTrack(tr.id) }.wrapCenter(),
                         )
                         if (tr.kind == "sets") {
-                            val sl = Logic.setsToday(data.sessions, tr.id, today)
-                            DotRow(sl.size, tr.dayTarget)
-                            val (hi, hi2) = Logic.trackReps(tr, plan)
-                            if (hi2 != null) Muted(Texts.pairLine(tr, plan, hi, hi2))
+                            DotRow(Logic.setsToday(data.sessions, tr.id, today).size, tr.dayTarget)
                         } else {
                             val n = counts.t[tr.id] ?: 0
                             if (tr.goal > 0) DotRow(n, tr.goal) else Muted("$n на этой неделе")
                         }
                     }
-                    if (tr.kind == "sets") {
-                        val sl = Logic.setsToday(data.sessions, tr.id, today)
-                        val (hi, hi2) = Logic.trackReps(tr, plan)
-                        PrimaryButton(if (hi2 != null) "+ подход" else "+ $hi", { vm.addTrackSet(tr.id, hi, hi2) })
-                        if (sl.isNotEmpty()) QuietButton("↶", { vm.undoTrackSet(tr.id) }, Modifier.semantics { contentDescription = "Убрать последний подход" })
-                    } else {
-                        SecondaryButton("Записать", { quickQ = key })
+                    if (tr.kind != "sets") SecondaryButton("Записать", { quickQ = key })
+                }
+                // Кнопки подходов — отдельной строкой под названием: появление «↶» после первого подхода
+                // не сдвигает и не сжимает текст.
+                if (tr.kind == "sets") {
+                    val sl = Logic.setsToday(data.sessions, tr.id, today)
+                    val (hi, hi2) = Logic.trackReps(tr, plan)
+                    if (hi2 != null) Muted("За подход: " + Texts.pairLine(tr, plan, hi, hi2).lowercase())
+                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        PrimaryButton(if (hi2 != null) "+ подход" else "+ подход ($hi)", { vm.addTrackSet(tr.id, hi, hi2) }, Modifier.weight(1f))
+                        QuietButton("↶", { vm.undoTrackSet(tr.id) }, Modifier.semantics { contentDescription = "Убрать последний подход" }, enabled = sl.isNotEmpty())
                     }
                 }
             }
