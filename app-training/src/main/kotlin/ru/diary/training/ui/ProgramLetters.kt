@@ -22,6 +22,15 @@ object ProgramLetters {
     }
 
     /**
+     * Программы по алфавиту: по букве на плашке, затем по названию. Так после смены буквы список
+     * на главной, в плане и очередь чередования сразу идут в новом порядке.
+     */
+    fun sorted(programs: List<Program>): List<Program> {
+        val letters = display(programs)
+        return programs.sortedWith(compareBy<Program>({ letters.getValue(it.id) }, { split(it.title).second.lowercase() }))
+    }
+
+    /**
      * Буква для показа на плашке у каждой программы. Своя буква из названия, иначе первая буква названия,
      * а если она уже занята — первая свободная латинская буква.
      */

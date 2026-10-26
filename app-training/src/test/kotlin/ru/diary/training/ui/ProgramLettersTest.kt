@@ -19,6 +19,14 @@ class ProgramLettersTest {
         assertEquals("B · Программа", ProgramLetters.join("B", "  "))
     }
 
+    @Test fun sortsByLetterThenName() {
+        val list = listOf(p("1", "C · ноги"), p("2", "A · верх"), p("3", "B · спина"), p("4", "Дом"))
+        assertEquals(listOf("2", "3", "1", "4"), ProgramLetters.sorted(list).map { it.id })
+        // Сменили букву «C» на «0»? — программа встаёт первой.
+        val renamed = list.map { if (it.id == "1") it.copy(title = ProgramLetters.join("0", "ноги")) else it }
+        assertEquals(listOf("1", "2", "3", "4"), ProgramLetters.sorted(renamed).map { it.id })
+    }
+
     @Test fun displayLettersAreUnique() {
         val l = ProgramLetters.display(listOf(p("1", "A · ноги"), p("2", "Аэробика"), p("3", "B · спина"), p("4", "Бег")))
         assertEquals("A", l["1"]); assertEquals("B", l["3"])
