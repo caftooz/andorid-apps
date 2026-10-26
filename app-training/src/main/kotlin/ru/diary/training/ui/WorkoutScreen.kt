@@ -451,7 +451,7 @@ private fun WorkoutBar(vm: TrainingViewModel, a: ActiveWorkout, onFinish: () -> 
                 when {
                     resting -> {
                         Text("Отдых ${left / 60}:${"%02d".format(left % 60)}", style = MaterialTheme.typography.titleLarge)
-                        Text("Следующий подход, когда будете готовы", style = MaterialTheme.typography.bodySmall)
+                        Text("до следующего подхода", style = MaterialTheme.typography.bodySmall)
                     }
                     over -> {
                         Text("Отдых закончен", style = MaterialTheme.typography.titleLarge)
@@ -464,8 +464,9 @@ private fun WorkoutBar(vm: TrainingViewModel, a: ActiveWorkout, onFinish: () -> 
                     }
                 }
             }
-            if (resting || over) QuietButton("Пропустить", { vm.stopRest() })
-            PrimaryButton("Закончить", onFinish)
+            // Во время отдыха панель занята таймером: «Закончить» возвращается, когда отдых пропущен или прошёл.
+            if (resting || over) PrimaryButton(if (over) "Дальше" else "Пропустить", { vm.stopRest() })
+            else PrimaryButton("Закончить", onFinish)
         }
     }
 }
