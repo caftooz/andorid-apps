@@ -30,23 +30,12 @@ class ProgramLettersTest {
 
     private fun q(id: String, title: String, rot: Boolean = true) = Program(id, title, rot, emptyList(), emptyList())
 
-    @Test fun moveSwapsQueueOrderAndLetters() {
-        val list = listOf(q("a", "A · ноги"), q("b", "B · спина"), q("c", "C · калистеника"), q("h", "D · дом", rot = false))
-        val moved = ProgramLetters.move(list, "c", -1)
-        assertEquals(listOf("a", "c", "b"), ProgramLetters.queue(moved).map { it.id })
-        assertEquals("B · калистеника", moved.first { it.id == "c" }.title)
-        assertEquals("C · спина", moved.first { it.id == "b" }.title)
-        assertEquals("D · дом", moved.first { it.id == "h" }.title, "программы вне очереди не трогаем")
-        assertEquals(list, ProgramLetters.move(list, "a", -1), "выше первой не двигается")
-    }
-
-    @Test fun queueSkipsLettersOfOtherPrograms() {
-        val list = listOf(q("h", "A · дом", rot = false), q("x", "Спина", rot = false))
-        val added = ProgramLetters.setInQueue(list, "x", true)
-        assertEquals("B · Спина", added.first { it.id == "x" }.title)
-        val removed = ProgramLetters.setInQueue(added, "x", false)
-        assertEquals("Спина", removed.first { it.id == "x" }.title)
-        assertTrue(ProgramLetters.queue(removed).isEmpty())
+    @Test fun nextFreeLetterIsUnique() {
+        val list = listOf(q("a", "A · ноги"), q("b", "B · спина"), q("d", "D · дом"), q("x", "Без буквы"))
+        assertEquals("C", ProgramLetters.nextFree(list))
+        assertEquals("A", ProgramLetters.nextFree(list, except = "a"), "своя буква программы не считается занятой")
+        assertEquals(setOf("B", "D"), ProgramLetters.usedByOthers(list, "a"))
+        assertEquals(26, ProgramLetters.CHOICES.size)
     }
 
     @Test fun displayLettersAreUnique() {

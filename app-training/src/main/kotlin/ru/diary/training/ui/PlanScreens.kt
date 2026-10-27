@@ -139,11 +139,9 @@ internal fun PlanOverview(vm: TrainingViewModel, data: TrainingData, today: Stri
             style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(top = 4.dp),
         )
         SectionTitle("Программы")
-        val q = ProgramLetters.queue(data.programs)
         SheetRow(
-            if (q.isEmpty()) "Очередь пуста" else "Очередь: " + q.joinToString(" → ") { letters.getValue(it.id) },
-            { go("plan/progs") },
-            subtitle = if (q.isEmpty()) "Добавьте готовую программу или свою" else q.joinToString(" · ") { ProgramLetters.split(it.title).second },
+            "Все программы: " + data.programs.joinToString(", ") { letters.getValue(it.id) }, { go("plan/progs") },
+            subtitle = "Добавить готовую или свою, изменить. Дни недели выбирают программу по букве.",
             leading = { IconBubble("gym", MaterialTheme.colorScheme.primary) },
         )
         SectionTitle("Цели недели")
@@ -275,10 +273,16 @@ private fun StartDateDialog(onDismiss: () -> Unit, onPick: (String) -> Unit) {
 @Composable
 private fun DaysEditor(vm: TrainingViewModel, data: TrainingData, back: () -> Unit) {
     val plan = data.plan
+    var chooseDay by rememberSaveable { mutableStateOf<Int?>(null) }
     TabColumn {
         BackLink("План", back)
         ScreenTitle("Дни недели")
         val letters = ProgramLetters.display(data.programs)
+        chooseDay?.let { i ->
+            ProgramChooserSheet(data, plan.days[i].prog, Texts.DAY_NAMES_FULL[i], { chooseDay = null }) { p ->
+                vm.updatePlan { PlanEdit.setDayProg(it, i, p) }
+            }
+        }
         plan.days.forEachIndexed { i, d ->
             DiaryCard {
                 Text(Texts.DAY_NAMES[i], style = MaterialTheme.typography.titleMedium)
@@ -287,10 +291,11 @@ private fun DaysEditor(vm: TrainingViewModel, data: TrainingData, back: () -> Un
                     d.k, { k -> vm.updatePlan { PlanEdit.setDayKind(it, i, k) } },
                 )
                 Reveal(d.k == "gym") {
-                    Muted("Программа: " + (data.programs.firstOrNull { it.id == d.prog }?.title ?: "по очереди"))
-                    LetterPicker(
-                        listOf(LetterOption("", "↻", "По очереди")) + data.programs.map { LetterOption(it.id, letters.getValue(it.id), it.title) },
-                        d.prog, { p -> vm.updatePlan { PlanEdit.setDayProg(it, i, p) } }, tile = 52.dp,
+                    val pr = data.programs.firstOrNull { it.id == d.prog }
+                    SheetRow(
+                        pr?.let { ProgramLetters.split(it.title).second } ?: "По очереди", { chooseDay = i },
+                        subtitle = if (pr != null) "Нажмите, чтобы выбрать другую программу" else "Следующая программа после прошлой тренировки",
+                        leading = { if (pr != null) LetterBadge(letters.getValue(pr.id)) else IconBubble("gym", MaterialTheme.colorScheme.primary) },
                     )
                 }
                 DebouncedField("Заметка к дню, по желанию", d.note, { n -> vm.updatePlan { PlanEdit.setDayNote(it, i, n) } }, maxLength = 120)
@@ -503,89 +508,52 @@ private fun SetupScreen(vm: TrainingViewModel, data: TrainingData, today: String
 private fun ProgramsScreen(vm: TrainingViewModel, data: TrainingData, onBack: () -> Unit, onEdit: (String) -> Unit) {
     var newOpen by rememberSaveable { mutableStateOf(false) }
     var title by rememberSaveable { mutableStateOf("") }
-    // Библиотека: null — закрыта, "" — добавить новую, иначе id программы, которую заменяем.
-    var library by rememberSaveable { mutableStateOf<String?>(null) }
+    var library by rememberSaveable { mutableStateOf(false) }
     val catalog = ExerciseCatalog(data.customEx)
     val letters = ProgramLetters.display(data.programs)
-    val queue = ProgramLetters.queue(data.programs)
-    val others = data.programs.filter { !it.rot }
-    fun summary(p: Program) = if (p.items.isEmpty()) "Пока без упражнений"
-        else "${p.items.size} ${Js.plural(p.items.size, "упражнение", "упражнения", "упражнений")}: " + p.items.joinToString(", ") { catalog.nameOf(it.id) }
     TabColumn {
         BackLink("План", onBack)
         ScreenTitle("Программы")
-        Muted("План только ссылается на программы: в днях «Зал» берётся очередная программа или выбранная для этого дня. Меняйте сами программы и их порядок здесь.")
+        Muted("У каждой программы своя буква. В «Днях недели» для дня «Зал» выбираете программу — и за днём закрепляется её буква.")
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            PrimaryButton("+ Готовая", { library = "" }, Modifier.weight(1f))
+            PrimaryButton("+ Готовая", { library = true }, Modifier.weight(1f))
             SecondaryButton("+ Своя", { newOpen = true }, Modifier.weight(1f))
         }
-
-        SectionTitle("Очередь в зале")
-        if (queue.isEmpty()) Muted("В очереди пока нет программ. Добавьте готовую или отметьте свою «В очередь».")
-        else Muted("После каждой тренировки берётся следующая сверху вниз: " + queue.joinToString(" → ") { letters.getValue(it.id) } + " → снова ${letters.getValue(queue.first().id)}.")
-        queue.forEachIndexed { i, p ->
-            DiaryCard {
+        if (data.programs.isEmpty()) Muted("Программ пока нет. Добавьте готовую или создайте свою.")
+        data.programs.forEach { p ->
+            DiaryCard(onClick = { onEdit(p.id) }) {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
                     LetterBadge(letters.getValue(p.id))
-                    Text(ProgramLetters.split(p.title).second, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
-                    ArrowButton("↑", "Выше в очереди", i > 0) { vm.moveInQueue(p.id, -1) }
-                    ArrowButton("↓", "Ниже в очереди", i < queue.size - 1) { vm.moveInQueue(p.id, 1) }
+                    Column(Modifier.weight(1f)) {
+                        Text(ProgramLetters.split(p.title).second, style = MaterialTheme.typography.titleMedium)
+                        Muted(if (p.items.isEmpty()) "Пока без упражнений" else Logic.progBrief(p))
+                    }
+                    Text("›", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary)
                 }
-                Muted(summary(p))
+                if (p.items.isNotEmpty()) Muted(p.items.joinToString(", ") { catalog.nameOf(it.id) })
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     SecondaryButton("Изменить", { onEdit(p.id) })
-                    SecondaryButton("Заменить на готовую", { library = p.id })
-                    QuietButton("Убрать из очереди", { vm.setInQueue(p.id, false) })
-                }
-            }
-        }
-
-        if (others.isNotEmpty()) {
-            SectionTitle("Другие программы")
-            Muted("Не чередуются сами: выбираются на главном экране или для конкретного дня плана.")
-            others.forEach { p ->
-                DiaryCard {
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                        LetterBadge(letters.getValue(p.id))
-                        Text(ProgramLetters.split(p.title).second, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
-                    }
-                    Muted(summary(p))
-                    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        SecondaryButton("В очередь", { vm.setInQueue(p.id, true) })
-                        SecondaryButton("Изменить", { onEdit(p.id) })
-                        QuietButton("Копировать", { vm.duplicateProgram(p.id) })
-                    }
+                    QuietButton("Копировать", { vm.duplicateProgram(p.id) })
                 }
             }
         }
         if (newOpen) DiarySheet({ newOpen = false }, title = "Своя программа", icon = "gym") { close ->
-            LabeledField("Название", title, { title = it }, maxLength = 60, placeholder = "Например, дома без инвентаря")
+            LabeledField("Название", title, { title = it }, maxLength = 56, placeholder = "Например, дома без инвентаря")
+            Muted("Получит букву ${ProgramLetters.nextFree(data.programs)}. Её можно сменить в настройках программы.")
             PrimaryButton("Создать", { vm.createProgram(title)?.let { id -> title = ""; close(); onEdit(id) } }, Modifier.fillMaxWidth())
         }
-        library?.let { target ->
-            PresetLibrarySheet(data, replace = data.programs.firstOrNull { it.id == target }, onDismiss = { library = null },
-                onAdd = { presetId, inQueue -> vm.addPreset(presetId, inQueue) },
-                onReplace = { presetId -> vm.replaceWithPreset(target, presetId) })
-        }
+        if (library) PresetLibrarySheet(data, onDismiss = { library = false }) { presetId -> vm.addPreset(presetId) }
         Callout("Тренировка без программы. Кнопка «Своя тренировка» на вкладке «Сегодня» открывает пустую тренировку: упражнения добавляете по ходу, и всё записывается в историю.")
     }
 }
 
-/**
- * Библиотека готовых программ. Без `replace` — добавить в очередь или отдельно;
- * с `replace` — заменить упражнения этой программы, сохранив её букву и место в очереди.
- */
-@OptIn(ExperimentalLayoutApi::class)
+/** Библиотека готовых программ: добавленная программа встаёт в список со следующей свободной буквой. */
 @Composable
-private fun PresetLibrarySheet(
-    data: TrainingData, replace: Program?, onDismiss: () -> Unit, onAdd: (String, Boolean) -> Unit, onReplace: (String) -> Unit,
-) {
+private fun PresetLibrarySheet(data: TrainingData, onDismiss: () -> Unit, onAdd: (String) -> Unit) {
     val catalog = ExerciseCatalog(data.customEx)
     var group by rememberSaveable { mutableStateOf(Presets.all.firstOrNull()?.group.orEmpty()) }
-    DiarySheet(
-        onDismiss, title = if (replace == null) "Готовые программы" else "Заменить программу",
-        subtitle = replace?.let { "«${it.title}»: буква и место в очереди останутся" } ?: "Добавьте целиком, потом можно изменить", icon = "gym",
-    ) { close ->
+    val next = ProgramLetters.nextFree(data.programs)
+    DiarySheet(onDismiss, title = "Готовые программы", subtitle = "Добавляется целиком, потом можно изменить", icon = "gym") { close ->
         ChoiceChips(Presets.all.map { it.group }.distinct().map { it to it }, group, { group = it })
         Presets.all.filter { it.group == group }.forEach { pr ->
             DiaryCard {
@@ -600,30 +568,37 @@ private fun PresetLibrarySheet(
                         Muted("${item.sets} × " + (if (item.lo == item.hi) "${item.lo}" else "${item.lo}–${item.hi}") + sfx)
                     }
                 }
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    if (replace != null) PrimaryButton("Заменить", { onReplace(pr.id); close() })
-                    else {
-                        PrimaryButton("В очередь", { onAdd(pr.id, true); close() })
-                        SecondaryButton("Отдельно", { onAdd(pr.id, false); close() })
-                    }
-                }
+                PrimaryButton(if (next.isNotEmpty()) "Добавить как «$next»" else "Добавить", { onAdd(pr.id); close() })
             }
         }
     }
 }
 
-/** Компактная круглая кнопка-стрелка для порядка в очереди. */
+/** Окно выбора программы для дня недели: все программы с буквами и «По очереди». */
 @Composable
-private fun ArrowButton(sign: String, description: String, enabled: Boolean, onClick: () -> Unit) {
-    val src = remember { MutableInteractionSource() }
-    val cs = MaterialTheme.colorScheme
-    Surface(
-        onClick, Modifier.size(MinTouch).pressScale(src, 0.88f).semantics { contentDescription = description }, enabled = enabled,
-        shape = androidx.compose.foundation.shape.CircleShape, color = cs.primary.copy(alpha = if (enabled) 0.12f else 0.04f), interactionSource = src,
-    ) {
-        androidx.compose.foundation.layout.Box(contentAlignment = Alignment.Center) {
-            Text(sign, style = MaterialTheme.typography.titleMedium, color = if (enabled) cs.primary else cs.onSurface.copy(alpha = 0.3f))
+private fun ProgramChooserSheet(data: TrainingData, selected: String, dayName: String, onDismiss: () -> Unit, onPick: (String) -> Unit) {
+    val letters = ProgramLetters.display(data.programs)
+    DiarySheet(onDismiss, title = "Программа на $dayName", subtitle = "Нажмите на программу — за днём закрепится её буква", icon = "gym") { close ->
+        data.programs.forEach { p ->
+            val sel = p.id == selected
+            val src = remember { MutableInteractionSource() }
+            Surface(
+                onClick = { onPick(p.id); close() }, interactionSource = src, shape = RoundedCornerShape(20.dp),
+                color = if (sel) MaterialTheme.colorScheme.primary.copy(alpha = 0.14f) else DiaryTheme.extras.glass,
+                border = BorderStroke(if (sel) 2.dp else 1.dp, if (sel) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline.copy(alpha = 0.6f)),
+                modifier = Modifier.fillMaxWidth().pressScale(src, 0.97f).semantics { contentDescription = p.title + if (sel) ", выбрано" else "" },
+            ) {
+                Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    LetterBadge(letters.getValue(p.id))
+                    Column(Modifier.weight(1f)) {
+                        Text(ProgramLetters.split(p.title).second, style = MaterialTheme.typography.titleSmall)
+                        Muted(if (p.items.isEmpty()) "Пока без упражнений" else Logic.progBrief(p))
+                    }
+                    if (sel) Text("✓", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
+                }
+            }
         }
+        QuietButton(if (selected.isEmpty()) "✓ По очереди" else "По очереди: следующая после прошлой тренировки", { onPick(""); close() })
     }
 }
 
@@ -653,13 +628,15 @@ private fun ProgramEditor(vm: TrainingViewModel, data: TrainingData, id: String,
         val (letter, name) = ProgramLetters.split(p.title)
         DiaryCard {
             Text("Буква на главном экране", style = MaterialTheme.typography.titleSmall)
-            SegmentedControl(
-                ProgramLetters.CHOICES.map { it to it.ifEmpty { "—" } }, letter,
+            val taken = ProgramLetters.usedByOthers(data.programs, id)
+            ChoiceChips(
+                ProgramLetters.CHOICES.filter { it !in taken || it == letter }.map { it to it }, letter,
                 { l -> vm.updateProgram(id) { it.copy(title = ProgramLetters.join(l, ProgramLetters.split(it.title).second)) } },
             )
+            Muted("Показаны только свободные буквы: у каждой программы своя.")
             Muted(if (letter.isEmpty()) "Без буквы на плашке будет первая буква названия." else "На главном экране программа выбирается плашкой «$letter».")
             DebouncedField("Название", name, { t -> vm.updateProgram(id) { it.copy(title = ProgramLetters.join(ProgramLetters.split(it.title).first, t)) } }, maxLength = 56)
-            CheckRow("В очереди: чередуется с другими такими программами", p.rot) { v -> vm.setInQueue(id, v) }
+            CheckRow("Для дней «по очереди»: чередуется с другими такими программами", p.rot) { v -> vm.updateProgram(id) { it.copy(rot = v) } }
         }
         SectionTitle("Упражнения")
         if (p.items.isEmpty()) Muted("Пока пусто. Добавьте первое упражнение.")

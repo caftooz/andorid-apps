@@ -16,6 +16,7 @@ import ru.diary.training.domain.Track
 /** Тексты и подписи, перенесённые из прототипа. */
 object Texts {
     val DAY_NAMES = listOf("Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс")
+    val DAY_NAMES_FULL = listOf("понедельник", "вторник", "среду", "четверг", "пятницу", "субботу", "воскресенье")
     val DAY_KINDS = linkedMapOf("gym" to "Зал", "home" to "Дом", "vb" to "Волейбол", "rest" to "Отдых")
     val INT_LABEL = listOf("", "Лёгкая", "Спокойная", "Средняя", "Тяжёлая", "Очень тяжёлая")
     val RPE_LABEL = listOf("", "Очень легко", "Легко", "Нормально", "Тяжело", "На пределе")

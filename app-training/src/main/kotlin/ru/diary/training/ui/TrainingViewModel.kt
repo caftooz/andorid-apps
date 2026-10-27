@@ -248,40 +248,33 @@ class TrainingViewModel(
     fun createProgram(title: String): String? {
         val t = title.trim()
         if (t.isEmpty()) { say("Введите название программы"); return null }
-        val p = Program("p-" + Ids.uid(), t.take(60), false, BuiltinData.warmGen, emptyList())
-        mutate { it.copy(programs = it.programs + p) }
-        return p.id
+        val id = "p-" + Ids.uid()
+        mutate { d -> d.copy(programs = d.programs + Program(id, ProgramLetters.join(ProgramLetters.nextFree(d.programs), t), false, BuiltinData.warmGen, emptyList())) }
+        return id
     }
 
     fun duplicateProgram(id: String) {
         mutate { d ->
             val src = d.programs.firstOrNull { it.id == id } ?: return@mutate d
-            d.copy(programs = d.programs + src.copy(id = "p-" + Ids.uid(), title = (src.title + " (копия)").take(60), rot = false))
+            val name = (ProgramLetters.split(src.title).second + " (копия)").take(56)
+            d.copy(programs = d.programs + src.copy(id = "p-" + Ids.uid(), title = ProgramLetters.join(ProgramLetters.nextFree(d.programs), name), rot = false))
         }
         say("Копия создана")
     }
 
-    /** Добавить готовую программу: в конец очереди или отдельно. */
-    fun addPreset(presetId: String, inQueue: Boolean): String? {
+    /** Добавить готовую программу в список со следующей свободной буквой. */
+    fun addPreset(presetId: String): String? {
         val pr = Presets.byId(presetId) ?: return null
         val id = "p-" + Ids.uid()
+        var letter = ""
         mutate { d ->
-            val list = d.programs + Presets.toProgram(pr, id, rot = false)
-            d.copy(programs = if (inQueue) ProgramLetters.setInQueue(list, id, true) else list)
+            letter = ProgramLetters.nextFree(d.programs)
+            val p = Presets.toProgram(pr, id, rot = false).let { it.copy(title = ProgramLetters.join(letter, it.title)) }
+            d.copy(programs = d.programs + p)
         }
-        say(if (inQueue) "«${pr.title}» добавлена в очередь" else "«${pr.title}» добавлена")
+        say("Программа «${pr.title}» добавлена")
         return id
     }
-
-    /** Заменить содержимое программы готовой: id, буква и место в очереди остаются, поэтому план не меняется. */
-    fun replaceWithPreset(programId: String, presetId: String) {
-        val pr = Presets.byId(presetId) ?: return
-        updateProgram(programId) { p -> p.copy(title = ProgramLetters.join(ProgramLetters.split(p.title).first, pr.title), warm = pr.warm, items = pr.items) }
-        say("Программа заменена на «${pr.title}»")
-    }
-
-    fun moveInQueue(id: String, dir: Int) = mutate { d -> d.copy(programs = ProgramLetters.move(d.programs, id, dir)) }
-    fun setInQueue(id: String, on: Boolean) = mutate { d -> d.copy(programs = ProgramLetters.setInQueue(d.programs, id, on)) }
 
     fun updateProgram(id: String, f: (Program) -> Program) =
         mutate { d -> d.copy(programs = d.programs.map { if (it.id == id) f(it) else it }) }
