@@ -77,6 +77,7 @@ import ru.diary.core.ui.SecondaryButton
 import ru.diary.core.ui.SectionTitle
 import ru.diary.core.ui.Stepper
 import ru.diary.core.util.Js
+import ru.diary.training.domain.Muscles
 import ru.diary.training.domain.BuiltinData
 import ru.diary.training.domain.ExerciseCatalog
 import ru.diary.training.domain.Logic
@@ -580,6 +581,7 @@ private fun ProgramEditor(vm: TrainingViewModel, data: TrainingData, id: String,
             val unit = if (d?.kind == "time") "Секунды" else "Повторы"
             val st = if (d?.kind == "time") 5 else 1
             DiarySheet({ editIdx = null }, title = d?.name ?: it0.id, subtitle = "Упражнение ${i + 1} из ${p.items.size}", icon = "gym") { close ->
+                Muscles.forEx(it0.id)?.let { BodyMap(it) }
                 Stepper("Подходы", it0.sets.toString(),
                     { vm.updateProgram(id) { q -> q.copy(items = q.items.mapIndexed { k, x -> if (k == i) x.copy(sets = Js.clamp(x.sets - 1, 1, 10)) else x }) } },
                     { vm.updateProgram(id) { q -> q.copy(items = q.items.mapIndexed { k, x -> if (k == i) x.copy(sets = Js.clamp(x.sets + 1, 1, 10)) else x }) } })

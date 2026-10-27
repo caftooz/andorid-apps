@@ -103,6 +103,7 @@ import ru.diary.training.domain.ActiveSet
 import ru.diary.training.domain.ActiveWorkout
 import ru.diary.training.domain.BuiltinData
 import ru.diary.training.domain.Logic
+import ru.diary.training.domain.Muscles
 import ru.diary.training.domain.TrainingData
 
 /**
@@ -270,6 +271,7 @@ private fun ExerciseStage(
         }
         if (ex.hint.isNotEmpty()) Callout { Text(ex.hint, style = MaterialTheme.typography.bodyMedium) }
         if (ex.first && weighted) Muted("Подбираем вес: после подхода отметьте, как далось, — следующий вес подстроится.")
+        Muscles.forEx(ex.id)?.let { MusclesRow(it, ex.d.name) }
         if (ex.d.tip.isNotEmpty()) Accordion("Техника") { Muted(ex.d.tip) }
 
         // Как далось последний выполненный подход — сразу после отметки, пока идёт отдых.
@@ -310,6 +312,26 @@ private fun ExerciseStage(
             ex.sets.forEachIndexed { j, s -> SetLine(ex, j, s, current = j == cur) { vm.toggleDone(i, j) } }
             QuietButton("+ Подход", { vm.addSet(i) })
         }
+    }
+}
+
+/** Какие мышцы работают: маленькая фигура и основные мышцы; по нажатию — схема спереди и сзади. */
+@Composable
+fun MusclesRow(load: Muscles.Load, title: String) {
+    var open by rememberSaveable(title) { mutableStateOf(false) }
+    DiaryCard(onClick = { open = true }) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            BodyThumb(load)
+            Column(Modifier.weight(1f)) {
+                Text("Работают мышцы", style = MaterialTheme.typography.titleSmall)
+                Muted(load.primary.joinToString(", ") { Muscles.name(it).lowercase() }.replaceFirstChar { it.uppercase() })
+            }
+            Text("›", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary)
+        }
+    }
+    if (open) DiarySheet({ open = false }, title = title, subtitle = "Какие мышцы работают", icon = "gym") { close ->
+        BodyMap(load)
+        PrimaryButton("Понятно", close)
     }
 }
 
