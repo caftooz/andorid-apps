@@ -39,6 +39,7 @@ import ru.diary.training.domain.Ids
 import ru.diary.training.domain.Logic
 import ru.diary.training.domain.MaxEntry
 import ru.diary.training.domain.Plan
+import ru.diary.training.domain.Presets
 import ru.diary.training.domain.Program
 import ru.diary.training.domain.ProgramItem
 import ru.diary.training.domain.Session
@@ -247,17 +248,32 @@ class TrainingViewModel(
     fun createProgram(title: String): String? {
         val t = title.trim()
         if (t.isEmpty()) { say("Введите название программы"); return null }
-        val p = Program("p-" + Ids.uid(), t.take(60), false, BuiltinData.warmGen, emptyList())
-        mutate { it.copy(programs = it.programs + p) }
-        return p.id
+        val id = "p-" + Ids.uid()
+        mutate { d -> d.copy(programs = d.programs + Program(id, ProgramLetters.join(ProgramLetters.nextFree(d.programs), t), false, BuiltinData.warmGen, emptyList())) }
+        return id
     }
 
     fun duplicateProgram(id: String) {
         mutate { d ->
             val src = d.programs.firstOrNull { it.id == id } ?: return@mutate d
-            d.copy(programs = d.programs + src.copy(id = "p-" + Ids.uid(), title = (src.title + " (копия)").take(60), rot = false))
+            val name = (ProgramLetters.split(src.title).second + " (копия)").take(56)
+            d.copy(programs = d.programs + src.copy(id = "p-" + Ids.uid(), title = ProgramLetters.join(ProgramLetters.nextFree(d.programs), name), rot = false))
         }
         say("Копия создана")
+    }
+
+    /** Добавить готовую программу в список со следующей свободной буквой. */
+    fun addPreset(presetId: String): String? {
+        val pr = Presets.byId(presetId) ?: return null
+        val id = "p-" + Ids.uid()
+        var letter = ""
+        mutate { d ->
+            letter = ProgramLetters.nextFree(d.programs)
+            val p = Presets.toProgram(pr, id, rot = false).let { it.copy(title = ProgramLetters.join(letter, it.title)) }
+            d.copy(programs = d.programs + p)
+        }
+        say("Программа «${pr.title}» добавлена")
+        return id
     }
 
     fun updateProgram(id: String, f: (Program) -> Program) =

@@ -7,8 +7,8 @@ import ru.diary.training.domain.Program
  * и формат экспорта не меняются, а веб-версия видит то же название.
  */
 object ProgramLetters {
-    /** Варианты буквы в редакторе программы; пустая строка — без буквы. */
-    val CHOICES = listOf("", "A", "B", "C", "D", "E", "F")
+    /** Варианты буквы в редакторе программы. */
+    val CHOICES = ('A'..'Z').map { it.toString() }
 
     private val prefix = Regex("""^\s*([A-Za-zА-Яа-яЁё0-9]{1,2})\s*[·.:–—-]\s*(.+)$""")
 
@@ -29,6 +29,16 @@ object ProgramLetters {
         val letters = display(programs)
         return programs.sortedWith(compareBy<Program>({ letters.getValue(it.id) }, { split(it.title).second.lowercase() }))
     }
+
+    /** Первая латинская буква, которой ещё нет ни у одной программы: у каждой программы своя буква. */
+    fun nextFree(programs: List<Program>, except: String? = null): String {
+        val used = programs.filter { it.id != except }.map { split(it.title).first }.toSet()
+        return ('A'..'Z').map { it.toString() }.firstOrNull { it !in used } ?: ""
+    }
+
+    /** Буквы, занятые другими программами (для выбора буквы в редакторе). */
+    fun usedByOthers(programs: List<Program>, id: String): Set<String> =
+        programs.filter { it.id != id }.map { split(it.title).first }.filter { it.isNotEmpty() }.toSet()
 
     /**
      * Буква для показа на плашке у каждой программы. Своя буква из названия, иначе первая буква названия,

@@ -3,6 +3,7 @@ package ru.diary.training.ui
 import org.junit.Test
 import ru.diary.training.domain.Program
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class ProgramLettersTest {
     private fun p(id: String, title: String) = Program(id, title, true, emptyList(), emptyList())
@@ -25,6 +26,16 @@ class ProgramLettersTest {
         // Сменили букву «C» на «0»? — программа встаёт первой.
         val renamed = list.map { if (it.id == "1") it.copy(title = ProgramLetters.join("0", "ноги")) else it }
         assertEquals(listOf("1", "2", "3", "4"), ProgramLetters.sorted(renamed).map { it.id })
+    }
+
+    private fun q(id: String, title: String, rot: Boolean = true) = Program(id, title, rot, emptyList(), emptyList())
+
+    @Test fun nextFreeLetterIsUnique() {
+        val list = listOf(q("a", "A · ноги"), q("b", "B · спина"), q("d", "D · дом"), q("x", "Без буквы"))
+        assertEquals("C", ProgramLetters.nextFree(list))
+        assertEquals("A", ProgramLetters.nextFree(list, except = "a"), "своя буква программы не считается занятой")
+        assertEquals(setOf("B", "D"), ProgramLetters.usedByOthers(list, "a"))
+        assertEquals(26, ProgramLetters.CHOICES.size)
     }
 
     @Test fun displayLettersAreUnique() {
