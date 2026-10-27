@@ -77,7 +77,13 @@ fun ExercisePicker(
     onPick: (ExDef) -> Unit,
 ) {
     val catalog = ExerciseCatalog(data.customEx)
-    val list = catalog.all.filter { it.id !in excludeIds }
+    var query by rememberSaveable { mutableStateOf("") }
+    val q = query.trim().lowercase()
+    // Поиск по названию и по мышцам: «бицепс», «грудь», «жим».
+    val list = catalog.all.filter { it.id !in excludeIds }.filter { d ->
+        q.isEmpty() || d.name.lowercase().contains(q) ||
+            Muscles.forEx(d.id)?.let { l -> (l.primary + l.secondary).any { Muscles.name(it).lowercase().contains(q) } } == true
+    }
     var askDelete by rememberSaveable { mutableStateOf<String?>(null) }
     var formOpen by rememberSaveable { mutableStateOf(false) }
     var name by rememberSaveable { mutableStateOf("") }
@@ -86,7 +92,8 @@ fun ExercisePicker(
     var tip by rememberSaveable { mutableStateOf("") }
 
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        if (list.isEmpty()) Muted("Все упражнения из списка уже добавлены. Создайте своё ниже.")
+        LabeledField("Поиск", query, { query = it }, placeholder = "Например, жим, бицепс или спина", maxLength = 40)
+        if (list.isEmpty()) Muted(if (q.isNotEmpty()) "Ничего не нашлось. Создайте своё упражнение ниже." else "Все упражнения из списка уже добавлены. Создайте своё ниже.")
         list.forEach { d ->
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Muscles.forEx(d.id)?.let { BodyThumb(it) }

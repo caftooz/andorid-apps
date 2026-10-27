@@ -9,7 +9,7 @@ import kotlin.test.assertTrue
 class MusclesTest {
     @Test fun everyBuiltinExerciseHasMusclesDrawnOnFigure() {
         val drawn = (Muscles.front + Muscles.back).map { it.id }.toSet()
-        for (d in BuiltinData.exercises) {
+        for (d in BuiltinData.allExercises) {
             val l = assertNotNull(Muscles.forEx(d.id), "мышцы для ${d.id}")
             assertTrue(l.primary.isNotEmpty(), "основные мышцы для ${d.id}")
             (l.primary + l.secondary).forEach { m ->
@@ -17,6 +17,14 @@ class MusclesTest {
                 assertTrue(Muscles.name(m) != m, "у $m есть русское название")
             }
         }
+    }
+
+    @Test fun gymExercisesAreInCatalog() {
+        val c = ExerciseCatalog(emptyList())
+        assertEquals("Жим штанги лёжа", c.nameOf("bench"))
+        assertEquals("Подъём гантелей на бицепс", c.nameOf("curl"))
+        assertEquals(BuiltinData.allExercises.size, BuiltinData.allExercises.map { it.id }.toSet().size, "id не повторяются")
+        assertTrue(BuiltinData.gymExercises.size >= 20)
     }
 
     @Test fun figuresAreParsed() {

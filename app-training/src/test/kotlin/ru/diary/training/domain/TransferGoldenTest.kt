@@ -51,7 +51,13 @@ class TransferGoldenTest {
         val data = Golden.dataFrom(Golden["exportInput"].jsonObject)
         val out = Transfer.buildExport(data, "2026-03-18T12:00:00.000Z")
         val expected = Golden["exportOutput"].jsonObject
-        Golden.assertJsonEquals(expected, JsonObject(out.filterKeys { it != "exportedAt" }))
+        // Классические упражнения для зала (gym.json) появились после прототипа: в эталоне их нет,
+        // поэтому сравниваем без них, а их наличие в экспорте проверяем отдельно.
+        val gymIds = BuiltinData.gymExercises.map { it.id }.toSet()
+        val exported = out.getValue("exercises").jsonArray
+        assertEquals(gymIds, exported.map { it.jsonObject.getValue("id").jsonPrimitive.content }.filter { it in gymIds }.toSet())
+        val protoOnly = JsonObject(out.filterKeys { it != "exportedAt" } + ("exercises" to kotlinx.serialization.json.JsonArray(exported.filter { it.jsonObject.getValue("id").jsonPrimitive.content !in gymIds })))
+        Golden.assertJsonEquals(expected, protoOnly)
         assertEquals("dnevnik-trenirovok", out["app"]!!.jsonPrimitive.content)
         assertEquals("3", out["version"]!!.jsonPrimitive.content)
     }
