@@ -37,6 +37,7 @@ import ru.diary.core.ui.PrimaryButton
 import ru.diary.core.ui.QuietButton
 import ru.diary.core.ui.SecondaryButton
 import ru.diary.core.util.Js
+import ru.diary.training.domain.Muscles
 import ru.diary.training.domain.BuiltinData
 import ru.diary.training.domain.ExDef
 import ru.diary.training.domain.ExerciseCatalog
@@ -87,10 +88,12 @@ fun ExercisePicker(
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         if (list.isEmpty()) Muted("Все упражнения из списка уже добавлены. Создайте своё ниже.")
         list.forEach { d ->
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                Muscles.forEx(d.id)?.let { BodyThumb(it) }
                 Column(Modifier.weight(1f).padding(vertical = 2.dp)) {
                     Text(d.name, style = MaterialTheme.typography.titleSmall)
                     Muted(kindMeta(d))
+                    Muscles.forEx(d.id)?.let { l -> Muted(l.primary.joinToString(", ") { Muscles.name(it).lowercase() }) }
                 }
                 if (d.custom) QuietButton("Удалить", { askDelete = d.id }, Modifier.semantics { contentDescription = "Удалить упражнение ${d.name}" })
                 SecondaryButton("Добавить", { onPick(d) }, Modifier.semantics { contentDescription = "Добавить: ${d.name}" })
