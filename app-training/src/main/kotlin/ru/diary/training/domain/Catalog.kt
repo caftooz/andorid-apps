@@ -51,25 +51,34 @@ object BuiltinData {
 
     fun defaultsFor(kind: String): KindDefaults = kindDefaults[kind] ?: kindDefaults.getValue("w")
 
-    /** Встроенные упражнения в порядке прототипа. */
-    val exercises: List<ExDef> by lazy {
-        root.getValue("exercises").jsonArray.map { e ->
-            val o = e.jsonObject
-            val reps = o.getValue("reps").jsonArray
-            ExDef(
-                id = o.getValue("id").jsonPrimitive.content,
-                name = o.getValue("name").jsonPrimitive.content,
-                kind = o.getValue("kind").jsonPrimitive.content,
-                step = o.getValue("step").jsonPrimitive.content.toDouble(),
-                sets = o.getValue("sets").jsonPrimitive.int,
-                lo = reps[0].jsonPrimitive.int,
-                hi = reps[1].jsonPrimitive.int,
-                tip = o.getValue("tip").jsonPrimitive.content,
-                rest = o["rest"]?.jsonPrimitive?.int ?: 0,
-                per = o["per"]?.jsonPrimitive?.content ?: "",
-            )
-        }
+    private fun parseExercises(arr: kotlinx.serialization.json.JsonArray): List<ExDef> = arr.map { e ->
+        val o = e.jsonObject
+        val reps = o.getValue("reps").jsonArray
+        ExDef(
+            id = o.getValue("id").jsonPrimitive.content,
+            name = o.getValue("name").jsonPrimitive.content,
+            kind = o.getValue("kind").jsonPrimitive.content,
+            step = o.getValue("step").jsonPrimitive.content.toDouble(),
+            sets = o.getValue("sets").jsonPrimitive.int,
+            lo = reps[0].jsonPrimitive.int,
+            hi = reps[1].jsonPrimitive.int,
+            tip = o.getValue("tip").jsonPrimitive.content,
+            rest = o["rest"]?.jsonPrimitive?.int ?: 0,
+            per = o["per"]?.jsonPrimitive?.content ?: "",
+        )
     }
+
+    /** Встроенные упражнения в порядке прототипа. */
+    val exercises: List<ExDef> by lazy { parseExercises(root.getValue("exercises").jsonArray) }
+
+    /** Классические упражнения для зала из `gym.json`: жимы, тяги, изоляция. */
+    val gymExercises: List<ExDef> by lazy {
+        val stream = BuiltinData::class.java.getResourceAsStream("/ru/diary/training/gym.json") ?: return@lazy emptyList()
+        stream.use { parseExercises(Json.parseToJsonElement(it.readBytes().toString(Charsets.UTF_8)).jsonObject.getValue("exercises").jsonArray) }
+    }
+
+    /** Весь встроенный каталог: упражнения прототипа и классические для зала. */
+    val allExercises: List<ExDef> by lazy { exercises + gymExercises }
 
     /** Подписи «на каждую …» из `PER_LABEL`. */
     val perLabel: Map<String, String> = mapOf(
@@ -114,7 +123,7 @@ object BuiltinData {
 /** Каталог упражнений: встроенные плюс свои. */
 class ExerciseCatalog(private val custom: List<CustomEx>) {
     val all: List<ExDef> by lazy {
-        BuiltinData.exercises + custom.map { c ->
+        BuiltinData.allExercises + custom.map { c ->
             val k = BuiltinData.defaultsFor(c.kind)
             ExDef(c.id, c.name, c.kind, if (c.step > 0) c.step else k.step, k.sets, k.lo, k.hi, c.tip, custom = true)
         }
