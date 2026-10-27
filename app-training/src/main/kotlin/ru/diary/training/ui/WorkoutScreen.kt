@@ -104,6 +104,7 @@ import ru.diary.training.domain.ActiveWorkout
 import ru.diary.training.domain.BuiltinData
 import ru.diary.training.domain.Logic
 import ru.diary.training.domain.Muscles
+import ru.diary.training.domain.Pictos
 import ru.diary.training.domain.TrainingData
 
 /**
@@ -271,7 +272,8 @@ private fun ExerciseStage(
         }
         if (ex.hint.isNotEmpty()) Callout { Text(ex.hint, style = MaterialTheme.typography.bodyMedium) }
         if (ex.first && weighted) Muted("Подбираем вес: после подхода отметьте, как далось, — следующий вес подстроится.")
-        Muscles.forEx(ex.id)?.let { MusclesRow(it, ex.d.name) }
+        Pictos.forEx(ex.id)?.let { ExercisePicto(it, description = "Как делать: ${ex.d.name}") }
+        Muscles.forEx(ex.id)?.let { MusclesRow(it, ex.d.name, ex.id) }
         if (ex.d.tip.isNotEmpty()) Accordion("Техника") { Muted(ex.d.tip) }
 
         // Как далось последний выполненный подход — сразу после отметки, пока идёт отдых.
@@ -317,7 +319,7 @@ private fun ExerciseStage(
 
 /** Какие мышцы работают: маленькая фигура и основные мышцы; по нажатию — схема спереди и сзади. */
 @Composable
-fun MusclesRow(load: Muscles.Load, title: String) {
+fun MusclesRow(load: Muscles.Load, title: String, exId: String? = null) {
     var open by rememberSaveable(title) { mutableStateOf(false) }
     DiaryCard(onClick = { open = true }) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -330,6 +332,7 @@ fun MusclesRow(load: Muscles.Load, title: String) {
         }
     }
     if (open) DiarySheet({ open = false }, title = title, subtitle = "Какие мышцы работают", icon = "gym") { close ->
+        exId?.let { Pictos.forEx(it) }?.let { ExercisePicto(it, description = "Как делать: $title") }
         BodyMap(load)
         PrimaryButton("Понятно", close)
     }
