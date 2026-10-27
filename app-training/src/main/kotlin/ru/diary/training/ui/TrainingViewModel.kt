@@ -39,6 +39,7 @@ import ru.diary.training.domain.Ids
 import ru.diary.training.domain.Logic
 import ru.diary.training.domain.MaxEntry
 import ru.diary.training.domain.Plan
+import ru.diary.training.domain.Presets
 import ru.diary.training.domain.Program
 import ru.diary.training.domain.ProgramItem
 import ru.diary.training.domain.Session
@@ -259,6 +260,28 @@ class TrainingViewModel(
         }
         say("Копия создана")
     }
+
+    /** Добавить готовую программу: в конец очереди или отдельно. */
+    fun addPreset(presetId: String, inQueue: Boolean): String? {
+        val pr = Presets.byId(presetId) ?: return null
+        val id = "p-" + Ids.uid()
+        mutate { d ->
+            val list = d.programs + Presets.toProgram(pr, id, rot = false)
+            d.copy(programs = if (inQueue) ProgramLetters.setInQueue(list, id, true) else list)
+        }
+        say(if (inQueue) "«${pr.title}» добавлена в очередь" else "«${pr.title}» добавлена")
+        return id
+    }
+
+    /** Заменить содержимое программы готовой: id, буква и место в очереди остаются, поэтому план не меняется. */
+    fun replaceWithPreset(programId: String, presetId: String) {
+        val pr = Presets.byId(presetId) ?: return
+        updateProgram(programId) { p -> p.copy(title = ProgramLetters.join(ProgramLetters.split(p.title).first, pr.title), warm = pr.warm, items = pr.items) }
+        say("Программа заменена на «${pr.title}»")
+    }
+
+    fun moveInQueue(id: String, dir: Int) = mutate { d -> d.copy(programs = ProgramLetters.move(d.programs, id, dir)) }
+    fun setInQueue(id: String, on: Boolean) = mutate { d -> d.copy(programs = ProgramLetters.setInQueue(d.programs, id, on)) }
 
     fun updateProgram(id: String, f: (Program) -> Program) =
         mutate { d -> d.copy(programs = d.programs.map { if (it.id == id) f(it) else it }) }
