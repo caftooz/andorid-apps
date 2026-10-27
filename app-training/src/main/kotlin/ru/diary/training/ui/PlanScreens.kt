@@ -528,8 +528,8 @@ private fun ProgramsScreen(vm: TrainingViewModel, data: TrainingData, onBack: ()
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
                     LetterBadge(letters.getValue(p.id))
                     Text(ProgramLetters.split(p.title).second, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
-                    QuietButton("↑", { vm.moveInQueue(p.id, -1) }, Modifier.semantics { contentDescription = "Выше в очереди" }, enabled = i > 0)
-                    QuietButton("↓", { vm.moveInQueue(p.id, 1) }, Modifier.semantics { contentDescription = "Ниже в очереди" }, enabled = i < queue.size - 1)
+                    ArrowButton("↑", "Выше в очереди", i > 0) { vm.moveInQueue(p.id, -1) }
+                    ArrowButton("↓", "Ниже в очереди", i < queue.size - 1) { vm.moveInQueue(p.id, 1) }
                 }
                 Muted(summary(p))
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -608,6 +608,21 @@ private fun PresetLibrarySheet(
                     }
                 }
             }
+        }
+    }
+}
+
+/** Компактная круглая кнопка-стрелка для порядка в очереди. */
+@Composable
+private fun ArrowButton(sign: String, description: String, enabled: Boolean, onClick: () -> Unit) {
+    val src = remember { MutableInteractionSource() }
+    val cs = MaterialTheme.colorScheme
+    Surface(
+        onClick, Modifier.size(MinTouch).pressScale(src, 0.88f).semantics { contentDescription = description }, enabled = enabled,
+        shape = androidx.compose.foundation.shape.CircleShape, color = cs.primary.copy(alpha = if (enabled) 0.12f else 0.04f), interactionSource = src,
+    ) {
+        androidx.compose.foundation.layout.Box(contentAlignment = Alignment.Center) {
+            Text(sign, style = MaterialTheme.typography.titleMedium, color = if (enabled) cs.primary else cs.onSurface.copy(alpha = 0.3f))
         }
     }
 }
