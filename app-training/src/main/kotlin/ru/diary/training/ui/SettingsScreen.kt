@@ -93,6 +93,9 @@ fun SettingsScreen(vm: TrainingViewModel, data: TrainingData) {
         SectionTitle("Где хранятся данные")
         Muted("Данные хранятся только на этом телефоне и никуда не отправляются. Делайте экспорт, чтобы не потерять историю.")
 
+        SectionTitle("Схема мышц")
+        Muted("Контуры фигуры — react-body-highlighter, © 2020 GV79, лицензия MIT. Какие мышцы работают в упражнениях, размечено для этого приложения.")
+
         SectionTitle("Обновления")
         UpdateSection(ctx.container.updater)
 

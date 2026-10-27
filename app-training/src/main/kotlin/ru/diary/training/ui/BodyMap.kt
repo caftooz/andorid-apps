@@ -92,5 +92,5 @@ private fun Legend(color: Color, title: String, ids: List<String>) {
 /** Маленькая фигура для списков: та сторона, где основная нагрузка. */
 @Composable
 fun BodyThumb(load: Muscles.Load, modifier: Modifier = Modifier) {
-    BodyFigure(if (Muscles.mainSideIsFront(load)) Muscles.front else Muscles.back, load, modifier.size(width = 28.dp, height = 56.dp))
+    BodyFigure(if (Muscles.mainSideIsFront(load)) Muscles.front else Muscles.back, load, modifier.size(width = 36.dp, height = 72.dp))
 }
